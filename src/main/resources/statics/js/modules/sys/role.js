@@ -229,16 +229,18 @@ var vm = new Vue({
         getDataTree: function(roleId) {
             //加载菜单树
             $.get(baseURL + "shop/shop/queryList", function(r){
-                data_ztree = $.fn.zTree.init($("#dataTree"), data_setting, r);
+                console.log("queryList====="+r.list);
+                data_ztree = $.fn.zTree.init($("#dataTree"), data_setting, r.list);
                 //展开所有节点
                 data_ztree.expandAll(true);
             });
         },
         getDept: function(){
             //加载部门树(店铺树)
-            $.get(baseURL + "shop/shop/list", function(r){
-                dept_ztree = $.fn.zTree.init($("#deptTree"), dept_setting, r);
-                var node = dept_ztree.getNodeByParam("id", vm.role.id);
+            $.get(baseURL + "shop/shop/select", function(r){
+                console.log("list====="+r.list);
+                dept_ztree = $.fn.zTree.init($("#deptTree"), dept_setting, r.list);
+                var node = dept_ztree.getNodeByParam("shopId", vm.role.shopId);
                 if(node != null){
                     dept_ztree.selectNode(node);
 

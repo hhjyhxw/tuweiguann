@@ -76,7 +76,7 @@ public class ShopController extends AbstractController {
 
 
     /**
-     * 列表
+     * 角色数据权限列表
      */
     @RequestMapping("/queryList")
     @RequiresPermissions("shop:shop:list")
@@ -149,7 +149,7 @@ public class ShopController extends AbstractController {
 //        }else{
 //            list = shopService.list(new QueryWrapper<Shop>().in("dept_id", deptUtils.getDeptIdList()));//当前登陆用户的
 //        }
-
+        list = shopService.list(new QueryWrapper<Shop>());//当前登陆用户的
         List<ShopTreeVo> shopTreeVolist = new ArrayList<ShopTreeVo>();
         if(list!=null && list.size()>0){
             ShopTreeVo shopvo = null;
@@ -175,7 +175,7 @@ public class ShopController extends AbstractController {
             root.setParentId(-1L);
             shopTreeVolist.add(root);
         }
-        return R.ok().put("retailList", shopTreeVolist);
+        return R.ok().put("list", shopTreeVolist);
     }
     /**
      * 列表
