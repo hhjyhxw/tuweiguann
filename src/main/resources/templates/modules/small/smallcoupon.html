@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>折扣券管理</title>
+		<#include "/header.html">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.css">
+    <script src="${request.contextPath}/statics/libs/bootstrap-table.min.js"></script>
+    <script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.min.js"></script>
+    <script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.bootstrap3.js"></script>
+    <script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.extension.js"></script>
+    <script src="${request.contextPath}/statics/plugins/treegrid/tree.table.js"></script>
+    <script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    <script type="text/javascript" src="${request.contextPath}/statics/plugins/layui/layui.js"></script>
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/font-awesome/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/kindeditor/themes/default/default.css" />
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/kindeditor/plugins/code/prettify.css" />
+    <script charset="utf-8" src="${request.contextPath}/statics/plugins/kindeditor/kindeditor-all.js"></script>
+    <script charset="utf-8" src="${request.contextPath}/statics/plugins/kindeditor/lang/zh-CN.js"></script>
+    <script charset="utf-8" src="${request.contextPath}/statics/plugins/kindeditor/plugins/code/prettify.js"></script>
+</head>
+<body>
+<div id="icloudapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("small:smallcoupon:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("small:smallcoupon:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("small:smallcoupon:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+                 <form class="form-horizontal" style="width: 100rem;" id="form">
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">所属店铺</div>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                {{shopName}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li v-for="(item,index) in shopList" :key="index"><a href="#" @click="selectShop(index)">{{item.shopName}}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+					 <div class="form-group">
+                        <div class="col-sm-2 control-label">优惠券名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallCoupon.title" placeholder="代金券名称"/>
+                        </div>
+                    </div>
+				<!--	<div class="form-group">
+                        <div class="col-sm-2 control-label">使用类型，如满减</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallCoupon.coupType" placeholder="使用类型，如满减"/>
+                        </div>
+                    </div>-->
+
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">投放量</div>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" v-model="smallCoupon.total" placeholder="投放量"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">优惠券类型</div>
+                        <label class="radio-inline">
+                            <input type="radio" name="surplus" value="0" v-model="smallCoupon.surplus" checked="checked"/> 默认类型
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="surplus" value="1" v-model="smallCoupon.surplus"/> 新用户专用
+                        </label>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">每人限领</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallCoupon.limits" placeholder="每人限领"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">最低消费金额(元)</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallCoupon.min" placeholder="最低消费金额"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">优惠金额(元)</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallCoupon.discount" placeholder="优惠金额"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">状态</div>
+                        <label class="radio-inline">
+                            <input type="radio" name="status" value="1" v-model="smallCoupon.status" checked="checked"/> 使用
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="status" value="0" v-model="smallCoupon.status" /> 停用
+                        </label>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">可用分类</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallCategoryName" placeholder="可用分类(可为空)" @click="categroyTree" readonly="readonly"/>
+                        </div>
+                    </div>
+                     <div class="form-group">
+                         <div class="col-sm-2 control-label">优惠券类型</div>
+                         <label class="radio-inline">
+                             <input type="radio" name="validateType" value="0" v-model="smallCoupon.validateType"/> 领取后计算有效期
+                         </label>
+                         <label class="radio-inline">
+                             <input type="radio" name="validateType" value="1" v-model="smallCoupon.validateType" checked="checked"/> 固定有效期
+                         </label>
+                     </div>
+					<div class="form-group" v-show="smallCoupon.validateType==0">
+                        <div class="col-sm-2 control-label">过期天数</div>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" v-model="smallCoupon.days" placeholder="领取后多少天过期"/>
+                        </div>
+                    </div>
+                    <div v-show="smallCoupon.validateType==1" class="form-group">
+                        <div class="col-sm-2 control-label">有效开始日期</div>
+                        <div class="block">
+                            <el-date-picker
+                                    v-model="smallCoupon.startTime"
+                                    type="datetime"
+                                    placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss" >
+                            </el-date-picker>
+                        </div>
+                    </div>
+                    <div  v-show="smallCoupon.validateType==1" class="form-group">
+                        <div class="col-sm-2 control-label">有效结束日期</div>
+                        <div class="block">
+                            <el-date-picker
+                                    v-model="smallCoupon.endTime"
+                                    type="datetime"
+                                    placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss" >
+                            </el-date-picker>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="width:100rem;">
+                        <div class="col-sm-2 control-label">详情</div>
+                        <div class="col-sm-10">
+                            <div class="layui-form-item">
+                                <textarea class="form-control" name="detail" lay-verify="" id="detail" v-model="smallCoupon.description">{{smallCoupon.description}}</textarea>
+                            </div>
+                        </div>
+                     </div>
+			<div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- 分类树 -->
+<div id="categroyLayer" style="display: none;padding:10px;">
+    <ul id="categroyTree" class="ztree"></ul>
+</div>
+<script src="${request.contextPath}/statics/js/common/money.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/js/modules/small/smallcoupon.js?_${.now?long}"></script>
+</body>
+</html>

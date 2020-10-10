@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icloud.modules.small.dao.SmallUserCouponMapper">
+
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.small.entity.SmallUserCoupon" id="BaseResultMap">
+     <id property="id" column="id"/>
+     <result property="userId" column="user_id"/>
+     <result property="couponId" column="coupon_id"/>
+     <result property="orderId" column="order_id"/>
+     <result property="useTime" column="use_time"/>
+     <result property="startTime" column="start_time"/>
+     <result property="endTime" column="end_time"/>
+     <result property="createTime" column="create_time"/>
+     <result property="modifyTime" column="modify_time"/>
+     <result property="shopId" column="shop_id"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+   <!-- 基础字段列 -->
+   <sql id="Base_Column_List" >
+id,user_id,coupon_id,order_id,use_time,start_time,end_time,create_time,modify_time,shop_id,dept_id
+    </sql>
+
+
+<select id="queryMixList" resultMap="BaseResultMap">
+select * from t_small_user_coupon t
+<where>
+<if test="id != null">
+    and t.id = #{id}
+</if>
+<if test="userId != null">
+    and t.user_id = #{userId}
+</if>
+<if test="couponId != null">
+    and t.coupon_id = #{couponId}
+</if>
+<if test="orderId != null">
+    and t.order_id = #{orderId}
+</if>
+<if test="useTime != null">
+    and t.use_time = #{useTime}
+</if>
+<if test="startTime != null">
+    and t.start_time = #{startTime}
+</if>
+<if test="endTime != null">
+    and t.end_time = #{endTime}
+</if>
+<if test="createTime != null">
+    and t.create_time = #{createTime}
+</if>
+<if test="modifyTime != null">
+    and t.modify_time = #{modifyTime}
+</if>
+<if test="shopId != null">
+    and t.shop_id = #{shopId}
+</if>
+    <if test="sql_filter != null and sql_filter!=''">
+        and ${sql_filter}
+    </if>
+</where>
+</select>
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.small.vo.MycouponVo" id="BaseResultMapVo">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="useTime" column="use_time"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="shopId" column="shop_id"/>
+
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="surplus" column="surplus"/>
+        <result property="discount" column="discount"/>
+        <result property="min" column="min"/>
+        <result property="categoryId" column="category_id"/>
+    </resultMap>
+
+    <!--我领取的优惠券-->
+    <select id="queryMixListVo" resultMap="BaseResultMapVo">
+        select t.*,cp.title,cp.description,cp.surplus,cp.discount,cp.min,cp.category_id from t_small_user_coupon t,t_small_coupon cp
+        <where>
+            t.coupon_id = cp.id
+            <if test="id != null">
+                and t.id = #{id}
+            </if>
+            <if test="userId != null">
+                and t.user_id = #{userId}
+            </if>
+            <if test="couponId != null">
+                and t.coupon_id = #{couponId}
+            </if>
+            <if test="orderId != null">
+                and t.order_id = #{orderId}
+            </if>
+            <if test="useTime != null">
+                and t.use_time = #{useTime}
+            </if>
+            <if test="startTime != null">
+                and t.start_time = #{startTime}
+            </if>
+            <if test="endTime != null">
+                and t.end_time = #{endTime}
+            </if>
+            <if test="createTime != null">
+                and t.create_time = #{createTime}
+            </if>
+            <if test="modifyTime != null">
+                and t.modify_time = #{modifyTime}
+            </if>
+            <if test="shopId != null">
+                and t.shop_id = #{shopId}
+            </if>
+            <!--未使用-->
+            <if test="unreceived != null">
+                and t.status=0 and t.end_time>now()
+            </if>
+            <!--已使用-->
+            <if test="received != null">
+                and t.status=1
+            </if>
+            <!--已过期-->
+            <if test="overtimed != null">
+                and t.status=0 and now()>t.end_time
+            </if>
+            <if test="sql_filter != null and sql_filter!=''">
+                and ${sql_filter}
+            </if>
+        </where>
+    </select>
+
+    <!--根据店铺id 和商品sku 查询我领取的对应可用优惠券-->
+    <select id="getCategoryidList" resultMap="BaseResultMapVo">
+        select DISTINCT t.id,t.*,cp.title,cp.description,cp.surplus,cp.discount,cp.min,cp.category_id from t_small_user_coupon t,t_small_sku sk,t_small_spu sp,t_small_category cg,t_small_coupon cp
+         <where>
+             t.coupon_id = cp.id and sp.shop_id = #{shopId}
+             and
+                 ( (cp.category_id=cg.id and sk.spu_id=sp.id and sp.category_id=cg.id
+                 and sk.id in
+                 <foreach item="item" index="index" collection="skuId" open="("
+                          separator="," close=")">
+                     #{item}
+                 </foreach>
+                 )
+                 or cp.surplus=1
+                 )
+             and t.status=0
+             and t.user_id = #{userId}
+             and t.end_time>now()
+         </where>
+        order by t.create_time desc
+    </select>
+
+</mapper>

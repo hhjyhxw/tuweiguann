@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icloud.modules.small.dao.SmallWasteRecordMapper">
+
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.small.entity.SmallWasteRecord" id="BaseResultMap">
+     <id property="id" column="id"/>
+     <result property="shopId" column="shop_id"/>
+     <result property="payType" column="pay_type"/>
+     <result property="wasteFlag" column="waste_flag"/>
+     <result property="amount" column="amount"/>
+     <result property="createTime" column="create_time"/>
+     <result property="approveFlag" column="approve_flag"/>
+     <result property="wasteState" column="waste_state"/>
+     <result property="transactionId" column="transaction_id"/>
+     <result property="orderNo" column="order_no"/>
+     <result property="msg" column="msg"/>
+     <result property="approveTime" column="approve_time"/>
+     <result property="modifyTime" column="modify_time"/>
+     <result property="approveBy" column="approve_by"/>
+     <result property="createBy" column="create_by"/>
+    </resultMap>
+
+   <!-- 基础字段列 -->
+   <sql id="Base_Column_List" >
+id,shop_id,pay_type,waste_flag,amount,create_time,approve_flag,waste_state,transaction_id,order_no,msg,approve_time,modify_time,approve_by,create_by
+    </sql>
+
+
+<select id="queryMixList" resultMap="BaseResultMap">
+    select t.*,s.shop_name as "shop.shopName" from t_small_waste_record t,shop s
+<where>
+t.shop_id=s.id
+<if test="id != null">
+    and t.id = #{id}
+</if>
+<if test="shopId != null">
+    and t.shop_id = #{shopId}
+</if>
+<if test="payType != null">
+    and t.pay_type = #{payType}
+</if>
+<if test="wasteFlag != null">
+    and t.waste_flag = #{wasteFlag}
+</if>
+<if test="amount != null">
+    and t.amount = #{amount}
+</if>
+<if test="createTime != null">
+    and t.create_time = #{createTime}
+</if>
+<if test="approveFlag != null">
+    and t.approve_flag = #{approveFlag}
+</if>
+<if test="wasteState != null">
+    and t.waste_state = #{wasteState}
+</if>
+<if test="transactionId != null">
+    and t.transaction_id = #{transactionId}
+</if>
+<if test="orderNo != null">
+    and t.order_no = #{orderNo}
+</if>
+<if test="msg != null">
+    and t.msg = #{msg}
+</if>
+<if test="approveTime != null">
+    and t.approve_time = #{approveTime}
+</if>
+<if test="modifyTime != null">
+    and t.modify_time = #{modifyTime}
+</if>
+<if test="approveBy != null">
+    and t.approve_by = #{approveBy}
+</if>
+    <if test="shopName != null and shopName!=''">
+        and s.shop_name like CONCAT('%', '${shopName}', '%')
+    </if>
+    <if test="sql_filter != null and sql_filter!=''">
+        and ${sql_filter}
+    </if>
+</where>
+</select>
+</mapper>

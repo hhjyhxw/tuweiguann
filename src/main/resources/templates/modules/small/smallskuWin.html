@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>商品sku</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="icloudapp" v-cloak>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+
+				 <!--<div class="form-group">
+                        <div class="col-sm-2 control-label">sku条码</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallSku.barCode" placeholder="sku条码"/>
+                        </div>
+                    </div>-->
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">sku名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallSku.title" placeholder="sku名称"/>
+                        </div>
+                    </div>
+                  <div class="form-group">
+                        <div class="col-sm-2 control-label">商品图片</div>
+                        <img   :src="smallSku.img" style="width:300px;height:150px;" v-model="smallSku.img" placeholder="商品图片"/>
+                        <div class="col-sm-10">
+                            <a class="btn btn-primary" id="upload" style="margin-left:23.2rem;"><i class="fa fa-plus"></i>&nbsp;上传文件</a>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">原始价</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallSku.originalPrice" placeholder="原始价"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">现价</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallSku.price" placeholder="现价"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">vip价</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallSku.vipPrice" placeholder="vip价"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">剩余库存</div>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" v-model="smallSku.remainStock" readonly placeholder="剩余库存"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">添加库存</div>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" v-model="addStock" placeholder="添加库存"/>
+                        </div>
+                    </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">单位</div>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" v-model="smallSku.unit" placeholder="单位"/>
+                    </div>
+                </div>
+
+
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="保存"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
+<script src="${request.contextPath}/statics/js/common/money.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/js/modules/small/smallskuWin.js?_${.now?long}"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icloud.modules.small.dao.SmallShopconectuserMapper">
+
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.small.entity.SmallShopconectuser" id="BaseResultMap">
+     <id property="id" column="id"/>
+     <result property="userId" column="user_id"/>
+     <result property="shopId" column="shop_id"/>
+     <result property="createTime" column="create_time"/>
+     <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+   <!-- 基础字段列 -->
+   <sql id="Base_Column_List" >
+id,user_id,shop_id,create_time,modify_time
+    </sql>
+
+
+<select id="queryMixList" resultMap="BaseResultMap">
+select t.*,p.shop_name as "shop.shopName",u.nickname as "user.nickname",u.headimgurl as "user.headimgurl" from t_small_shopconectuser t,shop p,t_wx_user u
+<where>
+t.user_id = u.id and t.shop_id = p.id
+<if test="id != null">
+    and t.id = #{id}
+</if>
+<if test="userId != null">
+    and t.user_id = #{userId}
+</if>
+<if test="shopId != null">
+    and t.shop_id = #{shopId}
+</if>
+<if test="createTime != null">
+    and t.create_time = #{createTime}
+</if>
+<if test="shopName != null and shopName!=''">
+    and s.shop_name like CONCAT('%', '${shopName}', '%')
+</if>
+<if test="nickname != null and nickname!=''">
+    and u.nickname like CONCAT('%', '${nickname}', '%')
+</if>
+<if test="sql_filter != null and sql_filter!=''">
+    and ${sql_filter}
+</if>
+</where>
+order by t.create_time desc
+</select>
+</mapper>

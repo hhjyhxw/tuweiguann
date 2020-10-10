@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icloud.modules.shop.dao.ShopStoreMapper">
+
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.shop.entity.ShopStore" id="BaseResultMap">
+     <id property="id" column="id"/>
+     <result property="shopId" column="shop_id"/>
+     <result property="titile" column="titile"/>
+     <result property="province" column="province"/>
+     <result property="city" column="city"/>
+     <result property="county" column="county"/>
+     <result property="address" column="address"/>
+     <result property="phone" column="phone"/>
+     <result property="lnt" column="lnt"/>
+     <result property="lat" column="lat"/>
+     <result property="distributionScope" column="distribution_scope"/>
+     <result property="status" column="status"/>
+     <result property="createdBy" column="created_by"/>
+     <result property="createdTime" column="created_time"/>
+     <result property="updatedBy" column="updated_by"/>
+     <result property="updatedTime" column="updated_time"/>
+    </resultMap>
+
+   <!-- 基础字段列 -->
+   <sql id="Base_Column_List" >
+id,shop_id,titile,province,city,county,address,phone,lnt,lat,distribution_scope,status,created_by,created_time,updated_by,updated_time
+    </sql>
+
+
+<select id="queryMixList" resultMap="BaseResultMap">
+    select t.*,s.shop_name as "shop.shopName" from shop_store t,shop s
+<where>
+    t.shop_id = s.id
+<if test="id != null">
+    and t.id = #{id}
+</if>
+<if test="shopId != null">
+    and t.shop_id = #{shopId}
+</if>
+<if test="titile != null">
+    and t.titile = #{titile}
+</if>
+<if test="province != null">
+    and t.province = #{province}
+</if>
+<if test="city != null">
+    and t.city = #{city}
+</if>
+<if test="county != null">
+    and t.county = #{county}
+</if>
+<if test="address != null">
+    and t.address = #{address}
+</if>
+<if test="phone != null">
+    and t.phone = #{phone}
+</if>
+<if test="lnt != null">
+    and t.lnt = #{lnt}
+</if>
+<if test="lat != null">
+    and t.lat = #{lat}
+</if>
+<if test="distributionScope != null">
+    and t.distribution_scope = #{distributionScope}
+</if>
+<if test="status != null">
+    and t.status = #{status}
+</if>
+<if test="createdBy != null">
+    and t.created_by = #{createdBy}
+</if>
+<if test="createdTime != null">
+    and t.created_time = #{createdTime}
+</if>
+<if test="updatedBy != null">
+    and t.updated_by = #{updatedBy}
+</if>
+<if test="shopName != null and shopName!=''">
+    and s.shop_name like CONCAT('%', '${shopName}', '%')
+</if>
+<if test="sql_filter != null and sql_filter!=''">
+    and ${sql_filter}
+</if>
+</where>
+</select>
+</mapper>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icloud.modules.small.dao.SmallOrderMapper">
+
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.small.entity.SmallOrder" id="BaseResultMap">
+     <id property="id" column="id"/>
+     <result property="channel" column="channel"/>
+     <result property="orderNo" column="order_no"/>
+     <result property="userId" column="user_id"/>
+     <result property="shopId" column="shop_id"/>
+     <result property="orderStatus" column="order_status"/>
+     <result property="payStatus" column="pay_status"/>
+     <result property="refundStatus" column="refund_status"/>
+     <result property="shipStatus" column="ship_status"/>
+     <result property="skuOriginalTotalPrice" column="sku_original_total_price"/>
+     <result property="skuTotalPrice" column="sku_total_price"/>
+     <result property="freightPrice" column="freight_price"/>
+     <result property="couponPrice" column="coupon_price"/>
+     <result property="couponId" column="coupon_id"/>
+     <result property="actualPrice" column="actual_price"/>
+     <result property="payPrice" column="pay_price"/>
+     <result property="payId" column="pay_id"/>
+     <result property="payChannel" column="pay_channel"/>
+     <result property="payTime" column="pay_time"/>
+     <result property="shipCode" column="ship_code"/>
+     <result property="shipNo" column="ship_no"/>
+     <result property="paySn" column="pay_sn"/>
+     <result property="shipTime" column="ship_time"/>
+     <result property="confirmTime" column="confirm_time"/>
+     <result property="province" column="province"/>
+     <result property="city" column="city"/>
+     <result property="county" column="county"/>
+     <result property="address" column="address"/>
+     <result property="memo" column="memo"/>
+     <result property="refundReason" column="refund_reason"/>
+     <result property="consignee" column="consignee"/>
+     <result property="phone" column="phone"/>
+     <result property="createTime" column="create_time"/>
+     <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+   <!-- 基础字段列 -->
+   <sql id="Base_Column_List" >
+id,channel,order_no,user_id,shop_id,order_status,pay_status,refund_status,ship_status,sku_original_total_price,sku_total_price,freight_price,coupon_price,coupon_id,actual_price,pay_price,pay_id,pay_channel,pay_time,ship_code,ship_no,pay_sn,ship_time,confirm_time,province,city,county,address,memo,refund_reason,consignee,phone,create_time,modify_time
+    </sql>
+
+
+<select id="queryMixList" resultMap="BaseResultMap">
+select t.*,s.shop_name as "shop.shopName",u.nickname as "user.nickname" from t_small_order t,shop s,t_wx_user u
+<where>
+t.shop_id = s.id and t.user_id = u.id
+    <if test="id != null">
+        and t.id = #{id}
+    </if>
+    <if test="channel != null">
+        and t.channel = #{channel}
+    </if>
+    <if test="orderNo != null and orderNo!=''">
+        and t.order_no = #{orderNo}
+    </if>
+    <if test="userId != null">
+        and t.user_id = #{userId}
+    </if>
+    <if test="shopId != null">
+        and t.shop_id = #{shopId}
+    </if>
+    <if test="orderStatus != null">
+        and t.order_status = #{orderStatus}
+    </if>
+    <if test="payStatus != null">
+        and t.pay_status = #{payStatus}
+    </if>
+    <if test="refundStatus != null">
+        and t.refund_status = #{refundStatus}
+    </if>
+    <if test="shipStatus != null">
+        and t.ship_status = #{shipStatus}
+    </if>
+    <if test="skuOriginalTotalPrice != null">
+        and t.sku_original_total_price = #{skuOriginalTotalPrice}
+    </if>
+    <if test="skuTotalPrice != null">
+        and t.sku_total_price = #{skuTotalPrice}
+    </if>
+    <if test="freightPrice != null">
+        and t.freight_price = #{freightPrice}
+    </if>
+    <if test="couponPrice != null">
+        and t.coupon_price = #{couponPrice}
+    </if>
+    <if test="couponId != null">
+        and t.coupon_id = #{couponId}
+    </if>
+    <if test="actualPrice != null">
+        and t.actual_price = #{actualPrice}
+    </if>
+    <if test="payPrice != null">
+        and t.pay_price = #{payPrice}
+    </if>
+    <if test="payId != null">
+        and t.pay_id = #{payId}
+    </if>
+    <if test="payChannel != null">
+        and t.pay_channel = #{payChannel}
+    </if>
+    <if test="payTime != null">
+        and t.pay_time = #{payTime}
+    </if>
+    <if test="shipCode != null">
+        and t.ship_code = #{shipCode}
+    </if>
+    <if test="shipNo != null">
+        and t.ship_no = #{shipNo}
+    </if>
+    <if test="paySn != null">
+        and t.pay_sn = #{paySn}
+    </if>
+    <if test="shipTime != null">
+        and t.ship_time = #{shipTime}
+    </if>
+    <if test="confirmTime != null">
+        and t.confirm_time = #{confirmTime}
+    </if>
+    <if test="province != null">
+        and t.province = #{province}
+    </if>
+    <if test="city != null">
+        and t.city = #{city}
+    </if>
+    <if test="county != null">
+        and t.county = #{county}
+    </if>
+    <if test="address != null">
+        and t.address = #{address}
+    </if>
+    <if test="memo != null">
+        and t.memo = #{memo}
+    </if>
+    <if test="refundReason != null">
+        and t.refund_reason = #{refundReason}
+    </if>
+    <if test="consignee != null">
+        and t.consignee = #{consignee}
+    </if>
+    <if test="phone != null">
+        and t.phone = #{phone}
+    </if>
+<if test="startTime != null" >
+    <![CDATA[ and t.create_time  >=  #{startTime}  ]]>
+</if>
+<if test="endTime != null" >
+    <![CDATA[ and t.create_time  <=  #{endTime}  ]]>
+</if>
+<if test="nickname != null and nickname!=''">
+    and u.nickname like CONCAT('%', '${nickname}', '%')
+</if>
+<if test="shopName != null and shopName!=''">
+    and s.shop_name like CONCAT('%', '${shopName}', '%')
+</if>
+    <if test="sql_filter != null and sql_filter!=''">
+        and ${sql_filter}
+    </if>
+</where>
+    order by t.create_time desc
+</select>
+
+    <!--订单日报-->
+    <select id="queryReportList" resultType="com.icloud.modules.small.vo.OrderReportVo">
+        select DATE_FORMAT(t.create_time, '%Y-%m-%d') AS createTime,count(*) orderCount,sum(t.actual_price) orderAmout,s.shop_name shopName  from t_small_order t,shop s
+        <where>
+            t.shop_id = s.id and t.pay_status=2
+            <if test="shopId != null">
+                and t.shop_id = #{shopId}
+            </if>
+            <if test="shopName != null and shopName!=''">
+                and s.shop_name like CONCAT('%', '${shopName}', '%')
+            </if>
+            <if test="start != null" >
+                <![CDATA[ and t.create_time  >=  #{start}  ]]>
+            </if>
+            <if test="end != null" >
+                <![CDATA[ and t.create_time  <=  #{end}  ]]>
+            </if>
+            <if test="sql_filter != null and sql_filter!=''">
+                and ${sql_filter}
+            </if>
+        </where>
+        group by createTime,t.shop_id,s.shop_name
+        order by orderCount desc,orderAmout desc
+    </select>
+
+    <!--订单月报-->
+    <select id="queryReportMonthList" resultType="com.icloud.modules.small.vo.OrderReportVo">
+        select DATE_FORMAT(t.create_time, '%Y-%m') AS createTime,count(*) orderCount,sum(t.actual_price) orderAmout,s.shop_name shopName  from t_small_order t,shop s
+        <where>
+            t.shop_id = s.id and t.pay_status=2
+            <if test="shopId != null">
+                and t.shop_id = #{shopId}
+            </if>
+            <if test="shopName != null and shopName!=''">
+                and s.shop_name like CONCAT('%', '${shopName}', '%')
+            </if>
+            <if test="yearonly != null and yearonly !=''" >
+                and DATE_FORMAT(t.create_time, '%Y') = #{yearonly}
+            </if>
+            <if test="yearAndMoth != null and yearAndMoth !=''" >
+                and DATE_FORMAT(t.create_time,'%Y-%m') = #{yearAndMoth}
+            </if>
+            <if test="sql_filter != null and sql_filter!=''">
+                and ${sql_filter}
+            </if>
+        </where>
+        group by createTime,t.shop_id,s.shop_name
+        order by orderCount desc,orderAmout desc
+    </select>
+</mapper>

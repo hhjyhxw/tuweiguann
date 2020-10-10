@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icloud.modules.small.dao.SmallCouponMapper">
+
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.small.entity.SmallCoupon" id="BaseResultMap">
+     <id property="id" column="id"/>
+     <result property="title" column="title"/>
+     <result property="coupType" column="coup_type"/>
+     <result property="description" column="description"/>
+     <result property="total" column="total"/>
+     <result property="surplus" column="surplus"/>
+     <result property="limits" column="limits"/>
+     <result property="discount" column="discount"/>
+     <result property="min" column="min"/>
+     <result property="status" column="status"/>
+     <result property="categoryId" column="category_id"/>
+     <result property="days" column="days"/>
+     <result property="startTime" column="start_time"/>
+     <result property="endTime" column="end_time"/>
+     <result property="createTime" column="create_time"/>
+     <result property="modifyTime" column="modify_time"/>
+     <result property="shopId" column="shop_id"/>
+        <result property="freezeStore" column="freeze_store"/>
+
+    </resultMap>
+
+   <!-- 基础字段列 -->
+   <sql id="Base_Column_List" >
+id,title,coup_type,description,total,surplus,limits,discount,min,status,category_id,days,start_time,end_time,create_time,modify_time,supplier_id,dept_id
+    </sql>
+
+
+<select id="queryMixList" resultMap="BaseResultMap">
+select * from t_small_coupon t
+<where>
+<if test="id != null">
+    and t.id = #{id}
+</if>
+<if test="title != null">
+    and t.title = #{title}
+</if>
+<if test="coupType != null">
+    and t.coup_type = #{coupType}
+</if>
+<if test="description != null">
+    and t.description = #{description}
+</if>
+<if test="total != null">
+    and t.total = #{total}
+</if>
+<if test="surplus != null">
+    and t.surplus = #{surplus}
+</if>
+<if test="limits != null">
+    and t.limits = #{limits}
+</if>
+<if test="discount != null">
+    and t.discount = #{discount}
+</if>
+<if test="min != null">
+    and t.min = #{min}
+</if>
+<if test="status != null">
+    and t.status = #{status}
+</if>
+<if test="categoryId != null">
+    and t.category_id = #{categoryId}
+</if>
+<if test="days != null">
+    and t.days = #{days}
+</if>
+<if test="startTime != null">
+    and t.start_time = #{startTime}
+</if>
+<!-- 查询有效结束时间大于 当前时间的优惠券 -->
+<!--<if test="endTime != null">
+    <![CDATA[ and t.end_time  >  #{endTime}  ]]>
+</if>-->
+    and t.end_time >now()
+<if test="createTime != null">
+    and t.create_time = #{createTime}
+</if>
+<if test="modifyTime != null">
+    and t.modify_time = #{modifyTime}
+</if>
+<if test="supplierId != null">
+    and t.supplier_id = #{supplierId}
+</if>
+    <if test="sql_filter != null and sql_filter!=''">
+        and ${sql_filter}
+    </if>
+</where>
+    order by t.create_time desc
+</select>
+</mapper>

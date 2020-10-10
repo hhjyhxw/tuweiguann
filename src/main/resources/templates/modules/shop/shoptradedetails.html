@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>店铺账号交易明细 </title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="icloudapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <div class="form-group col-sm-2">
+                <input type="text" class="form-control" v-model="q.shopName" @keyup.enter="query" placeholder="店铺名称">
+            </div>
+            <div class="form-group col-sm-1">
+                <input type="text" class="form-control" v-model="q.orderNo" @keyup.enter="query" placeholder="订单号">
+            </div>
+            <div class="form-group col-sm-1">
+              <!--  <input type="text" class="form-control" v-model="q.shopName" @keyup.enter="query" placeholder="交易类型">-->
+                <select class="form-control"  v-model="q.bizType">
+                    <!---->
+                    <option value="">选择交易类型</option>
+                    <option value="7">公共商品订单收入</option>
+                    <option value="8">佣金收入</option>
+                    <option value="9">公共订单(自营部分商品收入)</option>
+                    <option value="10">自营订单收入</option>
+                    <option value="11">账号充值</option>
+                    <option value="20">账号提现</option>
+                    <option value="21">扣除订单手续费</option>
+                </select>
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+			<!--<#if shiro.hasPermission("shop:shoptradedetails:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("shop:shoptradedetails:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("shop:shoptradedetails:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>-->
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">所属店铺</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shopTradeDetails.shopId" placeholder="所属店铺"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">交易单号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shopTradeDetails.tradeNo" placeholder="交易单号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">对应单号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shopTradeDetails.orderNo" placeholder="对应单号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">交易类型 10：订单收入，11：账号充值，20：账号提现，21：扣除订单手续费</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shopTradeDetails.bizType" placeholder="交易类型 10：订单收入，11：账号充值，20：账号提现，21：扣除订单手续费"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">收支方向 1：收入，2：支出</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shopTradeDetails.inOrOut" placeholder="收支方向 1：收入，2：支出"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">变更前余额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shopTradeDetails.beforeBlance" placeholder="变更前余额"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">变更金额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shopTradeDetails.amount" placeholder="变更金额"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">变更后余额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shopTradeDetails.afterBlance" placeholder="变更后余额"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建人</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shopTradeDetails.createdBy" placeholder="创建人"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shopTradeDetails.createdTime" placeholder="创建时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">更新人</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shopTradeDetails.updatedBy" placeholder="更新人"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">更新时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shopTradeDetails.updatedTime" placeholder="更新时间"/>
+                        </div>
+                    </div>
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/shop/shoptradedetails.js?_${.now?long}"></script>
+</body>
+</html>

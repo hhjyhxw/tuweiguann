@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icloud.modules.shop.dao.ShopMapper">
+
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.shop.entity.Shop" id="BaseResultMap">
+     <id property="id" column="id"/>
+     <result property="parentId" column="parent_id"/>
+     <result property="shopCode" column="shop_code"/>
+     <result property="shopName" column="shop_name"/>
+     <result property="sysFlag" column="sys_flag"/>
+     <result property="shopLevel" column="shop_level"/>
+     <result property="shopTel" column="shop_tel"/>
+     <result property="shopImg" column="shop_img"/>
+     <result property="description" column="description"/>
+     <result property="balance" column="balance"/>
+     <result property="untitled4" column="untitled4"/>
+     <result property="province" column="province"/>
+     <result property="city" column="city"/>
+     <result property="county" column="county"/>
+     <result property="address" column="address"/>
+     <result property="lnt" column="lnt"/>
+     <result property="lat" column="lat"/>
+     <result property="coverScope" column="cover_scope"/>
+     <result property="status" column="status"/>
+     <result property="review" column="review"/>
+     <result property="createdBy" column="created_by"/>
+     <result property="createdTime" column="created_time"/>
+     <result property="updatedBy" column="updated_by"/>
+     <result property="updatedTime" column="updated_time"/>
+     <result property="userId" column="user_id"/>
+    </resultMap>
+
+   <!-- 基础字段列 -->
+   <sql id="Base_Column_List" >
+id,parent_id,shop_code,shop_name,sys_flag,shop_level,shop_tel,shop_img,description,balance,untitled4,province,city,county,address,lnt,lat,cover_scope,status,review,created_by,created_time,updated_by,updated_time,user_id
+    </sql>
+
+
+<select id="queryMixList" resultMap="BaseResultMap">
+select * from shop t
+<where>
+<if test="id != null">
+    and t.id = #{id}
+</if>
+<if test="parentId != null">
+    and t.parent_id = #{parentId}
+</if>
+<if test="shopCode != null">
+    and t.shop_code = #{shopCode}
+</if>
+<if test="shopName != null">
+    and t.shop_name = #{shopName}
+</if>
+<if test="sysFlag != null">
+    and t.sys_flag = #{sysFlag}
+</if>
+<if test="shopLevel != null">
+    and t.shop_level = #{shopLevel}
+</if>
+<if test="shopTel != null">
+    and t.shop_tel = #{shopTel}
+</if>
+<if test="shopImg != null">
+    and t.shop_img = #{shopImg}
+</if>
+<if test="description != null">
+    and t.description = #{description}
+</if>
+<if test="balance != null">
+    and t.balance = #{balance}
+</if>
+<if test="untitled4 != null">
+    and t.untitled4 = #{untitled4}
+</if>
+<if test="province != null">
+    and t.province = #{province}
+</if>
+<if test="city != null">
+    and t.city = #{city}
+</if>
+<if test="county != null">
+    and t.county = #{county}
+</if>
+<if test="address != null">
+    and t.address = #{address}
+</if>
+<if test="lnt != null">
+    and t.lnt = #{lnt}
+</if>
+<if test="lat != null">
+    and t.lat = #{lat}
+</if>
+<if test="coverScope != null">
+    and t.cover_scope = #{coverScope}
+</if>
+<if test="status != null">
+    and t.status = #{status}
+</if>
+<if test="review != null">
+    and t.review = #{review}
+</if>
+<if test="createdBy != null">
+    and t.created_by = #{createdBy}
+</if>
+<if test="createdTime != null">
+    and t.created_time = #{createdTime}
+</if>
+<if test="updatedBy != null">
+    and t.updated_by = #{updatedBy}
+</if>
+<if test="updatedTime != null">
+    and t.updated_time = #{updatedTime}
+</if>
+<if test="sql_filter != null and sql_filter!=''">
+    and ${sql_filter}
+</if>
+</where>
+</select>
+</mapper>

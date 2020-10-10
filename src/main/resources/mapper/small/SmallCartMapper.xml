@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icloud.modules.small.dao.SmallCartMapper">
+
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.small.entity.SmallCart" id="BaseResultMap">
+     <id property="id" column="id"/>
+     <result property="skuId" column="sku_id"/>
+     <result property="userId" column="user_id"/>
+     <result property="num" column="num"/>
+     <result property="createTime" column="create_time"/>
+     <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+   <!-- 基础字段列 -->
+   <sql id="Base_Column_List" >
+id,sku_id,user_id,num,create_time,modify_time
+    </sql>
+
+
+<select id="queryMixList" resultMap="BaseResultMap">
+select * from t_small_cart t
+<where>
+<if test="id != null">
+    and t.id = #{id}
+</if>
+<if test="sku_id != null">
+    and t.sku_id = #{sku_id}
+</if>
+<if test="user_id != null">
+    and t.user_id = #{user_id}
+</if>
+<if test="num != null">
+    and t.num = #{num}
+</if>
+<if test="create_time != null">
+    and t.create_time = #{create_time}
+</if>
+</where>
+</select>
+    <!-- cartVo map -->
+    <resultMap type="com.icloud.modules.small.vo.CartVo" id="CartVoResultMap">
+        <id property="id" column="id"/>
+        <result property="skuId" column="sku_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="groupId" column="group_id"/>
+        <result property="shopId" column="shop_id"/>
+        <result property="num" column="num"/>
+        <result property="title" column="title"/>
+        <result property="price" column="min_price"/><!--团购价-->
+        <result property="originalPrice" column="max_price"/><!--原价-->
+        <result property="title" column="title"/>
+        <result property="img" column="img"/>
+        <result property="totalAmout" column="totalAmout"/>
+
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <select id="getCartVoList" resultMap="CartVoResultMap">
+        select t.id,t.sku_id,t.user_id,t.num,t.num*gp.min_price as totalAmout,gp.min_price,gp.max_price,s.title,IFNULL(s.img,p.img) img,s.title,gp.id group_id  from t_small_cart t,t_small_spu p,t_small_sku s,t_small_group_shop gp
+        <where>
+            t.sku_id = s.id and s.spu_id=p.id and t.group_id=gp.id
+            <if test="sku_id != null">
+                and t.sku_id = #{sku_id}
+            </if>
+            <if test="user_id != null">
+                and t.user_id = #{user_id}
+            </if>
+            <if test="supplier_id != null">
+                and gp.supplier_id = #{supplier_id}
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
+
+</mapper>

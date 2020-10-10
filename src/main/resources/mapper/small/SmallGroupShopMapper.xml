@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icloud.modules.small.dao.SmallGroupShopMapper">
+
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.small.entity.SmallGroupShop" id="BaseResultMap">
+     <id property="id" column="id"/>
+     <result property="spuId" column="spu_id"/>
+     <result property="skuId" column="sku_id"/>
+     <result property="minPrice" column="min_price"/>
+     <result property="maxPrice" column="max_price"/>
+     <result property="gmtStart" column="gmt_start"/>
+     <result property="gmtEnd" column="gmt_end"/>
+     <result property="minimumNumber" column="minimum_number"/>
+     <result property="alreadyBuyNumber" column="already_buy_number"/>
+     <result property="automaticRefund" column="automatic_refund"/>
+     <result property="status" column="status"/>
+     <result property="createTime" column="create_time"/>
+     <result property="modifyTime" column="modify_time"/>
+     <result property="shopId" column="shop_id"/>
+        <result property="sysShopId" column="sys_shop_id"/>
+        <result property="commonFlag" column="common_flag"/>
+    </resultMap>
+
+   <!-- 基础字段列 -->
+   <sql id="Base_Column_List" >
+id,spu_id,min_price,max_price,gmt_start,gmt_end,minimum_number,already_buy_number,automatic_refund,status,create_time,modify_time,shop_id,sku_id
+    </sql>
+
+
+<select id="queryMixList" resultMap="BaseResultMap">
+select * from t_small_group_shop t
+<where>
+<if test="id != null">
+    and t.id = #{id}
+</if>
+<if test="spu_id != null">
+    and t.spu_id = #{spu_id}
+</if>
+<if test="min_price != null">
+    and t.min_price = #{min_price}
+</if>
+<if test="max_price != null">
+    and t.max_price = #{max_price}
+</if>
+<if test="gmt_start != null">
+    and t.gmt_start = #{gmt_start}
+</if>
+<if test="gmt_end != null">
+    and t.gmt_end = #{gmt_end}
+</if>
+<if test="minimum_number != null">
+    and t.minimum_number = #{minimum_number}
+</if>
+<if test="already_buy_number != null">
+    and t.already_buy_number = #{already_buy_number}
+</if>
+<if test="automatic_refund != null">
+    and t.automatic_refund = #{automatic_refund}
+</if>
+<if test="status != null">
+    and t.status = #{status}
+</if>
+<if test="sql_filter != null and sql_filter!=''">
+    and ${sql_filter}
+</if>
+</where>
+    order by t.create_time desc
+</select>
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.small.vo.GroupSkuVo" id="GroupSkuMap">
+        <id property="id" column="id"/><!--团购记录Id-->
+        <result property="skuId" column="sku_id"/>
+        <result property="spuId" column="spu_id"/>
+        <result property="title" column="title"/>
+        <result property="img" column="img"/>
+        <result property="originalPrice" column="original_price"/>
+        <result property="price" column="price"/>
+        <result property="remainStock" column="remainStock"/>
+        <result property="shopId" column="shop_id"/>
+    </resultMap>
+
+    <!--后台分页-->
+    <select id="queryGroupAndSkuForhou" resultMap="GroupSkuMap">
+        select t.shop_id,sh.shop_name,t.id,t.sku_id,t.spu_id,k.title,IFNULL(k.img,p.img) img,t.min_price as price,t.max_price original_price,k.stock-k.freeze_stock as remainStock from t_small_group_shop t,t_small_sku k,t_small_spu p,shop sh
+        <where>
+            t.sku_id = k.id and k.spu_id = p.id and t.shop_id = sh.id
+            <if test="shopId != null">
+                and t.shop_id = #{shopId}
+            </if>
+            <if test="title != null and title!=''">
+                and (k.title LIKE CONCAT('%', '${title}', '%')  or p.title LIKE CONCAT('%', '${title}', '%'))
+            </if>
+            <if test="shopName != null and shopName!=''">
+                and sh.shop_name LIKE CONCAT('%', '${shopName}', '%')
+            </if>
+
+            <if test="sql_filter != null and sql_filter!=''">
+                and ${sql_filter}
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
+
+    <!--前端分页-->
+    <select id="queryGroupAndSku" resultMap="GroupSkuMap">
+        select t.shop_id,t.id,t.sku_id,t.spu_id,k.title,IFNULL(k.img,p.img) img,t.min_price as price,t.max_price original_price,k.stock-k.freeze_stock as remainStock from t_small_group_shop t,t_small_sku k,t_small_spu p
+        <where>
+            t.sku_id = k.id and k.spu_id = p.id
+            <if test="shopId != null">
+                and t.shop_id = #{shopId}
+            </if>
+            <if test="title != null and title!=''">
+                and (k.title LIKE CONCAT('%', '${title}', '%')  or p.title LIKE CONCAT('%', '${title}', '%'))
+            </if>
+        </where>
+    </select>
+</mapper>

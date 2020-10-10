@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icloud.modules.small.dao.SmallPurorderMapper">
+
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.small.entity.SmallPurorder" id="BaseResultMap">
+     <id property="id" column="id"/>
+     <result property="channel" column="channel"/>
+     <result property="purorderNo" column="purorder_no"/>
+     <result property="orderId" column="order_id"/>
+     <result property="shopId" column="shop_id"/>
+     <result property="purorderType" column="purorder_type"/>
+     <result property="orderStatus" column="order_status"/>
+     <result property="payStatus" column="pay_status"/>
+     <result property="refundStatus" column="refund_status"/>
+     <result property="shipStatus" column="ship_status"/>
+     <result property="skuOriginalTotalPrice" column="sku_original_total_price"/>
+     <result property="skuTotalPrice" column="sku_total_price"/>
+     <result property="freightPrice" column="freight_price"/>
+     <result property="actualPrice" column="actual_price"/>
+     <result property="payPrice" column="pay_price"/>
+     <result property="payId" column="pay_id"/>
+     <result property="payChannel" column="pay_channel"/>
+     <result property="payTime" column="pay_time"/>
+     <result property="shipTime" column="ship_time"/>
+     <result property="confirmTime" column="confirm_time"/>
+     <result property="province" column="province"/>
+     <result property="city" column="city"/>
+     <result property="county" column="county"/>
+     <result property="address" column="address"/>
+     <result property="memo" column="memo"/>
+     <result property="consignee" column="consignee"/>
+     <result property="phone" column="phone"/>
+     <result property="createTime" column="create_time"/>
+     <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+   <!-- 基础字段列 -->
+   <sql id="Base_Column_List" >
+id,channel,purorder_no,order_id,supplier_id,purorder_type,order_status,pay_status,refund_status,ship_status,sku_original_total_price,sku_total_price,freight_price,actual_price,pay_price,pay_id,pay_channel,pay_time,ship_time,confirm_time,province,city,county,address,memo,consignee,phone,create_time,modify_time
+    </sql>
+
+
+<select id="queryMixList" resultMap="BaseResultMap">
+select * from t_small_purorder t
+<where>
+<if test="id != null">
+    and t.id = #{id}
+</if>
+<if test="channel != null">
+    and t.channel = #{channel}
+</if>
+<if test="purorderNo != null">
+    and t.purorder_no = #{purorderNo}
+</if>
+<if test="orderId != null">
+    and t.order_id = #{orderId}
+</if>
+<if test="shopId != null">
+    and t.shop_id = #{shopId}
+</if>
+<if test="purorderType != null">
+    and t.purorder_type = #{purorderType}
+</if>
+<if test="orderStatus != null">
+    and t.order_status = #{orderStatus}
+</if>
+<if test="payStatus != null">
+    and t.pay_status = #{payStatus}
+</if>
+<if test="refundStatus != null">
+    and t.refund_status = #{refundStatus}
+</if>
+<if test="shipStatus != null">
+    and t.ship_status = #{shipStatus}
+</if>
+<if test="skuOriginalTotalPrice != null">
+    and t.sku_original_total_price = #{skuOriginalTotalPrice}
+</if>
+<if test="skuTotalPrice != null">
+    and t.sku_total_price = #{skuTotalPrice}
+</if>
+<if test="freightPrice != null">
+    and t.freight_price = #{freightPrice}
+</if>
+<if test="actualPrice != null">
+    and t.actual_price = #{actualPrice}
+</if>
+<if test="payPrice != null">
+    and t.pay_price = #{payPrice}
+</if>
+<if test="payId != null">
+    and t.pay_id = #{payId}
+</if>
+<if test="payChannel != null">
+    and t.pay_channel = #{payChannel}
+</if>
+<if test="payTime != null">
+    and t.pay_time = #{payTime}
+</if>
+<if test="shipTime != null">
+    and t.ship_time = #{shipTime}
+</if>
+<if test="confirmTime != null">
+    and t.confirm_time = #{confirmTime}
+</if>
+<if test="province != null">
+    and t.province = #{province}
+</if>
+<if test="city != null">
+    and t.city = #{city}
+</if>
+<if test="county != null">
+    and t.county = #{county}
+</if>
+<if test="address != null">
+    and t.address = #{address}
+</if>
+<if test="memo != null">
+    and t.memo = #{memo}
+</if>
+<if test="consignee != null">
+    and t.consignee = #{consignee}
+</if>
+<if test="phone != null">
+    and t.phone = #{phone}
+</if>
+<if test="createTime != null">
+    and t.create_time = #{createTime}
+</if>
+    <if test="sql_filter != null and sql_filter!=''">
+        and ${sql_filter}
+    </if>
+</where>
+    order by t.create_time desc
+</select>
+</mapper>

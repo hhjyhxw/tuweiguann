@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>采购单</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="icloudapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("small:smallpurorder:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("small:smallpurorder:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("small:smallpurorder:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">下单渠道</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.channel" placeholder="下单渠道"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">采购单号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.purorderNo" placeholder="采购单号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">关联订单id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.orderId" placeholder="关联订单id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">店铺id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.supplierId" placeholder="店铺id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">采购单类型(0公共商品售卖产生 1其他渠道采购)</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.purorderType" placeholder="采购单类型(0公共商品售卖产生 1其他渠道采购)"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">0生成、处理中、已完成</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.orderStatus" placeholder="0生成、处理中、已完成"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">0未支付、1支付中、2已支付</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.payStatus" placeholder="0未支付、1支付中、2已支付"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">0生成、1、退款中、2已退款</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.refundStatus" placeholder="0生成、1、退款中、2已退款"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">0未发货、1发货中、2已发货</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.shipStatus" placeholder="0未发货、1发货中、2已发货"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品(sku)原始价总额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.skuOriginalTotalPrice" placeholder="商品(sku)原始价总额"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品(sku)现价总额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.skuTotalPrice" placeholder="商品(sku)现价总额"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">运费</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.freightPrice" placeholder="运费"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">实付订单金额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.actualPrice" placeholder="实付订单金额"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">支付金额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.payPrice" placeholder="支付金额"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">支付流水id(本地支付流水)</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.payId" placeholder="支付流水id(本地支付流水)"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">支付渠道名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.payChannel" placeholder="支付渠道名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">支付时间(支付成功回调获取的支付时间)</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.payTime" placeholder="支付时间(支付成功回调获取的支付时间)"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">发货时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.shipTime" placeholder="发货时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">确认收货时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.confirmTime" placeholder="确认收货时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">省</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.province" placeholder="省"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">市</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.city" placeholder="市"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">县</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.county" placeholder="县"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">详细地址</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.address" placeholder="详细地址"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.memo" placeholder=""/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.consignee" placeholder=""/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.phone" placeholder=""/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.createTime" placeholder=""/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="smallPurorder.modifyTime" placeholder=""/>
+                        </div>
+                    </div>
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/small/smallpurorder.js?_${.now?long}"></script>
+</body>
+</html>

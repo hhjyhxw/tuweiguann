@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>店铺 </title>
+		<#include "/header.html">
+    <script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=A23543b3be51778406429cba6b7d74c4"></script>
+<style>
+    .searchs {
+     /*   width: 650px;*/
+        /* height: 500px; */
+        overflow: hidden;
+        border: 1px solid rgb(204, 204, 204);
+        margin-top: 25px;
+        margin-left: auto;
+        margin-right: auto;
+        position: absolute;
+        z-index: 0;
+        background-color: rgb(243, 241, 236);
+        color: rgb(0, 0, 0);
+        text-align: left;
+        top: 39rem;
+        right: 60.5rem;
+        height: 3rem;
+
+    }
+   .maps {
+        width: 650px;
+        height: 491px;
+        overflow: hidden;
+        border: 1px solid rgb(204, 204, 204);
+        margin-top: 25px;
+        margin-left: auto;
+        margin-right: auto;
+        position: absolute;
+        z-index: 0;
+        background-color: rgb(243, 241, 236);
+        color: rgb(0, 0, 0);
+        text-align: left;
+        top: 42rem;
+        right:26rem;
+    }
+</style>
+</head>
+<body>
+<div id="icloudapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">可提现金额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shop.balance" placeholder="可提现金额" readonly/>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">提现金额</div>
+                        <div class="col-sm-10">
+                            <input type="text" v-if="shop.balance==null || shop.balance<=0" class="form-control" v-model="smallWasteRecord.amount" placeholder="提现金额" readonly/>
+                            <input type="text" v-if="shop.balance!=null && shop.balance>0" class="form-control" v-model="smallWasteRecord.amount" placeholder="提现金额"/>
+                        </div>
+                    </div>
+
+
+			<div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+
+
+
+</div>
+
+
+<!-- 选择上级树 -->
+<div id="deptLayer" style="display: none;padding:10px;">
+    <ul id="deptTree" class="ztree"></ul>
+</div>
+<script src="${request.contextPath}/statics/js/common/money.js?_${.now?long}"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=A23543b3be51778406429cba6b7d74c4"></script>
+<script src="${request.contextPath}/statics/js/modules/shop/shopwithdrawlist.js?_${.now?long}"></script>
+</body>
+
+</html>

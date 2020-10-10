@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icloud.modules.shop.dao.ShopTradeDetailsMapper">
+
+
+    <!-- 基础map -->
+    <resultMap type="com.icloud.modules.shop.entity.ShopTradeDetails" id="BaseResultMap">
+     <id property="id" column="id"/>
+     <result property="shopId" column="shop_id"/>
+     <result property="tradeNo" column="trade_no"/>
+     <result property="orderNo" column="order_no"/>
+     <result property="bizType" column="biz_type"/>
+     <result property="inOrOut" column="in_or_out"/>
+     <result property="beforeBlance" column="before_blance"/>
+     <result property="amount" column="amount"/>
+     <result property="afterBlance" column="after_blance"/>
+     <result property="createdBy" column="created_by"/>
+     <result property="createdTime" column="created_time"/>
+     <result property="updatedBy" column="updated_by"/>
+     <result property="updatedTime" column="updated_time"/>
+    </resultMap>
+
+   <!-- 基础字段列 -->
+   <sql id="Base_Column_List" >
+id,shop_id,trade_no,order_no,biz_type,in_or_out,before_blance,amount,after_blance,created_by,created_time,updated_by,updated_time
+    </sql>
+
+
+<select id="queryMixList" resultMap="BaseResultMap">
+    select t.*,s.shop_name as "shop.shopName" from shop_trade_details t,shop s
+<where>
+    t.shop_id = s.id
+<if test="id != null">
+    and t.id = #{id}
+</if>
+<if test="shopId != null">
+    and t.shop_id = #{shopId}
+</if>
+<if test="tradeNo != null">
+    and t.trade_no = #{tradeNo}
+</if>
+<if test="orderNo != null">
+    and t.order_no = #{orderNo}
+</if>
+<if test="bizType != null">
+    and t.biz_type = #{bizType}
+</if>
+<if test="inOrOut != null">
+    and t.in_or_out = #{inOrOut}
+</if>
+<if test="beforeBlance != null">
+    and t.before_blance = #{beforeBlance}
+</if>
+<if test="amount != null">
+    and t.amount = #{amount}
+</if>
+<if test="afterBlance != null">
+    and t.after_blance = #{afterBlance}
+</if>
+<if test="createdBy != null">
+    and t.created_by = #{createdBy}
+</if>
+<if test="createdTime != null">
+    and t.created_time = #{createdTime}
+</if>
+<if test="updatedBy != null">
+    and t.updated_by = #{updatedBy}
+</if>
+<if test="shopName != null and shopName!=''">
+    and s.shop_name like CONCAT('%', '${shopName}', '%')
+</if>
+<if test="sql_filter != null and sql_filter!=''">
+    and ${sql_filter}
+</if>
+</where>
+</select>
+</mapper>
