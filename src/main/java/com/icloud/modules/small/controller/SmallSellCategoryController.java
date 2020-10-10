@@ -100,8 +100,6 @@ public class SmallSellCategoryController extends AbstractController {
     @RequiresPermissions("small:smallsellcategory:save")
     public R save(@RequestBody SmallSellCategory smallSellCategory){
         ValidatorUtils.validateEntity(smallSellCategory);
-        Shop shop = (Shop) shopService.getById(smallSellCategory.getSupplierId());
-        smallSellCategory.setDeptId(shop.getDeptId());
         smallSellCategoryService.save(smallSellCategory);
 
         return R.ok();
@@ -114,8 +112,6 @@ public class SmallSellCategoryController extends AbstractController {
     @RequiresPermissions("small:smallsellcategory:update")
     public R update(@RequestBody SmallSellCategory smallSellCategory){
         ValidatorUtils.validateEntity(smallSellCategory);
-        Shop shop = (Shop) shopService.getById(smallSellCategory.getSupplierId());
-        smallSellCategory.setDeptId(shop.getDeptId());
         smallSellCategoryService.updateById(smallSellCategory);
         
         return R.ok();

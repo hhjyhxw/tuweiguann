@@ -28,6 +28,9 @@ public class ShopService extends BaseServiceImpl<ShopMapper,Shop> {
     @Autowired
     private ShopMapper shopMapper;
 
+    public List<Shop> queryList(Map<String,Object> map){
+        return shopMapper.queryList(map);
+    }
     @Override
     public PageUtils<Shop> findByPage(int pageNo, int pageSize, Map<String, Object> query) {
         PageHelper.startPage(pageNo, pageSize);

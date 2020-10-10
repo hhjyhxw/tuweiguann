@@ -118,16 +118,10 @@ var vm = new Vue({
         q:{
             name:'',
         },
-        user: {
-            userId:null
-        },
-        deptId:null,
-        deptList:[],
-        deptName:'',
+
     },
     created: function(){
-        this.getUser();
-        this.getDeptList();
+
     },
 	methods: {
 		query: function () {
@@ -231,8 +225,6 @@ var vm = new Vue({
 			$.get(baseURL + "small/smallcoupon/info/"+id, function(r){
                 vm.smallCoupon = r.smallCoupon;
                 editor1.html(vm.smallCoupon.description);
-                vm.deptId = r.smallCoupon.deptId;
-                vm.setDeptName(vm.deptId);
                 vm.getShopList(r.smallCoupon.shopId);
                 //加载商品分类
                 vm.getCategory();
@@ -248,7 +240,7 @@ var vm = new Vue({
         //加载分类树
         getCategory: function(){
             //加载分类树
-            $.get(baseURL + "small/smallcategory/select?deptId="+vm.deptId, function(r){
+            $.get(baseURL + "small/smallcategory/select", function(r){
                 ztree = $.fn.zTree.init($("#categroyTree"), setting, r.categoryList);
                 // console.log("ztree====="+JSON.stringify(ztree))
                 var node = ztree.getNodeByParam("id", vm.smallCoupon.categoryId);
@@ -290,7 +282,7 @@ var vm = new Vue({
         getShopList:function(id){
             console.log("id======"+id)
             $.ajaxSettings.async = false;
-            $.get(baseURL + "shop/shop/selectlist?deptId="+vm.deptId, function(r){
+            $.get(baseURL + "shop/shop/selectlist", function(r){
                 vm.shopList = r.list;
                 if(id!=null && id!=''){
                     vm.setShopName(vm.smallCoupon.shopId);
@@ -312,34 +304,6 @@ var vm = new Vue({
                 });
             }
         },
-        //加载企业列表
-        getDeptList:function(){
-            $.get(baseURL + "/sys/dept/selectlist", function(r){
-                vm.deptList = r.deptList;
-            });
-        },
-        //选择企业
-        selectDept: function (index) {
-            vm.smallCoupon.deptId = vm.deptList[index].deptId;
-            vm.deptName = vm.deptList[index].name;
-            vm.deptId = vm.deptList[index].deptId;
-            vm.getShopList();
-            vm.getCategory();
-        },
-        setDeptName:function(deptId){
-            if(vm.deptList!=null && vm.deptList.length>0 && deptId!=null){
-                vm.deptList.forEach(p=>{
-                    if(p.deptId===deptId){
-                        vm.deptName = p.name;
-                    }
-                });
-            }
-        },
-        //获取用户信息
-        getUser: function(){
-            $.getJSON(baseURL+"sys/user/info?_"+$.now(), function(r){
-                vm.user = r.user;
-            });
-        },
+
 	}
 });

@@ -74,9 +74,6 @@ public class ShopManController extends AbstractController {
         ValidatorUtils.validateEntity(shopMan);
         shopMan.setCreatedTime(new Date());
         shopMan.setCreatedBy(getUser().getUsername());
-
-        Shop shop = (Shop) shopService.getById(shopMan.getShopId());
-        shopMan.setDeptId(shop.getDeptId());
         shopManService.save(shopMan);
 
         return R.ok();
@@ -91,8 +88,7 @@ public class ShopManController extends AbstractController {
         ValidatorUtils.validateEntity(shopMan);
         shopMan.setUpdatedTime(new Date());
         shopMan.setUpdatedBy(getUser().getUsername());
-        Shop shop = (Shop) shopService.getById(shopMan.getShopId());
-        shopMan.setDeptId(shop.getDeptId());
+
         shopManService.updateById(shopMan);
         
         return R.ok();

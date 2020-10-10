@@ -56,13 +56,13 @@ var menu_setting = {
     }
 };
 
-//部门结构树(在次更换成店铺树)
+//部门结构树
 var dept_ztree;
 var dept_setting = {
     data: {
         simpleData: {
             enable: true,
-            idKey: "id",
+            idKey: "deptId",
             pIdKey: "parentId",
             rootPId: -1
         },
@@ -78,7 +78,7 @@ var data_setting = {
     data: {
         simpleData: {
             enable: true,
-            idKey: "id",
+            idKey: "deptId",
             pIdKey: "parentId",
             rootPId: -1
         },
@@ -102,8 +102,8 @@ var vm = new Vue({
         showList: true,
         title:null,
         role:{
-            id:null,
-            shopName:null
+            deptId:null,
+            deptName:null
         }
     },
     methods: {
@@ -169,10 +169,9 @@ var vm = new Vue({
                 }
 
                 //勾选角色所拥有的部门数据权限
-                // var deptIds = vm.role.deptIdList;
-                var shopIds = vm.role.shopIdList;
-                for(var i=0; i<shopIds.length; i++) {
-                    var node = data_ztree.getNodeByParam("id", shopIds[i]);
+                var deptIds = vm.role.deptIdList;
+                for(var i=0; i<deptIds.length; i++) {
+                    var node = data_ztree.getNodeByParam("deptId", deptIds[i]);
                     data_ztree.checkNode(node, true, false);
                 }
 
@@ -190,12 +189,11 @@ var vm = new Vue({
 
             //获取选择的数据
             var nodes = data_ztree.getCheckedNodes(true);
-            // var deptIdList = new Array();
-            var shopIdList = new Array();
+            var deptIdList = new Array();
             for(var i=0; i<nodes.length; i++) {
-                shopIdList.push(nodes[i].id);
+                deptIdList.push(nodes[i].deptId);
             }
-            vm.role.shopIdList = shopIdList;
+            vm.role.deptIdList = deptIdList;
 
             var url = vm.role.roleId == null ? "sys/role/save" : "sys/role/update";
             $.ajax({
@@ -228,17 +226,17 @@ var vm = new Vue({
         },
         getDataTree: function(roleId) {
             //加载菜单树
-            $.get(baseURL + "shop/shop/queryList", function(r){
+            $.get(baseURL + "sys/dept/list", function(r){
                 data_ztree = $.fn.zTree.init($("#dataTree"), data_setting, r);
                 //展开所有节点
                 data_ztree.expandAll(true);
             });
         },
         getDept: function(){
-            //加载部门树(店铺树)
-            $.get(baseURL + "shop/shop/list", function(r){
+            //加载部门树
+            $.get(baseURL + "sys/dept/list", function(r){
                 dept_ztree = $.fn.zTree.init($("#deptTree"), dept_setting, r);
-                var node = dept_ztree.getNodeByParam("id", vm.role.id);
+                var node = dept_ztree.getNodeByParam("deptId", vm.role.deptId);
                 if(node != null){
                     dept_ztree.selectNode(node);
 
@@ -260,7 +258,7 @@ var vm = new Vue({
                 btn1: function (index) {
                     var node = dept_ztree.getSelectedNodes();
                     //选择上级部门
-                    vm.role.id = node[0].id;
+                    vm.role.deptId = node[0].deptId;
                     vm.role.deptName = node[0].name;
 
                     layer.close(index);

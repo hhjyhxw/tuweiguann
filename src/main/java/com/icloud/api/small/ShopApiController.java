@@ -119,11 +119,11 @@ public class ShopApiController {
         List<BsactivityAd> adlist = null;
         if(shopId!=null){
             //查询店铺广告
-            adlist  = bsactivityAdService.list(new QueryWrapper<BsactivityAd>().eq("status",1).eq("supplier_id",shopId));
+            adlist  = bsactivityAdService.list(new QueryWrapper<BsactivityAd>().eq("status",1).eq("shop_id",shopId));
         }
         if(adlist==null || adlist.size()==0){
             //店铺广告为空查询平台广告
-            adlist  = bsactivityAdService.list(new QueryWrapper<BsactivityAd>().eq("status",1).eq("supplier_id",sysshoplist.get(0).getId()));
+            adlist  = bsactivityAdService.list(new QueryWrapper<BsactivityAd>().eq("status",1).eq("shop_id",sysshoplist.get(0).getId()));
         }
         //用于分享
         if(shopMainId==null){
@@ -148,7 +148,7 @@ public class ShopApiController {
                .put("shoplist",shopsets)
 //               .put("shoplist",shoplist)
                .put("adlist",adlist)
-               .put("supplierId",shopMainId)
+               .put("shopId",shopMainId)
                .put("shopMainId",shopMainId)
                .put("shopMainName",shopMainName)
                .put("shopImg",shopImg);
@@ -162,33 +162,33 @@ public class ShopApiController {
      *   pageNum //第几页
      *   pageSize  //每页条数
      *   categoryId //分类id
-     *   supplierId //商户id (必填)
+     *   shopId //商户id (必填)
      * @return
      */
     @ApiOperation(value="获取商品列表", notes="")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "pageSize", value = "每页多少记录", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "supplierId", value = "商户id", required = false, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "shopId", value = "商户id", required = false, paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "keyword", value = "关键字", required = false, paramType = "query", dataType = "String"),
 
     })
     @RequestMapping(value = "/goodsList",method = {RequestMethod.GET})
     @ResponseBody
     @AuthIgnore
-    public R goodsList(String pageNum,String pageSize,Long supplierId,String keyword) {
+    public R goodsList(String pageNum,String pageSize,Long shopId,String keyword) {
         //传入id为空则读取平台商品
-        if(supplierId==null){
+        if(shopId==null){
             List<Shop> shoplist = shopService.list(new QueryWrapper<Shop>().eq("sys_flag","1"));
             if(shoplist!=null && shoplist.size()>0){
-                supplierId = shoplist.get(0).getId();
+                shopId = shoplist.get(0).getId();
             }
         }
         Query query = new Query(new HashMap<>());
         query.put("status",1);
-        query.put("supplierId",supplierId);
+        query.put("shopId",shopId);
         query.put("title",keyword);
-//        query.put("",supplierId);
+//        query.put("",shopId);
         PageUtils<GroupSkuVo> page = smallGroupShopService.findByFrontPage(StringUtil.checkStr(pageNum)?Integer.parseInt(pageNum):1,
                 StringUtil.checkStr(pageSize)?Integer.parseInt(pageSize):10,
                 query);

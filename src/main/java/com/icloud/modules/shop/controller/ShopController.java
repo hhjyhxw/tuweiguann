@@ -76,6 +76,17 @@ public class ShopController extends AbstractController {
 
 
     /**
+     * 列表
+     */
+    @RequestMapping("/queryList")
+    @RequiresPermissions("shop:shop:list")
+    @DataFilter
+    public R queryList(@RequestParam Map<String, Object> params){
+        Query query = new Query(params);
+        List<Shop> list = shopService.queryList(params);
+        return R.ok().put("list", list);
+    }
+    /**
      * 查询处需要提现的店铺名称 和店铺余额列表，方便店铺管理员提交提现
      * 只获取当前登陆用户所在
      */
@@ -106,7 +117,6 @@ public class ShopController extends AbstractController {
     @RequiresPermissions("shop:shop:withdraw")
     public R withdraw(@RequestBody SmallWasteRecord smallWasteRecord){
         Shop shop = (Shop)shopService.getById(smallWasteRecord.getShopId());
-        smallWasteRecord.setDeptId(shop.getDeptId());
         smallWasteRecord.setCreateBy(getUser().getUsername());
         smallWasteRecord.setCreateTime(new Date());
         if(smallWasteRecord.getAmount().compareTo(new BigDecimal(0))<=0){
@@ -130,15 +140,15 @@ public class ShopController extends AbstractController {
      */
     @RequestMapping("/select")
     @RequiresPermissions("small:smallcategory:update")
-    @DataFilter//超级管理员需要在页面传入企业id,非超级管理员根据当前登陆用户所在企业过滤获取对应企业数据
+//    @DataFilter//超级管理员需要在页面传入企业id,非超级管理员根据当前登陆用户所在企业过滤获取对应企业数据
     public R select(@RequestParam Map<String, Object> params){
         List<Shop> list = null;
         //超级管理员可以为其他企业添加分类
-        if(Constant.SUPER_ADMIN==getUserId() && StringUtil.checkObj(params.get("deptId"))){//超级管理员选择的
-            list = shopService.list(new QueryWrapper<Shop>().in("dept_id", deptUtils.getDeptIdLists(Long.valueOf(params.get("deptId").toString()))));
-        }else{
-            list = shopService.list(new QueryWrapper<Shop>().in("dept_id", deptUtils.getDeptIdList()));//当前登陆用户的
-        }
+//        if(Constant.SUPER_ADMIN==getUserId() && StringUtil.checkObj(params.get("deptId"))){//超级管理员选择的
+//            list = shopService.list(new QueryWrapper<Shop>().in("dept_id", deptUtils.getDeptIdLists(Long.valueOf(params.get("deptId").toString()))));
+//        }else{
+//            list = shopService.list(new QueryWrapper<Shop>().in("dept_id", deptUtils.getDeptIdList()));//当前登陆用户的
+//        }
 
         List<ShopTreeVo> shopTreeVolist = new ArrayList<ShopTreeVo>();
         if(list!=null && list.size()>0){
@@ -171,7 +181,7 @@ public class ShopController extends AbstractController {
      * 列表
      */
     @RequestMapping("/selectlist")
-    public R attibutList(@RequestParam Map<String, Object> params){
+    public R selectlist(@RequestParam Map<String, Object> params){
         //超级管理员可以为其他企业添加分类
         List<Shop> list = null;
         if(Constant.SUPER_ADMIN==getUserId() && StringUtil.checkObj(params.get("deptId"))){//超级管理员选择的
@@ -225,10 +235,7 @@ public class ShopController extends AbstractController {
         ValidatorUtils.validateEntity(shop);
         shop.setCreatedTime(new Date());
         shop.setCreatedBy(getUser().getUsername());
-        /*设置部门*/
-        if(shop.getDeptId()==null){
-            shop.setDeptId(getDeptId());
-        }
+
         //设置级别
         if(shop.getParentId().longValue()==0){
             shop.setShopLevel(1);

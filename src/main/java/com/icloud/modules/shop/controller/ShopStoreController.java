@@ -75,8 +75,6 @@ public class ShopStoreController extends AbstractController {
         shopStore.setCreatedTime(new Date());
         shopStore.setCreatedBy(getUser().getUsername());
 
-        Shop shop = (Shop) shopService.getById(shopStore.getShopId());
-        shopStore.setDeptId(shop.getDeptId());
         shopStoreService.save(shopStore);
         return R.ok();
     }
@@ -91,8 +89,6 @@ public class ShopStoreController extends AbstractController {
         shopStore.setUpdatedTime(new Date());
         shopStore.setUpdatedBy(getUser().getUsername());
 
-        Shop shop = (Shop) shopService.getById(shopStore.getShopId());
-        shopStore.setDeptId(shop.getDeptId());
         shopStoreService.updateById(shopStore);
         
         return R.ok();

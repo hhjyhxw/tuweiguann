@@ -41,19 +41,21 @@ public class SysRoleEntity implements Serializable {
 	/**
 	 * 部门ID
 	 */
-	@NotNull(message="部门不能为空")
-	private Long deptId;
+	@NotNull(message="店铺id不能为空")
+	private Long shopId;
 
 	/**
 	 * 部门名称
 	 */
 	@TableField(exist=false)
-	private String deptName;
+	private String shopName;
 
 	@TableField(exist=false)
 	private List<Long> menuIdList;
+//	@TableField(exist=false)
+//	private List<Long> deptIdList;
 	@TableField(exist=false)
-	private List<Long> deptIdList;
+	private List<Long> shopIdList;
 	
 	/**
 	 * 创建时间

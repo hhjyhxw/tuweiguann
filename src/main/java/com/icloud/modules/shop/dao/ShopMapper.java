@@ -14,4 +14,8 @@ import java.util.Map;
 public interface ShopMapper extends BaseMapper<Shop> {
 
 	List<Shop> queryMixList(Map<String,Object> map);
+
+	List<Shop> queryList(Map<String,Object> map);
+
+
 }

@@ -216,13 +216,8 @@ var vm = new Vue({
         user: {
 		    userId:null
         },
-        deptId:null,
-        deptList:[],
-        deptName:'',
 	},
     created: function(){
-        this.getUser();
-        this.getDeptList();
     },
 	methods: {
 		query: function () {
@@ -245,8 +240,6 @@ var vm = new Vue({
                 address:'',
                 commissionRate:0,
             };
-            vm.deptName = '',
-            vm.deptId = null,
             vm.getShopTree();
 		},
 		update: function (event) {
@@ -319,8 +312,6 @@ var vm = new Vue({
 		getInfo: function(id){
 			$.get(baseURL + "shop/shop/info/"+id, function(r){
                 vm.shop = r.shop;
-                vm.deptId = r.shop.deptId;
-                vm.setDeptName(vm.deptId);
                 vm.getShopTree();
             });
 		},
@@ -334,7 +325,7 @@ var vm = new Vue({
         //加载店铺树
         getShopTree: function(){
             //加载分类树
-            $.get(baseURL + "shop/shop/select?deptId="+vm.deptId, function(r){
+            $.get(baseURL + "shop/shop/select", function(r){
                 // console.info("r==="+JSON.stringify(r))
                 ztree = $.fn.zTree.init($("#deptTree"), setting, r.retailList);
                 // console.log("ztree====="+JSON.stringify(ztree))
@@ -363,11 +354,6 @@ var vm = new Vue({
                     console.log("node====="+JSON.stringify(node))
                     if(node!=null) {
                         //系统管理员可以添加一级店铺
-                        if(vm.user.userId!=1){
-                            if (node[0].parentId === -1) {
-                                return;
-                            }
-                        }
                         vm.shop.parentId = node[0].id;
                         vm.shop.parentName = node[0].name;
                     }
@@ -375,28 +361,6 @@ var vm = new Vue({
                     layer.close(index);
                 }
             });
-        },
-        //加载企业列表
-        getDeptList:function(){
-            $.get(baseURL + "/sys/dept/selectlist", function(r){
-                vm.deptList = r.deptList;
-            });
-        },
-        //选择企业
-        selectDept: function (index) {
-            vm.shop.deptId = vm.deptList[index].deptId;
-            vm.deptName = vm.deptList[index].name;
-            vm.deptId = vm.deptList[index].deptId;
-            vm.getShopTree();
-        },
-        setDeptName:function(deptId){
-            if(vm.deptList!=null && vm.deptList.length>0 && deptId!=null){
-                vm.deptList.forEach(p=>{
-                    if(p.deptId===deptId){
-                        vm.deptName = p.name;
-                    }
-                });
-            }
         },
         //获取用户信息
         getUser: function(){

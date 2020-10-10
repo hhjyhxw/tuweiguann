@@ -7,6 +7,8 @@ import com.icloud.annotation.DataFilter;
 import com.icloud.common.Constant;
 import com.icloud.common.PageUtils;
 import com.icloud.common.Query;
+import com.icloud.modules.shop.entity.Shop;
+import com.icloud.modules.shop.service.ShopService;
 import com.icloud.modules.sys.dao.SysRoleDao;
 import com.icloud.modules.sys.entity.SysDeptEntity;
 import com.icloud.modules.sys.entity.SysRoleEntity;
@@ -28,12 +30,17 @@ import java.util.Map;
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> implements SysRoleService {
 	@Autowired
 	private SysRoleMenuService sysRoleMenuService;
-	@Autowired
-	private SysRoleDeptService sysRoleDeptService;
+//	@Autowired
+//	private SysRoleDeptService sysRoleDeptService;
+
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
+//	@Autowired
+//	private SysDeptService sysDeptService;
 	@Autowired
-	private SysDeptService sysDeptService;
+	private ShopService shopService;
+	@Autowired
+	private SysRoleShopService sysRoleShopService;
 
 	@Override
 	@DataFilter(subDept = true, user = false)
@@ -48,9 +55,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 		);
 
 		for(SysRoleEntity sysRoleEntity : page.getRecords()){
-			SysDeptEntity sysDeptEntity = sysDeptService.getById(sysRoleEntity.getDeptId());
-			if(sysDeptEntity != null){
-				sysRoleEntity.setDeptName(sysDeptEntity.getName());
+//			SysDeptEntity sysDeptEntity = sysDeptService.getById(sysRoleEntity.getDeptId());
+//			if(sysDeptEntity != null){
+//				sysRoleEntity.setDeptName(sysDeptEntity.getName());
+//			}
+			Object obj = shopService.getById(sysRoleEntity.getShopId());
+			if(obj!=null){
+				Shop shop = (Shop)obj;
+				sysRoleEntity.setShopName(shop.getShopName());
 			}
 		}
 
@@ -67,7 +79,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 		sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
 
 		//保存角色与部门关系
-		sysRoleDeptService.saveOrUpdate(role.getRoleId(), role.getDeptIdList());
+//		sysRoleDeptService.saveOrUpdate(role.getRoleId(), role.getDeptIdList());
+
+		sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getShopIdList());
 	}
 
 	@Override
@@ -79,7 +93,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 		sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
 
 		//保存角色与部门关系
-		sysRoleDeptService.saveOrUpdate(role.getRoleId(), role.getDeptIdList());
+//		sysRoleDeptService.saveOrUpdate(role.getRoleId(), role.getDeptIdList());
+		//保存角色与店铺关系
+		sysRoleShopService.saveOrUpdate(role.getRoleId(), role.getShopIdList());
 	}
 
 	@Override
@@ -92,8 +108,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 		sysRoleMenuService.deleteBatch(roleIds);
 
 		//删除角色与部门关联
-		sysRoleDeptService.deleteBatch(roleIds);
-
+//		sysRoleDeptService.deleteBatch(roleIds);
+		//删除角色与店铺关系
+		sysRoleShopService.deleteBatch(roleIds);
 		//删除角色与用户关联
 		sysUserRoleService.deleteBatch(roleIds);
 	}

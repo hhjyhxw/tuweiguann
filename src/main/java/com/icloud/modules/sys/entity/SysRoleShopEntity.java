@@ -11,8 +11,8 @@ import java.io.Serializable;
  *
  */
 @Data
-@TableName("sys_role_dept")
-public class SysRoleDeptEntity implements Serializable {
+@TableName("sys_role_shop")
+public class SysRoleShopEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
     /*  */
     @TableId(value="id", type= IdType.AUTO)
@@ -23,11 +23,10 @@ public class SysRoleDeptEntity implements Serializable {
 	 */
 	private Long roleId;
 
+
 	/**
-	 * 部门ID
+	 * 店铺ID
 	 */
-	private Long deptId;
-
-
+	private Long shopId;
 	
 }

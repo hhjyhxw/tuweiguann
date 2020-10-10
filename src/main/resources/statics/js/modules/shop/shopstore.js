@@ -135,16 +135,10 @@ var vm = new Vue({
             titile:'',
             shopName:'',
         },
-        user: {
-            userId:null
-        },
-        deptId:null,
-        deptList:[],
-        deptName:'',
+
 	},
     created: function(){
-        this.getUser();
-        this.getDeptList();
+
     },
 	methods: {
 		query: function () {
@@ -162,8 +156,6 @@ var vm = new Vue({
                 county:'',
                 address:'',
             };
-            vm.deptName = '',
-            vm.deptId = null,
             vm.shopName = null;
             vm.getShopList();
 		},
@@ -248,7 +240,7 @@ var vm = new Vue({
 		},
         //加载getShopList
         getShopList:function(id){
-            $.get(baseURL + "shop/shop/selectlist?deptId="+vm.deptId, function(r){
+            $.get(baseURL + "shop/shop/selectlist", function(r){
                 vm.shopList = r.list;
                 if(id!=null && id!=''){
                     vm.setShopName(vm.shopStore.shopId);
@@ -269,34 +261,7 @@ var vm = new Vue({
                 });
             }
         },
-        //加载企业列表
-        getDeptList:function(){
-            $.get(baseURL + "/sys/dept/selectlist", function(r){
-                vm.deptList = r.deptList;
-            });
-        },
-        //选择企业
-        selectDept: function (index) {
-            vm.shopStore.deptId = vm.deptList[index].deptId;
-            vm.deptName = vm.deptList[index].name;
-            vm.deptId = vm.deptList[index].deptId;
-            vm.getShopList();
-        },
-        setDeptName:function(deptId){
-            if(vm.deptList!=null && vm.deptList.length>0 && deptId!=null){
-                vm.deptList.forEach(p=>{
-                    if(p.deptId===deptId){
-                        vm.deptName = p.name;
-                    }
-                });
-            }
-        },
-        //获取用户信息
-        getUser: function(){
-            $.getJSON(baseURL+"sys/user/info?_"+$.now(), function(r){
-                vm.user = r.user;
-            });
-        },
+
 	}
 });
 vm.getShopList();

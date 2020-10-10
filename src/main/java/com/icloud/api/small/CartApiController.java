@@ -48,18 +48,18 @@ public class CartApiController {
     @CrossOrigin
     @ApiOperation(value="获取用户店铺购车信息", notes="")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "supplierId", value = "商户id", required = true, paramType = "query", dataType = "Long")
+            @ApiImplicitParam(name = "shopId", value = "商户id", required = true, paramType = "query", dataType = "Long")
     })
     @RequestMapping(value = "/cartList",method = {RequestMethod.GET})
     @ResponseBody
 //    @AuthIgnore
-    public R cartList(@RequestParam Long supplierId,@LoginUser WxUser user) {
-        if(supplierId==null){
+    public R cartList(@RequestParam Long shopId,@LoginUser WxUser user) {
+        if(shopId==null){
             return R.error("零售户id为空");
         }
         Map<String,Object> params = new HashMap<String,Object>();
         params.put("user_id",user.getId());
-        params.put("supplier_id",supplierId);
+        params.put("shop_id",shopId);
         List<CartVo> list  = smallCartService.getCartVoList(params);
         CartTotalVo total = CartOrderUtil.getTotal(list);
         return R.ok().put("list",list).put("totalAmout",total.getTotalAmout()).put("totalNum",total.getTotalNum());
@@ -69,14 +69,14 @@ public class CartApiController {
     @CrossOrigin
     @ApiOperation(value="购物车加一", notes="")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "supplierId", value = "商户id", required = true, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "shopId", value = "商户id", required = true, paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "skuId", value = "商品id", required = true, paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "groupId", value = "团购商品id", required = true, paramType = "query", dataType = "Long")
     })
     @RequestMapping(value = "/addCart",method = {RequestMethod.GET})
     @ResponseBody
-    public R addCart(@RequestParam Long supplierId,@RequestParam Long skuId,@RequestParam Long groupId,@LoginUser WxUser user) {
-        if(supplierId==null || skuId==null || groupId==null){
+    public R addCart(@RequestParam Long shopId,@RequestParam Long skuId,@RequestParam Long groupId,@LoginUser WxUser user) {
+        if(shopId==null || skuId==null || groupId==null){
             return R.error("缺少参数");
         }
         //库存校验
@@ -88,7 +88,7 @@ public class CartApiController {
                 .eq("user_id",user.getId())
                 .eq("sku_id",skuId)
                 .eq("group_id",groupId)
-                .eq("supplier_id",supplierId));
+                .eq("shop_id",shopId));
         if (!CollectionUtils.isEmpty(list)) {
             //若非空
             cart.setId(list.get(0).getId());
@@ -99,7 +99,7 @@ public class CartApiController {
             cart.setNum(1);
             cart.setCreateTime(new Date());
             cart.setUserId((long)user.getId());
-            cart.setSupplierId(supplierId);
+            cart.setShopId(shopId);
             cart.setGroupId(groupId);
             cart.setSkuId(skuId);
             return smallCartService.save(cart)?R.ok():R.error();
@@ -109,14 +109,14 @@ public class CartApiController {
     @CrossOrigin
     @ApiOperation(value="购物车减一", notes="")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "supplierId", value = "商户id", required = true, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "shopId", value = "商户id", required = true, paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "skuId", value = "商品id", required = true, paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "groupId", value = "团购商品id", required = true, paramType = "query", dataType = "Long")
     })
     @RequestMapping(value = "/subCart",method = {RequestMethod.GET})
     @ResponseBody
-    public R subCart(@RequestParam Long supplierId,@RequestParam Long skuId,@RequestParam Long groupId,@LoginUser WxUser user) {
-        if(supplierId==null || skuId==null || groupId==null){
+    public R subCart(@RequestParam Long shopId,@RequestParam Long skuId,@RequestParam Long groupId,@LoginUser WxUser user) {
+        if(shopId==null || skuId==null || groupId==null){
             return R.error("缺少参数");
         }
         SmallCart cart = new SmallCart();
@@ -124,7 +124,7 @@ public class CartApiController {
                 .eq("user_id",user.getId())
                 .eq("sku_id",skuId)
                 .eq("group_id",groupId)
-                .eq("supplier_id",supplierId));
+                .eq("shop_id",shopId));
         if (!CollectionUtils.isEmpty(list)) {
 
             boolean result = false;
@@ -181,17 +181,17 @@ public class CartApiController {
     @CrossOrigin
     @ApiOperation(value="清空购物项", notes="")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "supplierId", value = "商户id", required = true, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "shopId", value = "商户id", required = true, paramType = "query", dataType = "Long"),
     })
     @RequestMapping(value = "/deletAllCart",method = {RequestMethod.GET})
     @ResponseBody
-    public R deletAllCart(@RequestParam Long supplierId,@LoginUser WxUser user) {
-        if(supplierId==null){
-            return R.error("supplierId为空");
+    public R deletAllCart(@RequestParam Long shopId,@LoginUser WxUser user) {
+        if(shopId==null){
+            return R.error("shopId为空");
         }
         boolean result = smallCartService.remove(new QueryWrapper<SmallCart>()
                 .eq("user_id",user.getId())
-                .eq("supplier_id", supplierId));
+                .eq("shop_id", shopId));
 
         return result?R.ok():R.error();
     }
@@ -229,20 +229,20 @@ public class CartApiController {
     @CrossOrigin
     @ApiOperation(value="查询购车数量", notes="")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "supplierId", value = "商户id", required = true, paramType = "query", dataType = "Long")
+            @ApiImplicitParam(name = "shopId", value = "商户id", required = true, paramType = "query", dataType = "Long")
     })
     @RequestMapping(value = "/countCart",method = {RequestMethod.GET})
     @ResponseBody
-    public R countCart(@RequestParam Long supplierId,@LoginUser WxUser user) {
-        if(supplierId==null){
-            return R.error("supplierId为空");
+    public R countCart(@RequestParam Long shopId,@LoginUser WxUser user) {
+        if(shopId==null){
+            return R.error("shopId为空");
         }
 //        int num = smallCartService.count(new QueryWrapper<SmallCart>()
 //                .eq("user_id",user.getId())
-//                .eq("supplier_id", supplierId));
+//                .eq("shop_id", shopId));
         Map<String,Object> params = new HashMap<String,Object>();
         params.put("user_id",user.getId());
-        params.put("supplier_id",supplierId);
+        params.put("shop_id",shopId);
         List<CartVo> list  = smallCartService.getCartVoList(params);
         CartTotalVo total = CartOrderUtil.getTotal(list);
         return R.ok().put("totalNum",total.getTotalNum());

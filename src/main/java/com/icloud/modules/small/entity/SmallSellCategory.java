@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.icloud.modules.shop.entity.Shop;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -58,7 +59,7 @@ public class SmallSellCategory implements Serializable {
        private Long shopId;
         /*消费商户*/
         @TableField(exist = false)
-        private SmallRetail smallRetail;
+        private Shop shop;
 
    	
 }

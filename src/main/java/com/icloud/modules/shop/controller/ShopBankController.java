@@ -75,9 +75,6 @@ public class ShopBankController  extends AbstractController {
         ValidatorUtils.validateEntity(shopBank);
         shopBank.setUpdatedTime(new Date());
         shopBank.setUpdatedBy(getUser().getUsername());
-        shopBank.setUpdatedBy(getUser().getUsername());
-        Shop shop = (Shop) shopService.getById(shopBank.getShopId());
-        shopBank.setDeptId(shop.getDeptId());
         shopBankService.updateById(shopBank);
 
         return R.ok();
@@ -113,9 +110,6 @@ public class ShopBankController  extends AbstractController {
         ValidatorUtils.validateEntity(shopBank);
         shopBank.setCreatedTime(new Date());
         shopBank.setCreatedBy(getUser().getUsername());
-//        shopBank.setDeptId(getDeptId());
-        Shop shop = (Shop) shopService.getById(shopBank.getShopId());
-        shopBank.setDeptId(shop.getDeptId());
         shopBankService.save(shopBank);
 
         return R.ok();
@@ -130,8 +124,6 @@ public class ShopBankController  extends AbstractController {
         ValidatorUtils.validateEntity(shopBank);
         shopBank.setUpdatedTime(new Date());
         shopBank.setUpdatedBy(getUser().getUsername());
-        Shop shop = (Shop) shopService.getById(shopBank.getShopId());
-        shopBank.setDeptId(shop.getDeptId());
         shopBankService.updateById(shopBank);
         
         return R.ok();

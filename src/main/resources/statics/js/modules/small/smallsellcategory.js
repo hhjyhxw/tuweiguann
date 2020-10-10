@@ -66,16 +66,10 @@ var vm = new Vue({
                 supplierName:null
             }
         },
-        user: {
-            userId:null
-        },//当前登陆用户
-        deptId:null,//部门id(企业id)
-        deptList:[],//部门列表（企业列表）
-        deptName:'',
+
 	},
     created: function(){
-        this.getUser();
-        this.getDeptList();
+
     },
 	methods: {
 		query: function () {
@@ -90,8 +84,6 @@ var vm = new Vue({
                     supplierName:null
                 }
             };
-            vm.deptId=null,//部门id(企业id)
-            vm.deptName='',
 
             vm.getRetailList();
 		},
@@ -102,10 +94,7 @@ var vm = new Vue({
 			}
 			vm.showList = false;
             vm.title = "修改";
-            vm.deptId=null,//部门id(企业id)
-            vm.deptName='',
             vm.getInfo(id);
-            // vm.getRetailList();
 		},
 		saveOrUpdate: function (event) {
 		    $('#btnSaveOrUpdate').button('loading').delay(1000).queue(function() {
@@ -165,9 +154,6 @@ var vm = new Vue({
                 vm.smallSellCategory.smallRetail = {
                     supplierName:null
                 };
-                //设置部门信息
-                vm.deptId = r.smallSellCategory.deptId;
-                vm.setDeptName(vm.deptId);
                 vm.getRetailList();
             });
 		},
@@ -181,14 +167,14 @@ var vm = new Vue({
         //加载零售户
         getRetailList: function(){
             //加载
-            $.get(baseURL + "shop/shop/select?deptId="+vm.deptId, function(r){
+            $.get(baseURL + "shop/shop/select", function(r){
                 console.log("r====="+JSON.stringify(r))
                 retialztree = $.fn.zTree.init($("#retailTree"), settingretail, r.retailList);
                 var node = retialztree.getNodeByParam("id", vm.smallSellCategory.shopId);
                 // console.log("加载node====="+JSON.stringify(node))
                 if(node!=null){
                     retialztree.selectNode(node);
-                    vm.smallSellCategory.smallRetail.supplierName = node.name;
+                    vm.smallSellCategory.shop.shopName = node.name;
                 }
             })
         },
@@ -220,44 +206,14 @@ var vm = new Vue({
             });
         },
         setShopName:function(shopId){
-            if(vm.deptList!=null && vm.deptList.length>0 && deptId!=null){
-                vm.deptList.forEach(p=>{
-                    if(p.deptId===deptId){
-                        vm.deptName = p.name;
+            if(vm.shopList!=null && vm.shopList.length>0 && shopId!=null){
+                vm.shopList.forEach(p=>{
+                    if(p.id===shopId){
+                        vm.shopName = p.shopName;
                     }
                 });
             }
         },
-        //加载企业列表
-        getDeptList:function(){
-            $.get(baseURL + "/sys/dept/selectlist", function(r){
-                vm.deptList = r.deptList;
-            });
-        },
-        //选择企业
-        selectDept: function (index) {
-            vm.smallSellCategory.deptId = vm.deptList[index].deptId;
-            vm.deptName = vm.deptList[index].name;
-            vm.deptId = vm.deptList[index].deptId;
-            vm.getRetailList();
-        },
-        setDeptName:function(deptId){
-            if(vm.deptList!=null && vm.deptList.length>0 && deptId!=null){
-                vm.deptList.forEach(p=>{
-                    if(p.deptId===deptId){
-                        vm.deptName = p.name;
-                    }
-                });
-            }
-        },
-        //获取用户信息
-        getUser: function(){
-            $.getJSON(baseURL+"sys/user/info?_"+$.now(), function(r){
-                vm.user = r.user;
-            });
-        },
-
-
 
 	}
 });

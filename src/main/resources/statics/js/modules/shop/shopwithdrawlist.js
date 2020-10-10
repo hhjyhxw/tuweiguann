@@ -92,16 +92,10 @@ var vm = new Vue({
             review:0,
             commissionRate:0,
         },
-        user: {
-		    userId:null
-        },
-        deptId:null,
-        deptList:[],
-        deptName:'',
+
 	},
     created: function(){
-        this.getUser();
-        this.getDeptList();
+
     },
 	methods: {
 		query: function () {

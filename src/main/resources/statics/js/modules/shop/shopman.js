@@ -64,16 +64,10 @@ var vm = new Vue({
             shopName:'',
             accountNo:'',
         },
-        user: {
-            userId:null
-        },
-        deptId:null,
-        deptList:[],
-        deptName:'',
+
 	},
     created: function(){
-        this.getUser();
-        this.getDeptList();
+
     },
 	methods: {
 		query: function () {
@@ -84,8 +78,6 @@ var vm = new Vue({
 			vm.title = "新增";
 			vm.shopMan = {};
 
-            vm.deptName = '',
-            vm.deptId = null,
             vm.shopName = null;
             vm.getShopList();
 		},
@@ -154,10 +146,7 @@ var vm = new Vue({
 		getInfo: function(id){
 			$.get(baseURL + "shop/shopman/info/"+id, function(r){
                 vm.shopMan = r.shopMan;
-                vm.deptId = r.shopMan.deptId;
-                vm.setDeptName(vm.deptId);
                 vm.getShopList(r.shopMan.shopId);
-               // vm.setShopName(r.shopMan.shopId);
             });
 		},
 		reload: function (event) {
@@ -172,7 +161,7 @@ var vm = new Vue({
         getShopList:function(id){
 		    console.log("id======"+id)
             $.ajaxSettings.async = false;
-            $.get(baseURL + "shop/shop/selectlist?deptId="+vm.deptId, function(r){
+            $.get(baseURL + "shop/shop/selectlist", function(r){
                 vm.shopList = r.list;
                 if(id!=null && id!=''){
                     vm.setShopName(vm.shopMan.shopId);
@@ -194,34 +183,7 @@ var vm = new Vue({
                 });
             }
         },
-        //加载企业列表
-        getDeptList:function(){
-            $.get(baseURL + "/sys/dept/selectlist", function(r){
-                vm.deptList = r.deptList;
-            });
-        },
-        //选择企业
-        selectDept: function (index) {
-            vm.shopMan.deptId = vm.deptList[index].deptId;
-            vm.deptName = vm.deptList[index].name;
-            vm.deptId = vm.deptList[index].deptId;
-            vm.getShopList();
-        },
-        setDeptName:function(deptId){
-            if(vm.deptList!=null && vm.deptList.length>0 && deptId!=null){
-                vm.deptList.forEach(p=>{
-                    if(p.deptId===deptId){
-                        vm.deptName = p.name;
-                    }
-                });
-            }
-        },
-        //获取用户信息
-        getUser: function(){
-            $.getJSON(baseURL+"sys/user/info?_"+$.now(), function(r){
-                vm.user = r.user;
-            });
-        },
+
 	}
 });
 vm.getShopList();

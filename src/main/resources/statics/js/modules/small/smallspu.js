@@ -189,13 +189,6 @@ var vm = new Vue({
         },
         skuList:[],//sku子商品列表
         attibutList:[],//商品属性
-        user: {
-            userId:null
-        },//当前登陆用户
-        deptId:null,//部门id(企业id)
-        deptList:[],//部门列表（企业列表）
-        deptName:'',
-
         q:{
             title:'',
             shopName:'',
@@ -218,8 +211,7 @@ var vm = new Vue({
         }
     },
     created: function(){
-        this.getUser();
-        this.getDeptList();
+
     },
 	methods: {
 		query: function () {
@@ -234,7 +226,7 @@ var vm = new Vue({
                 smallCategory:{
                     title:null
                 },
-                retailerId:null,
+                shopId:null,
                 shop:{
                     shopName:null
                 },
@@ -244,8 +236,6 @@ var vm = new Vue({
                 }
 
             };
-            vm.deptName = '',
-            vm.deptId = null,
             vm.getCategory();
             vm.getRetailList();
 		},
@@ -365,10 +355,6 @@ var vm = new Vue({
                     title:null
                 };
 
-                //设置部门信息
-                vm.deptId = r.smallSpu.deptId;
-                vm.setDeptName(vm.deptId);
-
                 //加载商品分类
                 vm.getCategory();
                 //加载零售户
@@ -394,7 +380,7 @@ var vm = new Vue({
         //加载分类树
         getCategory: function(){
             //加载分类树
-            $.get(baseURL + "small/smallcategory/select?deptId="+vm.deptId, function(r){
+            $.get(baseURL + "small/smallcategory/select", function(r){
                 ztree = $.fn.zTree.init($("#categroyTree"), setting, r.categoryList);
                 // console.log("ztree====="+JSON.stringify(ztree))
                 var node = ztree.getNodeByParam("id", vm.smallSpu.categoryId);
@@ -435,7 +421,7 @@ var vm = new Vue({
         //加载零售户
         getRetailList: function(){
             //加载
-            $.get(baseURL + "shop/shop/select?deptId="+vm.deptId, function(r){
+            $.get(baseURL + "shop/shop/select", function(r){
                 // console.log("r====="+JSON.stringify(r))
                 retialztree = $.fn.zTree.init($("#retailTree"), settingretail, r.retailList);
                 var node = retialztree.getNodeByParam("id", vm.smallSpu.shopId);
@@ -539,14 +525,6 @@ var vm = new Vue({
                     var iframeWin = window[layero.find('iframe')[0]['name']];
                     //加载sku列表
                     vm.getSkuList(vm.smallSpu.id);
-                   /* var tArea = iframeWin.vm.tArea;
-                    if($.trim(tArea.id) == '') {
-                        layer.msg("请选择",{icon: 0,time: 1000});return;
-                    }
-
-                    console.log(tArea);
-                    vm.tChargerStand.tArea.name = tArea.name;
-                    vm.tChargerStand.areaId = tArea.id;*/
                     layer.close(index);
                 },
                 success: function (layero, index) {
@@ -650,35 +628,6 @@ var vm = new Vue({
                 }
             }, function(){
 
-            });
-        },
-        //加载企业列表
-        getDeptList:function(){
-            $.get(baseURL + "/sys/dept/selectlist", function(r){
-                vm.deptList = r.deptList;
-            });
-        },
-        //选择企业
-        selectDept: function (index) {
-            vm.smallSpu.deptId = vm.deptList[index].deptId;
-            vm.deptName = vm.deptList[index].name;
-            vm.deptId = vm.deptList[index].deptId;
-            vm.getCategory();
-            vm.getRetailList();
-        },
-        setDeptName:function(deptId){
-            if(vm.deptList!=null && vm.deptList.length>0 && deptId!=null){
-                vm.deptList.forEach(p=>{
-                    if(p.deptId===deptId){
-                        vm.deptName = p.name;
-                    }
-                });
-            }
-        },
-        //获取用户信息
-        getUser: function(){
-            $.getJSON(baseURL+"sys/user/info?_"+$.now(), function(r){
-                vm.user = r.user;
             });
         },
 

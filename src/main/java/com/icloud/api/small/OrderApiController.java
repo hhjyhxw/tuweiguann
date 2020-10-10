@@ -123,7 +123,7 @@ public class OrderApiController {
                 if(smallCoupon.getSurplus().intValue()==1){
                     //判断是否已在该店铺消费过，消费过，则不再显示新用户专用券
                     List<SmallOrder> list = smallOrderService.list(new QueryWrapper<SmallOrder>()
-                            .eq("supplier_id",preOrder.getSupplierId())
+                            .eq("shop_id",preOrder.getShopId())
                             .eq("coupon_id",userCoupon.getId())
                             .eq("user_id",user.getId()));
                     if(list!=null && list.size()>0){
@@ -170,7 +170,7 @@ public class OrderApiController {
     private void checkCateory(CreateOrder preOrder,Long categoryId){
         QuerySkuCategoryVo vo = new QuerySkuCategoryVo();
         vo.setSkuId(preOrder.getSkuId());
-        vo.setSupplierId(preOrder.getSupplierId());
+        vo.setShopId(preOrder.getShopId());
         List<SkuSpuCategoryVo>  list = smallSkuService.getSkuAndCategoryList(vo);
         List<SkuSpuCategoryVo>  exislist = new ArrayList<>();
         log.info("SkuSpuCategoryVoList==="+ JSON.toJSONString(list));
@@ -204,13 +204,13 @@ public class OrderApiController {
     @CrossOrigin
     @ApiOperation(value="最近订单", notes="")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "supplierId", value = "店铺id", required = false, paramType = "query", dataType = "long")
+            @ApiImplicitParam(name = "shopId", value = "店铺id", required = false, paramType = "query", dataType = "long")
     })
     @RequestMapping(value = "/latesOrder",method = {RequestMethod.GET})
     @ResponseBody
-    public R latesOrder(@LoginUser WxUser user,Long supplierId) throws Exception {
+    public R latesOrder(@LoginUser WxUser user,Long shopId) throws Exception {
         SmallOrder smallOrder = null;
-        List<SmallOrder> list = smallOrderService.list(new QueryWrapper<SmallOrder>().eq("supplier_id",supplierId).orderByDesc("create_time"));
+        List<SmallOrder> list = smallOrderService.list(new QueryWrapper<SmallOrder>().eq("shop_id",shopId).orderByDesc("create_time"));
         if(list!=null && list.size()>0){
             smallOrder = list.get(0);
             OrderVo orderVo = new OrderVo();
@@ -234,19 +234,19 @@ public class OrderApiController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "pageSize", value = "每页多少记录", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "supplierId", value = "店铺id", required = false, paramType = "query", dataType = "long")
+            @ApiImplicitParam(name = "shopId", value = "店铺id", required = false, paramType = "query", dataType = "long")
     })
     @RequestMapping(value = "/orderlist",method = {RequestMethod.GET})
     @ResponseBody
-    public R orderlist(@LoginUser WxUser user,String pageNum,String pageSize,Long supplierId) {
+    public R orderlist(@LoginUser WxUser user,String pageNum,String pageSize,Long shopId) {
         Map parma = new HashMap();
         parma.put("page",pageNum);
         parma.put("limit",pageSize);
         parma.put("userId",user.getId());
-        parma.put("supplierId",supplierId);
+        parma.put("shopId",shopId);
         Query query = new Query(parma);
         List<SmallOrder> orderlistSum = smallOrderService.list(new QueryWrapper<SmallOrder>().eq("user_id",user.getId())
-                .eq("supplier_id",supplierId));
+                .eq("shop_id",shopId));
         BigDecimal totalAmount = CartOrderUtil.getOrderTotalAmount(orderlistSum);
 
 //        List<SmallOrder> orderlist = smallOrderService.list(new QueryWrapper<SmallOrder>().eq("user_id",user.getId()));
@@ -300,13 +300,13 @@ public class OrderApiController {
     @CrossOrigin
     @ApiOperation(value="总下单金额", notes="")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "supplierId", value = "店铺id", required = false, paramType = "query", dataType = "long")
+            @ApiImplicitParam(name = "shopId", value = "店铺id", required = false, paramType = "query", dataType = "long")
     })
     @RequestMapping(value = "/getTotalOrderAmount",method = {RequestMethod.GET})
     @ResponseBody
-    public R getTotalOrderAmount(@LoginUser WxUser user,Long supplierId) {
+    public R getTotalOrderAmount(@LoginUser WxUser user,Long shopId) {
         List<SmallOrder> orderlistSum = smallOrderService.list(new QueryWrapper<SmallOrder>().eq("user_id",user.getId())
-                .eq("supplier_id",supplierId));
+                .eq("shopId",shopId));
         BigDecimal totalAmount = CartOrderUtil.getOrderTotalAmount(orderlistSum);
         return R.ok().put("totalAmount",totalAmount);
     }

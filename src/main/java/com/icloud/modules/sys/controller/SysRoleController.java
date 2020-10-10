@@ -8,6 +8,7 @@ import com.icloud.modules.sys.entity.SysRoleEntity;
 import com.icloud.modules.sys.service.SysRoleDeptService;
 import com.icloud.modules.sys.service.SysRoleMenuService;
 import com.icloud.modules.sys.service.SysRoleService;
+import com.icloud.modules.sys.service.SysRoleShopService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,10 @@ public class SysRoleController extends AbstractController {
 	private SysRoleService sysRoleService;
 	@Autowired
 	private SysRoleMenuService sysRoleMenuService;
+//	@Autowired
+//	private SysRoleDeptService sysRoleDeptService;
 	@Autowired
-	private SysRoleDeptService sysRoleDeptService;
+	private SysRoleShopService sysRoleShopService;
 	
 	/**
 	 * 角色列表
@@ -63,10 +66,11 @@ public class SysRoleController extends AbstractController {
 		List<Long> menuIdList = sysRoleMenuService.queryMenuIdList(roleId);
 		role.setMenuIdList(menuIdList);
 
-		//查询角色对应的部门
-		List<Long> deptIdList = sysRoleDeptService.queryDeptIdList(new Long[]{roleId});
-		role.setDeptIdList(deptIdList);
-		
+//		//查询角色对应的部门
+//		List<Long> deptIdList = sysRoleDeptService.queryDeptIdList(new Long[]{roleId});
+//		role.setDeptIdList(deptIdList);
+		List<Long> shopIdList = sysRoleShopService.queryShopIdList(new Long[]{roleId});
+		role.setShopIdList(shopIdList);
 		return R.ok().put("role", role);
 	}
 	
