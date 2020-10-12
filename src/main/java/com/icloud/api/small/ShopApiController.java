@@ -2,6 +2,7 @@ package com.icloud.api.small;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.AuthIgnore;
+import com.icloud.api.vo.AdVo;
 import com.icloud.basecommon.model.Query;
 import com.icloud.basecommon.service.redis.RedisService;
 import com.icloud.common.PageUtils;
@@ -144,10 +145,21 @@ public class ShopApiController {
                 shopsets.add(p);
             }
         });
+        List<AdVo> advolist = new ArrayList<AdVo>();
+        if(adlist!=null && adlist.size()>0){
+            adlist.forEach(p->{
+                AdVo vo = new AdVo();
+                vo.setImg(p.getAdImgurl());
+                vo.setTitle(p.getAdName());
+                vo.setUrl(p.getAddJumpurl());
+                vo.setOpentype("click");
+                advolist.add(vo);
+            });
+        }
        return R.ok()
                .put("shoplist",shopsets)
 //               .put("shoplist",shoplist)
-               .put("adlist",adlist)
+               .put("adlist",advolist)
                .put("shopId",shopMainId)
                .put("shopMainId",shopMainId)
                .put("shopMainName",shopMainName)
