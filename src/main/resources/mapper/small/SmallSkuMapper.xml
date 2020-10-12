@@ -27,42 +27,20 @@ id,spu_id,bar_code,title,img,original_price,price,vip_price,stock,freeze_stock,c
 
 
 <select id="queryMixList" resultMap="BaseResultMap">
-select * from t_small_sku t
+select t.*,s.shop_name as "shop.shopName" from t_small_sku t,t_small_spu p,shop s
 <where>
-<if test="id != null">
-    and t.id = #{id}
+t.spu_id = p.id and p.shop_id = s.id
+<if test="title != null and title!=''">
+    and t.title LIKE CONCAT('%', '${title}', '%')
 </if>
-<if test="spu_id != null">
-    and t.spu_id = #{spu_id}
-</if>
-<if test="bar_code != null">
-    and t.bar_code = #{bar_code}
-</if>
-<if test="title != null">
-    and t.title = #{title}
-</if>
-<if test="img != null">
-    and t.img = #{img}
-</if>
-<if test="original_price != null">
-    and t.original_price = #{original_price}
-</if>
-<if test="price != null">
-    and t.price = #{price}
-</if>
-<if test="vip_price != null">
-    and t.vip_price = #{vip_price}
-</if>
-<if test="stock != null">
-    and t.stock = #{stock}
-</if>
-<if test="freeze_stock != null">
-    and t.freeze_stock = #{freeze_stock}
-</if>
-<if test="create_time != null">
-    and t.create_time = #{create_time}
+<if test="spuIds != null">
+    and t.spu_id in
+    <foreach item="item" collection="spuIds" open="(" separator="," close=")">
+        #{item}
+    </foreach>
 </if>
 </where>
+
 </select>
 
     <!-- 基础map -->

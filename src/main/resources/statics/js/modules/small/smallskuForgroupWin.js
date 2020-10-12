@@ -12,7 +12,8 @@ $(function () {
 			{ label: '原始价', name: 'originalPrice', index: 'original_price', width: 80 }, 			
 			{ label: '现价', name: 'price', index: 'price', width: 80 }, 			
 			/*{ label: 'vip价', name: 'vipPrice', index: 'vip_price', width: 80 }, 			*/
-			{ label: '库存', name: 'stock', index: 'stock', width: 80 }, 			
+            { label: '店铺名称', name: 'shop.shopName', index: 'shop.shopName', width: 80 },
+			{ label: '库存', name: 'stock', index: 'stock', width: 80 },
 			{ label: '冻结库存', name: 'freezeStock', index: 'freeze_stock', width: 80 }, 			
 			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 }, 			
 			{ label: '修改时间', name: 'modifyTime', index: 'modify_time', width: 80 }			

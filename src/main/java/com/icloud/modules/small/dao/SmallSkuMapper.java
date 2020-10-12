@@ -18,5 +18,6 @@ public interface SmallSkuMapper extends BaseMapper<SmallSku> {
 
 	List<SmallSku> queryMixList(Map<String,Object> map);
 
+//	<!--根据店铺id 和商品sku 查询我领取的对应可用优惠券-->
 	List<SkuSpuCategoryVo>  getSkuAndCategoryList(QuerySkuCategoryVo querySkuCategoryVo);
 }

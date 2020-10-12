@@ -33,6 +33,8 @@ public class GroupSkuVo {
     private Integer remainStock;
 
     private Long shopId;
-
+    /*是否是公共商品 店铺名称*/
     private String shopName;
+    /*是否是公共商品 0不是 1是*/
+    private String commonFlag;
 }

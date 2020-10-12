@@ -34,14 +34,15 @@ public class SmallSkuService extends BaseServiceImpl<SmallSkuMapper,SmallSku> {
 
 
 
-    public PageUtils<SmallSku> listForgroupPage(int pageNo, int pageSize, List<Long>  spuIds,String title) {
+    public PageUtils<SmallSku> listForgroupPage(int pageNo, int pageSize,Map<String,Object> params) {
         PageHelper.startPage(pageNo, pageSize);
         List<SmallSku> list = null;
-        if(StringUtil.checkStr(title)){
-            list = smallSkuMapper.selectList(new QueryWrapper<SmallSku>().in("spu_id",spuIds).like("title",title));
-        }else{
-            list = smallSkuMapper.selectList(new QueryWrapper<SmallSku>().in("spu_id",spuIds));
-        }
+//        if(StringUtil.checkStr(title)){
+//            list = smallSkuMapper.selectList(new QueryWrapper<SmallSku>().in("spu_id",spuIds).like("title",title));
+//        }else{
+//            list = smallSkuMapper.selectList(new QueryWrapper<SmallSku>().in("spu_id",spuIds));
+//        }
+        list = smallSkuMapper.queryMixList(params);
         PageInfo<SmallSku> pageInfo = new PageInfo<SmallSku>(list);
         PageUtils<SmallSku> page = new PageUtils<SmallSku>(list,(int)pageInfo.getTotal(),pageSize,pageNo);
         return page;

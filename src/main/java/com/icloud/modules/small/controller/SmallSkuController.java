@@ -94,8 +94,9 @@ public class SmallSkuController {
         });
         Object title = params.get("title");
         Query query = new Query(params);
-        PageUtils page = smallSkuService.listForgroupPage(query.getPageNum(),query.getPageSize(), spuIds,StringUtil.checkObj(title)?title.toString():null);
-
+        query.put("title",title);
+        query.put("spuIds",spuIds);
+        PageUtils page = smallSkuService.listForgroupPage(query.getPageNum(),query.getPageSize(), query);
         return R.ok().put("page", page);
     }
 

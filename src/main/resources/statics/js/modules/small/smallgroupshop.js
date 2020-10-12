@@ -10,6 +10,12 @@ $(function () {
                     return '<img style="height: 3rem;width: 3rem;" src="'+value+'"/>';
                 }},
             { label: '商品名称', name: 'title', index: 'title', width: 80 },
+            { label: '商品类型', name: 'commonFlag', width: 60, formatter: function(value, options, row){
+                    return value == '0' ?
+                        '<span class="label label-danger">自营商品</span>' :
+                        (value=='1'?'<span class="label label-success">公共商品</span>':'其他');
+
+                }},
             { label: '现价', name: 'price', index: 'price', width: 80 },
 			{ label: '原价', name: 'originalPrice', index: 'originalPrice', width: 80 },
 			{ label: '剩余库存', name: 'remainStock', index: 'remainStock', width: 80 },

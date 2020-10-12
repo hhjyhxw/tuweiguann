@@ -81,11 +81,12 @@ select * from t_small_group_shop t
         <result property="price" column="price"/>
         <result property="remainStock" column="remainStock"/>
         <result property="shopId" column="shop_id"/>
+        <result property="commonFlag" column="common_flag"/>
     </resultMap>
 
     <!--后台分页-->
     <select id="queryGroupAndSkuForhou" resultMap="GroupSkuMap">
-        select t.shop_id,sh.shop_name,t.id,t.sku_id,t.spu_id,k.title,IFNULL(k.img,p.img) img,t.min_price as price,t.max_price original_price,k.stock-k.freeze_stock as remainStock from t_small_group_shop t,t_small_sku k,t_small_spu p,shop sh
+        select t.shop_id,t.common_flag,sh.shop_name,t.id,t.sku_id,t.spu_id,k.title,IFNULL(k.img,p.img) img,t.min_price as price,t.max_price original_price,k.stock-k.freeze_stock as remainStock from t_small_group_shop t,t_small_sku k,t_small_spu p,shop sh
         <where>
             t.sku_id = k.id and k.spu_id = p.id and t.shop_id = sh.id
             <if test="shopId != null">
