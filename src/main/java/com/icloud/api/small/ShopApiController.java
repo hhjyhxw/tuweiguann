@@ -58,15 +58,15 @@ public class ShopApiController {
      */
     @ApiOperation(value="取平台 和当前店铺和分店列表", notes="")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "supplierId", value = "商家id", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "shopIds", value = "商家id", required = false, paramType = "query", dataType = "String"),
     })
     @RequestMapping(value = "/shoplist",method = {RequestMethod.GET})
     @ResponseBody
     @AuthIgnore
-    public R shoplist(String supplierId) {
+    public R shoplist(String shopIds) {
         Long shopId = null;
-        if(StringUtil.checkStr(supplierId) && !"null".equals(supplierId)){
-            shopId = Long.valueOf(supplierId);
+        if(StringUtil.checkStr(shopIds) && !"null".equals(shopIds)){
+            shopId = Long.valueOf(shopIds);
         }
         //1、默认读取平台店铺
         List<Shop> shoplist = new ArrayList<Shop>();
