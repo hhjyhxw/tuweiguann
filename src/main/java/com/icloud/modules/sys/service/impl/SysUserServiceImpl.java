@@ -57,7 +57,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 				.like(StringUtils.isNotBlank(username),"username", username)
 				.apply(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
 		);
-		System.out.println("page.getRecords()====="+ JSON.toJSONString(page.getRecords()));
+//		System.out.println("page.getRecords()====="+ JSON.toJSONString(page.getRecords()));
 		for(SysUserEntity sysUserEntity : page.getRecords()){
 //			SysDeptEntity sysDeptEntity = sysDeptService.getById(sysUserEntity.getDeptId());
 //			sysUserEntity.setDeptName(sysDeptEntity.getName());

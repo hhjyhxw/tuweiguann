@@ -59,9 +59,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 //			if(sysDeptEntity != null){
 //				sysRoleEntity.setDeptName(sysDeptEntity.getName());
 //			}
-			Object obj = shopService.getById(sysRoleEntity.getShopId());
-			if(obj!=null){
-				Shop shop = (Shop)obj;
+//			Object obj = shopService.getById(sysRoleEntity.getShopId());
+//			if(obj!=null){
+//				Shop shop = (Shop)obj;
+//				sysRoleEntity.setShopName(shop.getShopName());
+//			}
+			Shop shop = (Shop) shopService.getById(sysRoleEntity.getShopId());
+			if(shop!=null){
 				sysRoleEntity.setShopName(shop.getShopName());
 			}
 		}
