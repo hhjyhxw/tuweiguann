@@ -422,13 +422,18 @@ var vm = new Vue({
         getRetailList: function(){
             //加载
             $.get(baseURL + "shop/shop/select", function(r){
-                // console.log("r====="+JSON.stringify(r))
-                retialztree = $.fn.zTree.init($("#retailTree"), settingretail, r.retailList);
+                console.log("r====="+JSON.stringify(r))
+                retialztree = $.fn.zTree.init($("#retailTree"), settingretail, r.list);
                 var node = retialztree.getNodeByParam("id", vm.smallSpu.shopId);
                 // console.log("加载node====="+JSON.stringify(node))
                 if(node!=null){
                     retialztree.selectNode(node);
                     vm.smallSpu.shop.shopName = node.name;
+                }else{
+                    if(r.list!=null && r.list.length>0){
+                        vm.smallSpu.shopId = r.list[0].id;
+                        vm.smallSpu.shop.shopName = r.list[0].name;
+                    }
                 }
             })
         },

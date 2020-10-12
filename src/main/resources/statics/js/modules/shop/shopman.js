@@ -79,7 +79,7 @@ var vm = new Vue({
 			vm.shopMan = {};
 
             vm.shopName = null;
-            vm.getShopList();
+            vm.getShopList('');
 		},
 		update: function (event) {
 			var id = getSelectedRow();
@@ -165,7 +165,13 @@ var vm = new Vue({
                 vm.shopList = r.list;
                 if(id!=null && id!=''){
                     vm.setShopName(vm.shopMan.shopId);
+                }else{
+                    if(r.list!=null && r.list.length>0){
+                        vm.shopMan.shopId = r.list[0].id;
+                        vm.shopName = r.list[0].shopName;
+                    }
                 }
+
             });
             $.ajaxSettings.async = true;
         },
@@ -186,4 +192,4 @@ var vm = new Vue({
 
 	}
 });
-vm.getShopList();
+vm.getShopList('');

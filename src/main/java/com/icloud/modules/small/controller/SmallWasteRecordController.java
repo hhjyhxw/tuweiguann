@@ -60,7 +60,7 @@ public class SmallWasteRecordController extends AbstractController{
      */
     @RequestMapping("/shenhelist")
     @RequiresPermissions("small:smallwasterecord:shenhelist")
-    @DataFilter
+//    @DataFilter (固定管理员)
     public R shenhelist(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
         query.put("wasteFlag","2");//提现类型

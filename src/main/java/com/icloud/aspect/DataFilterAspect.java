@@ -12,11 +12,14 @@ package com.icloud.aspect;
 import com.icloud.annotation.DataFilter;
 import com.icloud.common.Constant;
 import com.icloud.exceptions.BaseException;
+import com.icloud.modules.shop.service.ShopService;
 import com.icloud.modules.sys.entity.SysUserEntity;
 import com.icloud.modules.sys.service.SysDeptService;
 import com.icloud.modules.sys.service.SysRoleDeptService;
+import com.icloud.modules.sys.service.SysRoleShopService;
 import com.icloud.modules.sys.service.SysUserRoleService;
 import com.icloud.modules.sys.shiro.ShiroUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -36,15 +39,20 @@ import java.util.Set;
  *
  * @author Mark sunlightcs@gmail.com
  */
+@Slf4j
 @Aspect
 @Component
 public class DataFilterAspect {
-    @Autowired
-    private SysDeptService sysDeptService;
+//    @Autowired
+//    private SysDeptService sysDeptService;
     @Autowired
     private SysUserRoleService sysUserRoleService;
+//    @Autowired
+//    private SysRoleDeptService sysRoleDeptService;
     @Autowired
-    private SysRoleDeptService sysRoleDeptService;
+    private SysRoleShopService sysRoleShopService;
+    @Autowired
+    private ShopService shopService;
 
     @Pointcut("@annotation(com.icloud.annotation.DataFilter)")
 //    @Pointcut("execution(* com.icloud.modules..controller..*.*(..))")
@@ -57,7 +65,7 @@ public class DataFilterAspect {
         Object params = point.getArgs()[0];
         if(params != null && params instanceof Map){
             SysUserEntity user = ShiroUtils.getUserEntity();
-            //如果不是超级管理员，则进行数据过滤
+            //如果不是超级管理员，则进行数据过滤(由原来的部门过滤 改成 店铺过滤)
             if(user.getUserId() != Constant.SUPER_ADMIN){
                 Map map = (Map)params;
                 map.put(Constant.SQL_FILTER, getSQLFilter(user, point));
@@ -81,33 +89,34 @@ public class DataFilterAspect {
             tableAlias +=  ".";
         }
 
-        //部门ID列表
-        Set<Long> deptIdList = new HashSet<>();
+        //dianpu ID列表
+        Set<Long> shopIdList = new HashSet<>();
+        shopIdList.add(user.getShopId());
 
         //用户拥有角色
         List<Long> roleIdList = sysUserRoleService.queryRoleIdList(user.getUserId());
         if(roleIdList.size() > 0){
-            //用户角色对应的部门ID列表
-            List<Long> userDeptIdList = sysRoleDeptService.queryDeptIdList(roleIdList.toArray(new Long[roleIdList.size()]));
-            deptIdList.addAll(userDeptIdList);
+            //用户角色对应的店铺ID列表
+            List<Long> userShopIdList = sysRoleShopService.queryShopIdList(roleIdList.toArray(new Long[roleIdList.size()]));
+            shopIdList.addAll(userShopIdList);
         }
 
-        //用户子部门ID列表
+        //用户子店铺ID列表
         if(dataFilter.subDept()){
-            List<Long> subDeptIdList = sysDeptService.getSubDeptIdList(user.getDeptId());
-            deptIdList.addAll(subDeptIdList);
+            List<Long> subShopIdList = shopService.getSubShopIdList(user.getShopId());
+            shopIdList.addAll(subShopIdList);
         }
 
         StringBuilder sqlFilter = new StringBuilder();
         sqlFilter.append(" (");
 
-        if(deptIdList.size() > 0){
-            sqlFilter.append(tableAlias).append(dataFilter.deptId()).append(" in(").append(StringUtils.join(deptIdList, ",")).append(")");
+        if(shopIdList.size() > 0){
+            sqlFilter.append(tableAlias).append(dataFilter.shopId()).append(" in(").append(StringUtils.join(shopIdList, ",")).append(")");
         }
 
-        //没有本部门数据权限，也能查询本人数据
+        //没有本部门数据权限，也能查询本人所在数据
         if(dataFilter.user()){
-            if(deptIdList.size() > 0){
+            if(shopIdList.size() > 0){
                 sqlFilter.append(" or ");
             }
             sqlFilter.append(tableAlias).append(dataFilter.userId()).append("=").append(user.getUserId());
@@ -118,7 +127,60 @@ public class DataFilterAspect {
         if(sqlFilter.toString().trim().equals("()")){
             return null;
         }
-
+        log.info("Aspact_getSQLFilter====="+sqlFilter.toString());
         return sqlFilter.toString();
     }
+
+//    /**
+//     * 获取数据过滤的SQL
+//     */
+//    private String getSQLFilter_bak(SysUserEntity user, JoinPoint point){
+//        MethodSignature signature = (MethodSignature) point.getSignature();
+//        DataFilter dataFilter = signature.getMethod().getAnnotation(DataFilter.class);
+//        //获取表的别名
+//        String tableAlias = dataFilter.tableAlias();
+//        if(StringUtils.isNotBlank(tableAlias)){
+//            tableAlias +=  ".";
+//        }
+//
+//        //部门ID列表
+//        Set<Long> deptIdList = new HashSet<>();
+//
+//        //用户拥有角色
+//        List<Long> roleIdList = sysUserRoleService.queryRoleIdList(user.getUserId());
+//        if(roleIdList.size() > 0){
+//            //用户角色对应的部门ID列表
+//            List<Long> userDeptIdList = sysRoleDeptService.queryDeptIdList(roleIdList.toArray(new Long[roleIdList.size()]));
+//            deptIdList.addAll(userDeptIdList);
+//        }
+//
+//        //用户子部门ID列表
+//        if(dataFilter.subDept()){
+//            List<Long> subDeptIdList = sysDeptService.getSubDeptIdList(user.getDeptId());
+//            deptIdList.addAll(subDeptIdList);
+//        }
+//
+//        StringBuilder sqlFilter = new StringBuilder();
+//        sqlFilter.append(" (");
+//
+//        if(deptIdList.size() > 0){
+//            sqlFilter.append(tableAlias).append(dataFilter.deptId()).append(" in(").append(StringUtils.join(deptIdList, ",")).append(")");
+//        }
+//
+//        //没有本部门数据权限，也能查询本人数据
+//        if(dataFilter.user()){
+//            if(deptIdList.size() > 0){
+//                sqlFilter.append(" or ");
+//            }
+//            sqlFilter.append(tableAlias).append(dataFilter.userId()).append("=").append(user.getUserId());
+//        }
+//
+//        sqlFilter.append(")");
+//
+//        if(sqlFilter.toString().trim().equals("()")){
+//            return null;
+//        }
+//
+//        return sqlFilter.toString();
+//    }
 }

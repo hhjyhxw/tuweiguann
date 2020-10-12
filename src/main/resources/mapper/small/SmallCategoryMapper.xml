@@ -60,14 +60,14 @@ id,title,parent_id,pic_url,level,status,create_time,modify_time
 
 
     <select id="queryList" resultType="com.icloud.modules.small.entity.SmallCategory" resultMap="BaseResultMap">
-        select t.id,t.title,t.parent_id,t.status,t.sort_num,t.title name,t.dept_id,(select t2.title from t_small_category t2 where t2.id=t.parent_id) parentName from t_small_category t
+        select t.id,t.title,t.parent_id,t.status,t.sort_num,t.title name,(select t2.title from t_small_category t2 where t2.id=t.parent_id) parentName from t_small_category t
         <where>
         <if test="id != null and id!=''">
              t.id = #{id}
         </if>
-        <if test="sql_filter != null and sql_filter!=''">
+       <!-- <if test="sql_filter != null and sql_filter!=''">
              ${sql_filter}
-        </if>
+        </if>-->
         </where>
         order by t.create_time desc
     </select>

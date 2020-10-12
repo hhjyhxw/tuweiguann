@@ -46,11 +46,11 @@ public class SmallSellCategoryController extends AbstractController {
      */
     @RequestMapping("/select")
     @RequiresPermissions("small:smallsellcategory:update")
-    public R select(@RequestParam Long supplierId){
+    public R select(@RequestParam Long shopId){
 
         List<SellCategoryVo>  list = null;
-        if(supplierId!=null){
-            List<SmallSellCategory> clist = smallSellCategoryService.list(new QueryWrapper<SmallSellCategory>().eq("supplier_id",supplierId));
+        if(shopId!=null){
+            List<SmallSellCategory> clist = smallSellCategoryService.list(new QueryWrapper<SmallSellCategory>().eq("shop_id",shopId));
             list =  new ArrayList<SellCategoryVo>();
             SellCategoryVo vo = null;
             if(list!=null){

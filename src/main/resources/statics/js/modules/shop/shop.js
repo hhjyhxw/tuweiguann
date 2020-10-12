@@ -327,7 +327,7 @@ var vm = new Vue({
             //加载分类树
             $.get(baseURL + "shop/shop/select", function(r){
                 // console.info("r==="+JSON.stringify(r))
-                ztree = $.fn.zTree.init($("#deptTree"), setting, r.retailList);
+                ztree = $.fn.zTree.init($("#deptTree"), setting, r.list);
                 // console.log("ztree====="+JSON.stringify(ztree))
                 var node = ztree.getNodeByParam("id", vm.shop.parentId);
                 console.log("加载node====="+JSON.stringify(node))

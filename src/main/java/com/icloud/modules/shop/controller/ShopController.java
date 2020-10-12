@@ -11,6 +11,7 @@ import com.icloud.common.SnowflakeUtils;
 import com.icloud.common.util.StringUtil;
 import com.icloud.config.DeptUtils;
 import com.icloud.config.ServerConfig;
+import com.icloud.config.ShopFilterUtils;
 import com.icloud.exceptions.BaseException;
 import com.icloud.modules.small.entity.SmallCategory;
 import com.icloud.modules.small.entity.SmallWasteRecord;
@@ -47,7 +48,7 @@ public class ShopController extends AbstractController {
     @Autowired
     private SmallWasteRecordService smallWasteRecordService;
     @Autowired
-    private DeptUtils deptUtils;
+    private ShopFilterUtils shopFilterUtils;
     @Autowired
     private ServerConfig serverConfig;
     /**
@@ -55,9 +56,12 @@ public class ShopController extends AbstractController {
      */
     @RequestMapping("/list")
     @RequiresPermissions("shop:shop:list")
-    @DataFilter
+//    @DataFilter
     public R list(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
+        if(getUserId() == Constant.SUPER_ADMIN) {
+            query.put(Constant.SQL_FILTER, shopFilterUtils.getSQLFilterForshopsell());
+        }
         PageUtils page = shopService.findByPage(query.getPageNum(),query.getPageSize(), query);
         List<Shop> list = page.getList();
         if(list!=null && list.size()>0){
@@ -80,8 +84,11 @@ public class ShopController extends AbstractController {
      */
     @RequestMapping("/queryList")
     @RequiresPermissions("shop:shop:list")
-    @DataFilter
+//    @DataFilter
     public R queryList(@RequestParam Map<String, Object> params){
+//        if(getUserId() == Constant.SUPER_ADMIN) {
+//            params.put(Constant.SQL_FILTER, shopFilterUtils.getSQLFilterForshopsell());
+//        }
         List<Shop> list = shopService.queryList(params);
         List<ShopTreeVo> shopTreeVolist = new ArrayList<ShopTreeVo>();
 
@@ -104,9 +111,6 @@ public class ShopController extends AbstractController {
     @DataFilter
     public R withdrawlist(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
-//        if(getUserId()!= Constant.SUPER_ADMIN){
-//            query.put("deptId",getDeptId());
-//        }
         PageUtils page = shopService.findByPage(query.getPageNum(),query.getPageSize(), query);
         return R.ok().put("page", page);
     }
@@ -152,13 +156,11 @@ public class ShopController extends AbstractController {
 //    @DataFilter//超级管理员需要在页面传入企业id,非超级管理员根据当前登陆用户所在企业过滤获取对应企业数据
     public R select(@RequestParam Map<String, Object> params){
         List<Shop> list = null;
-        //超级管理员可以为其他企业添加分类
-//        if(Constant.SUPER_ADMIN==getUserId() && StringUtil.checkObj(params.get("deptId"))){//超级管理员选择的
-//            list = shopService.list(new QueryWrapper<Shop>().in("dept_id", deptUtils.getDeptIdLists(Long.valueOf(params.get("deptId").toString()))));
-//        }else{
-//            list = shopService.list(new QueryWrapper<Shop>().in("dept_id", deptUtils.getDeptIdList()));//当前登陆用户的
-//        }
-        list = shopService.list(new QueryWrapper<Shop>());//当前登陆用户的
+        if(Constant.SUPER_ADMIN==getUserId()){//超级管理员选择的
+            list = shopService.list(new QueryWrapper<Shop>());//当前登陆用户的
+        }else{
+            list = shopService.list(new QueryWrapper<Shop>().in("id", shopFilterUtils.getShopIdAndSubList()));//当前登陆用户的
+        }
         List<ShopTreeVo> shopTreeVolist = new ArrayList<ShopTreeVo>();
         if(list!=null && list.size()>0){
             ShopTreeVo shopvo = null;
@@ -191,14 +193,12 @@ public class ShopController extends AbstractController {
      */
     @RequestMapping("/selectlist")
     public R selectlist(@RequestParam Map<String, Object> params){
-        //超级管理员可以为其他企业添加分类
         List<Shop> list = null;
-        if(Constant.SUPER_ADMIN==getUserId() && StringUtil.checkObj(params.get("deptId"))){//超级管理员选择的
-            list = shopService.list(new QueryWrapper<Shop>().in("dept_id", deptUtils.getDeptIdLists(Long.valueOf(params.get("deptId").toString()))));
+        if(Constant.SUPER_ADMIN==getUserId()){//超级管理员选择的
+            list = shopService.list(new QueryWrapper<Shop>());//当前登陆用户的
         }else{
-            list = shopService.list(new QueryWrapper<Shop>().in("dept_id", deptUtils.getDeptIdList()));//当前登陆用户的
+            list = shopService.list(new QueryWrapper<Shop>().in("id", shopFilterUtils.getShopIdAndSubList()));//当前登陆用户的
         }
-//        List<Shop> list = shopService.list(new QueryWrapper<Shop>().in("dept_id", deptUtils.getDeptIdList()));
         return R.ok().put("list", list);
     }
 

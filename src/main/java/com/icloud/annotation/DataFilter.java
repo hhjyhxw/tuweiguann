@@ -34,6 +34,9 @@ public @interface DataFilter {
     /**  部门ID */
     String deptId() default "dept_id";
 
+    /**  店铺ID */
+    String shopId() default "shop_id";
+
     /**  用户ID */
     String userId() default "user_id";
 }

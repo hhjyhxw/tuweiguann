@@ -62,8 +62,9 @@ var vm = new Vue({
 		showList: true,
 		title: null,
 		smallSellCategory: {
-            smallRetail:{
-                supplierName:null
+		    shopId:null,
+            shop:{
+                shopName:null
             }
         },
 
@@ -80,8 +81,8 @@ var vm = new Vue({
 			vm.title = "新增";
 			vm.smallSellCategory = {
                 shopId:null,
-                smallRetail:{
-                    supplierName:null
+                shop:{
+                    shopName:null
                 }
             };
 
@@ -151,8 +152,8 @@ var vm = new Vue({
 		getInfo: function(id){
 			$.get(baseURL + "small/smallsellcategory/info/"+id, function(r){
                 vm.smallSellCategory = r.smallSellCategory;
-                vm.smallSellCategory.smallRetail = {
-                    supplierName:null
+                vm.smallSellCategory.shop = {
+                    shopName:null
                 };
                 vm.getRetailList();
             });
@@ -169,13 +170,18 @@ var vm = new Vue({
             //加载
             $.get(baseURL + "shop/shop/select", function(r){
                 console.log("r====="+JSON.stringify(r))
-                retialztree = $.fn.zTree.init($("#retailTree"), settingretail, r.retailList);
+                retialztree = $.fn.zTree.init($("#retailTree"), settingretail, r.list);
                 var node = retialztree.getNodeByParam("id", vm.smallSellCategory.shopId);
                 // console.log("加载node====="+JSON.stringify(node))
                 if(node!=null){
                     retialztree.selectNode(node);
                     vm.smallSellCategory.shop.shopName = node.name;
-                }
+                }else{
+                    if(r.list!=null && r.list.length>0){
+                        vm.smallSellCategory.shopId = r.list[0].id;
+                        vm.smallSellCategory.shop.shopName = r.list[0].name;
+                    }
+                 }
             })
         },
         //加载零售户
@@ -199,7 +205,7 @@ var vm = new Vue({
                         //选择
                         // console.log("node====="+JSON.stringify(node))
                         vm.smallSellCategory.shopId = node[0].id;
-                        vm.smallSellCategory.smallRetail.supplierName = node[0].name;
+                        vm.smallSellCategory.shop.shopName = node[0].name;
                     }
                     layer.close(index);
                 }

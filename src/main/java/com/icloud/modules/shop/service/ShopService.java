@@ -40,5 +40,8 @@ public class ShopService extends BaseServiceImpl<ShopMapper,Shop> {
         return page;
     }
 
+    public List<Long> getSubShopIdList(Long shopId) {
+        return shopMapper.getSubShopIdList(shopId);
+    }
 }
 

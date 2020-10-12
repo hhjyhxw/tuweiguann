@@ -56,12 +56,6 @@ var vm = new Vue({
         sysFlag:'0',//1系统店铺 0非系统店铺
         shopList:[],//店铺列表
         skuList :[],//对应店铺商品
-        user: {
-            userId:null
-        },
-        deptId:null,
-        deptList:[],
-        deptName:'',
 
         q:{
             title:'',
@@ -69,8 +63,7 @@ var vm = new Vue({
         }
 	},
     created: function(){
-        this.getUser();
-        this.getDeptList();
+
     },
 	methods: {
 		query: function () {
@@ -85,10 +78,7 @@ var vm = new Vue({
                 commonFlag:0
             };
             vm.goodName='',
-            vm.deptName = '',
-            vm.deptId = null,
-            vm.shopName = null;
-            vm.getShopList();
+            vm.getShopList('');
 		},
 		update: function (event) {
 			var id = getSelectedRow();
@@ -157,8 +147,6 @@ var vm = new Vue({
                 vm.smallGroupShop = r.smallGroupShop;
                 vm.shopName = r.smallGroupShop.shop.shopName;
                 vm.goodName = r.smallGroupShop.sku.title;
-                vm.deptId = r.smallGroupShop.deptId;
-                vm.setDeptName(vm.deptId);
                 vm.getShopList(r.smallGroupShop.shopId);
             });
 		},
@@ -172,10 +160,18 @@ var vm = new Vue({
 		},
         //加载AttibutList
         getShopList:function(id){
-            $.get(baseURL + "shop/shop/selectlist?deptId="+vm.deptId, function(r){
+            $.get(baseURL + "shop/shop/selectlist", function(r){
                 vm.shopList = r.list;
+
                 if(id!=null && id!=''){
                     vm.setShopName(vm.smallGroupShop.shopId);
+                }else{
+                    console.log("selectlist=="+JSON.stringify(r))
+                    console.log("id=="+id)
+                    if(r.list!=null && r.list.length>0){
+                        vm.smallGroupShop.shopId = r.list[0].id;
+                        vm.shopName = r.list[0].shopName;
+                    }
                 }
             });
         },
@@ -183,7 +179,7 @@ var vm = new Vue({
         selectShop: function (index) {
             vm.smallGroupShop.shopId = vm.shopList[index].id;
             vm.shopName = vm.shopList[index].shopName;
-            vm.getGoodsList(vm.shopList[index].id);//加载店铺sku列表
+            // vm.getGoodsList(vm.shopList[index].id);//加载店铺sku列表
             vm.goodName = '';
             vm.sysFlag = vm.shopList[index].sysFlag;
             vm.smallGroupShop.spuId = null;
@@ -214,11 +210,11 @@ var vm = new Vue({
 
         },
         //加载商品列表
-        getGoodsList:function(shopId,sysFlag){
-            $.get(baseURL + "small/smallsku/skulistForGroup?shopId="+shopId+"&sysFlag="+sysFlag, function(r){
-                vm.skuList = r.list;
-            });
-        },
+        // getGoodsList:function(shopId,sysFlag){
+        //     $.get(baseURL + "small/smallsku/skulistForGroup?shopId="+shopId+"&sysFlag="+sysFlag, function(r){
+        //         vm.skuList = r.list;
+        //     });
+        // },
         //选择sku
         selectSku_bak: function (index) {
 		    var goods = vm.skuList[index];
@@ -228,37 +224,9 @@ var vm = new Vue({
             vm.smallGroupShop.minPrice = goods.price;//团购价
             vm.smallGroupShop.maxPrice = goods.originalPrice;//原价
         },
-        //加载企业列表
-        getDeptList:function(){
-            $.get(baseURL + "/sys/dept/selectlist", function(r){
-                vm.deptList = r.deptList;
-            });
-        },
-        //选择企业
-        selectDept: function (index) {
-            vm.smallGroupShop.deptId = vm.deptList[index].deptId;
-            vm.deptName = vm.deptList[index].name;
-            vm.deptId = vm.deptList[index].deptId;
-            vm.getShopList();
-        },
-        setDeptName:function(deptId){
-            if(vm.deptList!=null && vm.deptList.length>0 && deptId!=null){
-                vm.deptList.forEach(p=>{
-                    if(p.deptId===deptId){
-                        vm.deptName = p.name;
-                    }
-                });
-            }
-        },
-        //获取用户信息
-        getUser: function(){
-            $.getJSON(baseURL+"sys/user/info?_"+$.now(), function(r){
-                vm.user = r.user;
-            });
-        },
         //打开添加sku弹窗 选择需要上团购 是航拍
         selectSku: function () {
-            if(vm.smallGroupShop.commonFlag===0){
+            if(vm.smallGroupShop.commonFlag==0 || vm.smallGroupShop.commonFlag=='0'){//自营商品
                 sysFlag = false;
             }else {
                 sysFlag = true;
@@ -308,4 +276,4 @@ var vm = new Vue({
         },
 	}
 });
-vm.getShopList();
+vm.getShopList('');

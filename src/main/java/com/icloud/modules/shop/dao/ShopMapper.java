@@ -15,7 +15,14 @@ public interface ShopMapper extends BaseMapper<Shop> {
 
 	List<Shop> queryMixList(Map<String,Object> map);
 
+	/**
+	 * 查询店铺列表 和上级名称
+	 */
 	List<Shop> queryList(Map<String,Object> map);
 
-
+	/**
+	 * 查询子店铺ID列表
+	 * @param parentId  上级店铺ID
+	 */
+    List<Long> getSubShopIdList(Long parentId);
 }

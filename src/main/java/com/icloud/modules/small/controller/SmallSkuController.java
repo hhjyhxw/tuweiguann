@@ -60,14 +60,14 @@ public class SmallSkuController {
     }
 
     /**
-     *
+     *上架商品的
      * @param params
      * @return
      */
     @RequestMapping("/listForgroup")
     public R listForgroup(@RequestParam Map<String, Object> params){
-        Long supplierId = Long.valueOf(params.get("supplierId").toString());//当前需要商家商品的店铺
-        Shop shop = (Shop) shopService.getById(supplierId);
+        Long shopId = Long.valueOf(params.get("shopId").toString());//当前需要商家商品的店铺
+        Shop shop = (Shop) shopService.getById(shopId);
         //查询到复合需求的spuList集合
         List<SmallSpu> spuList = null;
         //非系统店铺 上架系统店铺商品
@@ -78,10 +78,10 @@ public class SmallSkuController {
                 shoplist.forEach(p->{
                     shopIds.add(p.getId());
                 });
-                spuList = smallSpuService.list(new QueryWrapper<SmallSpu>().in("supplier_id",shopIds));//所有系统店铺的spu
+                spuList = smallSpuService.list(new QueryWrapper<SmallSpu>().in("shop_id",shopIds));//所有系统店铺的spu
             }
         }else{
-            spuList = smallSpuService.list(new QueryWrapper<SmallSpu>().eq("supplier_id",supplierId));//自营商品的
+            spuList = smallSpuService.list(new QueryWrapper<SmallSpu>().eq("shop_id",shopId));//自营商品的
         }
         if(spuList==null || spuList.size()==0){
             return R.error();
@@ -118,14 +118,14 @@ public class SmallSkuController {
      */
     /**
      *
-     * @param supplierId  上架团购商品的店铺Id
+     * @param shopId  上架团购商品的店铺Id
      * @param sysFlag
      * @return
      */
     @RequestMapping("/skulistForGroup")
     @RequiresPermissions("small:smallspu:list")
-    public R skulistForGroup(@RequestParam Long supplierId,@RequestParam boolean sysFlag){
-        Shop shop = (Shop) shopService.getById(supplierId);
+    public R skulistForGroup(@RequestParam Long shopId,@RequestParam boolean sysFlag){
+        Shop shop = (Shop) shopService.getById(shopId);
         //查询到list集合
         List<SmallSpu> spuList = null;
         //非系统店铺 上架系统店铺商品
@@ -136,10 +136,10 @@ public class SmallSkuController {
                 shoplist.forEach(p->{
                     shopIds.add(p.getId());
                 });
-                spuList = smallSpuService.list(new QueryWrapper<SmallSpu>().in("supplier_id",shopIds));
+                spuList = smallSpuService.list(new QueryWrapper<SmallSpu>().in("shop_id",shopIds));
             }
         }else{
-            spuList = smallSpuService.list(new QueryWrapper<SmallSpu>().eq("supplier_id",supplierId));
+            spuList = smallSpuService.list(new QueryWrapper<SmallSpu>().eq("shop_id",shopId));
         }
         if(spuList==null || spuList.size()==0){
             return R.error();

@@ -78,7 +78,7 @@ var vm = new Vue({
 			vm.shopBank = {};
 
             vm.shopName = null;
-            vm.getShopList();
+            vm.getShopList('');
 		},
 		update: function (event) {
 			var id = getSelectedRow();
@@ -163,6 +163,11 @@ var vm = new Vue({
                 vm.shopList = r.list;
                 if(id!=null && id!=''){
                     vm.setShopName(vm.shopBank.shopId);
+                }else{
+                    if(r.list!=null && r.list.length>0){
+                        vm.shopBank.shopId = r.list[0].id;
+                        vm.shopName = r.list[0].shopName;
+                    }
                 }
             });
             $.ajaxSettings.async = true;
