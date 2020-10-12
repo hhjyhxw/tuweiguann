@@ -21,7 +21,7 @@
 
    <!-- 基础字段列 -->
    <sql id="Base_Column_List" >
-id,user_id,coupon_id,order_id,use_time,start_time,end_time,create_time,modify_time,shop_id,dept_id
+id,user_id,coupon_id,order_id,use_time,start_time,end_time,create_time,modify_time,shop_id
     </sql>
 
 

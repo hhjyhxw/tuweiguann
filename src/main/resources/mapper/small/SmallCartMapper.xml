@@ -68,8 +68,8 @@ select * from t_small_cart t
             <if test="user_id != null">
                 and t.user_id = #{user_id}
             </if>
-            <if test="supplier_id != null">
-                and gp.supplier_id = #{supplier_id}
+            <if test="shop_id != null">
+                and gp.shop_id = #{shop_id}
             </if>
         </where>
         order by t.create_time desc

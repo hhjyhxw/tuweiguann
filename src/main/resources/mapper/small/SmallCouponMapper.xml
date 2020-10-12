@@ -29,7 +29,7 @@
 
    <!-- 基础字段列 -->
    <sql id="Base_Column_List" >
-id,title,coup_type,description,total,surplus,limits,discount,min,status,category_id,days,start_time,end_time,create_time,modify_time,supplier_id,dept_id
+id,title,coup_type,description,total,surplus,limits,discount,min,status,category_id,days,start_time,end_time,create_time,modify_time,shop_id,dept_id
     </sql>
 
 
@@ -86,8 +86,8 @@ select * from t_small_coupon t
 <if test="modifyTime != null">
     and t.modify_time = #{modifyTime}
 </if>
-<if test="supplierId != null">
-    and t.supplier_id = #{supplierId}
+<if test="shopId != null">
+    and t.shop_id = #{shopId}
 </if>
     <if test="sql_filter != null and sql_filter!=''">
         and ${sql_filter}
