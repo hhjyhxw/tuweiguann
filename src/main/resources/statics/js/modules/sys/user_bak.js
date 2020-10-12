@@ -5,7 +5,7 @@ $(function () {
         colModel: [			
 			{ label: '用户ID', name: 'userId', index: "user_id", width: 45, key: true },
 			{ label: '用户名', name: 'username', width: 75 },
-            { label: '所属店铺', name: 'shopName', sortable: false, width: 75 },
+            { label: '所属部门', name: 'deptName', sortable: false, width: 75 },
 			{ label: '邮箱', name: 'email', width: 90 },
 			{ label: '手机号', name: 'mobile', width: 100 },
 			{ label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
@@ -45,7 +45,7 @@ var setting = {
     data: {
         simpleData: {
             enable: true,
-            idKey: "id",
+            idKey: "deptId",
             pIdKey: "parentId",
             rootPId: -1
         },
@@ -67,8 +67,8 @@ var vm = new Vue({
         roleList:{},
         user:{
             status:1,
-            shopId:null,
-            shopName:null,
+            deptId:null,
+            deptName:null,
             roleIdList:[]
         }
     },
@@ -85,17 +85,17 @@ var vm = new Vue({
             //获取角色信息
             this.getRoleList();
 
-            // vm.getDept();
-            vm.getShopList();
+            vm.getDept();
         },
-
-        getShopList: function(){
-            $.get(baseURL + "shop/shop/queryList", function(r){
-                ztree = $.fn.zTree.init($("#shopTree"), setting, r.list);
-                var node = ztree.getNodeByParam("id", vm.user.shopId);
+        getDept: function(){
+            //加载部门树
+            $.get(baseURL + "sys/dept/list", function(r){
+                ztree = $.fn.zTree.init($("#deptTree"), setting, r);
+                var node = ztree.getNodeByParam("deptId", vm.user.deptId);
                 if(node != null){
                     ztree.selectNode(node);
-                    vm.user.shopName = node.name;
+
+                    vm.user.deptName = node.name;
                 }
             })
         },
@@ -167,7 +167,7 @@ var vm = new Vue({
                 vm.user = r.user;
                 vm.user.password = null;
 
-                vm.getShopList();
+                vm.getDept();
             });
         },
         getRoleList: function(){
@@ -175,23 +175,22 @@ var vm = new Vue({
                 vm.roleList = r.list;
             });
         },
-
-        shopTree: function(){
+        deptTree: function(){
             layer.open({
                 type: 1,
                 offset: '50px',
                 skin: 'layui-layer-molv',
-                title: "选择店铺",
+                title: "选择部门",
                 area: ['300px', '450px'],
                 shade: 0,
                 shadeClose: false,
-                content: jQuery("#shopLayer"),
+                content: jQuery("#deptLayer"),
                 btn: ['确定', '取消'],
                 btn1: function (index) {
                     var node = ztree.getSelectedNodes();
                     //选择上级部门
-                    vm.user.shopId = node[0].id;
-                    vm.user.shopName = node[0].name;
+                    vm.user.deptId = node[0].deptId;
+                    vm.user.deptName = node[0].name;
 
                     layer.close(index);
                 }

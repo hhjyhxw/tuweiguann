@@ -121,7 +121,7 @@ select * from shop t
 </select>
 
     <select id="queryList" resultType="com.icloud.modules.shop.entity.Shop">
-        select t1.*,(select t2.shopName from shop t2 where t2.id=t1.parent_id)parentName from shop t1
+        select t1.*,(select t2.shop_name from shop t2 where t2.id=t1.parent_id)parentName from shop t1
         <where>
         <if test="sql_filter != null">
             and ${sql_filter}

@@ -82,9 +82,18 @@ public class ShopController extends AbstractController {
     @RequiresPermissions("shop:shop:list")
     @DataFilter
     public R queryList(@RequestParam Map<String, Object> params){
-        Query query = new Query(params);
         List<Shop> list = shopService.queryList(params);
-        return R.ok().put("list", list);
+        List<ShopTreeVo> shopTreeVolist = new ArrayList<ShopTreeVo>();
+
+        list.forEach(p->{
+            ShopTreeVo shopvo = new ShopTreeVo();
+            shopvo.setId(p.getId());
+            shopvo.setName(p.getShopName());
+            shopvo.setParentId(p.getParentId());
+            shopvo.setParentName((p.getShopName()));
+            shopTreeVolist.add(shopvo);
+        });
+        return R.ok().put("list", shopTreeVolist);
     }
     /**
      * 查询处需要提现的店铺名称 和店铺余额列表，方便店铺管理员提交提现

@@ -39,7 +39,7 @@
 			<div class="form-group">
 				<div class="col-sm-2 control-label">所属店铺</div>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" style="cursor:pointer;" v-model="role.shopName" @click="deptTree" readonly="readonly" placeholder="所属部门"/>
+					<input type="text" class="form-control" style="cursor:pointer;" v-model="role.shopName" @click="shopTree" readonly="readonly" placeholder="所属部门"/>
 				</div>
 			</div>
 			<div class="form-group">
@@ -71,9 +71,9 @@
 	</div>
 </div>
 
-<!-- 选择部门 -->
-<div id="deptLayer" style="display: none;padding:10px;">
-	<ul id="deptTree" class="ztree"></ul>
+<!-- 选择店铺 -->
+<div id="shopLayer" style="display: none;padding:10px;">
+	<ul id="shopTree" class="ztree"></ul>
 </div>
 
 <script src="${request.contextPath}/statics/js/modules/sys/role.js?_${.now?long}"></script>

@@ -80,12 +80,23 @@ public class SysUserEntity implements Serializable {
 	/**
 	 * 部门ID
 	 */
-	@NotNull(message="部门不能为空", groups = {AddGroup.class, UpdateGroup.class})
+//	@NotNull(message="部门不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Long deptId;
+
+	/*店铺id*/
+	@NotNull(message="店铺不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	private Long shopId;
 
 	/**
 	 * 部门名称
 	 */
 	@TableField(exist=false)
 	private String deptName;
+
+	/**
+	 * 店铺名称
+	 */
+	@TableField(exist=false)
+	private String shopName;
+
 }

@@ -9,6 +9,8 @@ import com.icloud.annotation.DataFilter;
 import com.icloud.common.Constant;
 import com.icloud.common.PageUtils;
 import com.icloud.common.Query;
+import com.icloud.modules.shop.entity.Shop;
+import com.icloud.modules.shop.service.ShopService;
 import com.icloud.modules.sys.dao.SysUserDao;
 import com.icloud.modules.sys.entity.SysDeptEntity;
 import com.icloud.modules.sys.entity.SysUserEntity;
@@ -36,6 +38,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	private SysUserRoleService sysUserRoleService;
 	@Autowired
 	private SysDeptService sysDeptService;
+	@Autowired
+	private ShopService shopService;
 
 	@Override
 	public List<Long> queryAllMenuId(Long userId) {
@@ -55,8 +59,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		);
 		System.out.println("page.getRecords()====="+ JSON.toJSONString(page.getRecords()));
 		for(SysUserEntity sysUserEntity : page.getRecords()){
-			SysDeptEntity sysDeptEntity = sysDeptService.getById(sysUserEntity.getDeptId());
-			sysUserEntity.setDeptName(sysDeptEntity.getName());
+//			SysDeptEntity sysDeptEntity = sysDeptService.getById(sysUserEntity.getDeptId());
+//			sysUserEntity.setDeptName(sysDeptEntity.getName());
+			Shop shop = (Shop) shopService.getById(sysUserEntity.getShopId());
+			sysUserEntity.setShopName(shop!=null?shop.getShopName():"");
 		}
 
 		return new PageUtils(page);
