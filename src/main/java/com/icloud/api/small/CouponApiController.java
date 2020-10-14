@@ -86,9 +86,12 @@ public class CouponApiController {
            return R.error("店铺id为空");
         }
         //用于判断是否显示新用户专用类型优惠券，消费过，则不再显示新用户专用券
-        List<SmallOrder> orderlist = smallOrderService.list(new QueryWrapper<SmallOrder>()
+//        List<SmallOrder> orderlist = smallOrderService.list(new QueryWrapper<SmallOrder>()
+//                .eq("shop_id",shopId)
+//                .eq("pay_status",2)//已支付
+//                .eq("user_id",user.getId()));
+        List<SmallUserCoupon> userCouponList = smallUserCouponService.list(new QueryWrapper<SmallOrder>()
                 .eq("shop_id",shopId)
-                .eq("pay_status",2)//已支付
                 .eq("user_id",user.getId()));
         Query query = new Query(new HashMap<>());
         query.put("status",1);
@@ -98,21 +101,28 @@ public class CouponApiController {
                 StringUtil.checkStr(pageSize)?Integer.parseInt(pageSize):10,
                 query);
         List<SmallCoupon> list = (List<SmallCoupon>) page.getList();
-        List<SmallCoupon> newlist = new ArrayList<SmallCoupon>();
         if(list!=null && list.size()>0){
             list.forEach(p->{
-//                p.setStartTime(DateUtil.getDateWithoutTime(DateUtil.commonFormatDate(p.getStartTime(),"yyyy-MM-dd HH:mm:ss")));
-//                p.setEndTime(DateUtil.getDateWithoutTime(DateUtil.commonFormatDate(p.getEndTime(),"yyyy-MM-dd HH:mm:ss")));
                 p.setStartTimeStr(DateUtil.commonFormatDateDo(p.getStartTime()));
                 p.setEndTimeStr(DateUtil.commonFormatDateDo(p.getEndTime()));
-                if(orderlist!=null && orderlist.size()>0 && p.getSurplus().intValue()==1){//已使用过新用户专用券，则不再展示该类型券
-
+                if(userCouponList!=null && userCouponList.size()>0){//已使用过新用户专用券，则不再展示该类型券
+                    boolean flag = false;
+                    inner:for (SmallUserCoupon userCoupon:userCouponList){
+                        if(p.getId().longValue()==userCoupon.getCouponId().longValue()){
+                            flag = true;
+                            break inner;
+                        }
+                    }
+                    if(!flag){
+                        p.setReceivedStatus(0);//未领取
+                    }else{
+                        p.setReceivedStatus(1);//已领取
+                    }
                 }else{
-                    newlist.add(p);
+                    p.setReceivedStatus(0);//未领取
                 }
             });
         }
-//        page.setList(newlist); 暂时不使用
         page.setList(list);
         return R.ok().put("page", page);
     }
@@ -177,24 +187,6 @@ public class CouponApiController {
                 }
                 p.setStartTimeStr(DateUtil.commonFormatDateDo(p.getStartTime()));
                 p.setEndTimeStr(DateUtil.commonFormatDateDo(p.getEndTime()));
-//                if(!StringUtil.checkStr(status) || "unreceived".equals(status)){
-//                    if(p.getOrderId()==null && p.getEndTime().after(new Date())){
-//                        p.setStatus(0);//未领取
-//                        newlist.add(p);
-//                    }
-//                }
-//                if("received".equals(status)){
-//                    if(p.getOrderId()!=null){
-//                        p.setStatus(1);//已领取
-//                        newlist.add(p);
-//                    }
-//                }
-//                if("overtimed".equals(status)){
-//                    if(p.getOrderId()==null && p.getEndTime().before(new Date())){
-//                        p.setStatus(2);//已过期
-//                        newlist.add(p);
-//                    }
-//                }
             });
         }
         page.setList(list);

@@ -87,6 +87,9 @@ public class SmallCoupon implements Serializable {
        @TableField("shop_id")
        private Long shopId;
 
+        /* 是否已领取 */
+        @TableField(exist = false)
+        private Integer receivedStatus;
 
     /* 优惠券有效开始时间（领取优惠券时写入） */
     @TableField(exist = false)
