@@ -150,11 +150,11 @@ var vm = new Vue({
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
-            if(!priceCheck(vm.smallCoupon.min)){
-                layer.msg("最低消费金额不能为空,且为数字,最多保留两位小数", {icon: 2});
+            if(!numsCheck(vm.smallCoupon.min)){
+                layer.msg("最低消费金额不能为空,且为正整数", {icon: 2});
             }
-            if(!priceCheck(vm.smallCoupon.discount)){
-                layer.msg("优惠金额不能为空,且为数字,最多保留两位小数", {icon: 2});
+            if(!numsCheck(vm.smallCoupon.discount)){
+                layer.msg("优惠金额不能为空,且为正整数", {icon: 2});
                 return;
             }
             if(vm.smallCoupon.surplus==0 && (vm.smallCoupon.startTime==null ||  vm.smallCoupon.startTime=='')){

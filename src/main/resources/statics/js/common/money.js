@@ -12,3 +12,16 @@ function priceCheck(val) {
     }
     return true;
 }
+
+var numsReg = /^[1-9]\d*$/
+/**
+ * 正整数正则
+ * @param val
+ * @returns {boolean}
+ */
+function numsCheck(val) {
+    if (!numsReg.test(val)){
+        return false;
+    }
+    return true;
+}
