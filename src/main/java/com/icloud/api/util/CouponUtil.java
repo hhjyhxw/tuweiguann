@@ -25,8 +25,8 @@ public class CouponUtil {
                 vo.setLtBg("#FFFFFF");
                 vo.setHeight("180rpx");
                 vo.setUnit("￥");
-                vo.setNumber(smallCoupon.getDiscount().toString());
-                vo.setTxt("满"+smallCoupon.getMin()+"可用");
+                vo.setNumber(String.valueOf(smallCoupon.getDiscount().intValue()));
+                vo.setTxt("满"+(smallCoupon.getMin().intValue())+"可用");
                 vo.setTitle(smallCoupon.getTitle());
                 vo.setDesc("有效期"+DateUtil.formatDate(smallCoupon.getEndTime()));
                 vo.setBtn("领券");
@@ -37,8 +37,8 @@ public class CouponUtil {
                 vo.setLtBg("#FFFFFF");
                 vo.setHeight("180rpx");
                 vo.setUnit("￥");
-                vo.setNumber(smallCoupon.getDiscount().toString());
-                vo.setTxt("满"+smallCoupon.getMin()+"可用");
+                vo.setNumber(String.valueOf(smallCoupon.getDiscount().intValue()));
+                vo.setTxt("满"+(smallCoupon.getMin().intValue())+"可用");
                 vo.setTitle(smallCoupon.getTitle());
                 vo.setDesc("有效期"+DateUtil.formatDate(smallCoupon.getEndTime()));
                 vo.setBtn("领券");
@@ -48,11 +48,12 @@ public class CouponUtil {
             //已领取
             vo.setReceivedStatus(1);
             vo.setColor("#FF3456");
-            vo.setLtBg("#FFFFFF");
+//            vo.setLtBg("#FFFFFF");
+            vo.setLtBg("lightgrey");
             vo.setHeight("180rpx");
             vo.setUnit("￥");
-            vo.setNumber(smallCoupon.getDiscount().toString());
-            vo.setTxt("满"+smallCoupon.getMin()+"可用");
+            vo.setNumber(String.valueOf(smallCoupon.getDiscount().intValue()));
+            vo.setTxt("满"+(smallCoupon.getMin().intValue())+"可用");
             vo.setTitle(smallCoupon.getTitle());
             vo.setDesc("有效期"+DateUtil.formatDate(smallCoupon.getEndTime()));
             vo.setBtn("已领取");
