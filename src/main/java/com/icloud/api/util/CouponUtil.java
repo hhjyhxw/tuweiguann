@@ -19,23 +19,25 @@ public class CouponUtil {
         vo.setShopId(smallCoupon.getShopId());
         if(smallCoupon.getReceivedStatus().intValue()==0){
             vo.setReceivedStatus(0);
+            //通用券
             if(smallCoupon.getSurplus().intValue()==0){
                 vo.setColor("#9F6DFA");
                 vo.setLtBg("#FFFFFF");
                 vo.setHeight("180rpx");
                 vo.setUnit("￥");
-                vo.setNumber(smallCoupon.getDiscount());
+                vo.setNumber(smallCoupon.getDiscount().toString());
                 vo.setTxt("满"+smallCoupon.getMin()+"可用");
                 vo.setTitle(smallCoupon.getTitle());
                 vo.setDesc("有效期"+DateUtil.formatDate(smallCoupon.getEndTime()));
                 vo.setBtn("领券");
                 vo.setDrawed("已抢"+smallCoupon.getFreezeStore()+"张");
             }else{
+                //专用券
                 vo.setColor("#FF8830");
                 vo.setLtBg("#FFFFFF");
                 vo.setHeight("180rpx");
                 vo.setUnit("￥");
-                vo.setNumber(smallCoupon.getDiscount());
+                vo.setNumber(smallCoupon.getDiscount().toString());
                 vo.setTxt("满"+smallCoupon.getMin()+"可用");
                 vo.setTitle(smallCoupon.getTitle());
                 vo.setDesc("有效期"+DateUtil.formatDate(smallCoupon.getEndTime()));
@@ -43,12 +45,13 @@ public class CouponUtil {
                 vo.setDrawed("已抢"+smallCoupon.getFreezeStore()+"张");
             }
         }else{
+            //已领取
             vo.setReceivedStatus(1);
             vo.setColor("#FF3456");
             vo.setLtBg("#FFFFFF");
             vo.setHeight("180rpx");
             vo.setUnit("￥");
-            vo.setNumber(smallCoupon.getDiscount());
+            vo.setNumber(smallCoupon.getDiscount().toString());
             vo.setTxt("满"+smallCoupon.getMin()+"可用");
             vo.setTitle(smallCoupon.getTitle());
             vo.setDesc("有效期"+DateUtil.formatDate(smallCoupon.getEndTime()));

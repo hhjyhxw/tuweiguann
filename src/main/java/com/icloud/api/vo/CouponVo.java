@@ -13,7 +13,7 @@ public class CouponVo {
     private String ltBg;//背景
     private String height;//高度
     private String unit;//单位
-    private BigDecimal number;//多少折扣
+    private String number;//多少折扣
     private String txt;//满50元可用
     private String title;//标题
     private String desc;//有效期至 2018-05-20
