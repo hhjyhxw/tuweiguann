@@ -3,6 +3,8 @@ package com.icloud.api.small;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.AuthIgnore;
 import com.icloud.annotation.LoginUser;
+import com.icloud.api.util.CouponUtil;
+import com.icloud.api.vo.CouponVo;
 import com.icloud.api.vo.QueryMycouponVo;
 import com.icloud.basecommon.model.Query;
 import com.icloud.basecommon.service.redis.RedisService;
@@ -97,14 +99,15 @@ public class CouponApiController {
         query.put("status",1);
         query.put("shopId",shopId);
         query.put("endTime",new Date());
-        PageUtils<SmallCoupon> page = smallCouponService.findByPage(StringUtil.checkStr(pageNum)?Integer.parseInt(pageNum):1,
+        PageUtils page = smallCouponService.findByPage(StringUtil.checkStr(pageNum)?Integer.parseInt(pageNum):1,
                 StringUtil.checkStr(pageSize)?Integer.parseInt(pageSize):10,
                 query);
         List<SmallCoupon> list = (List<SmallCoupon>) page.getList();
+        List<CouponVo> couponVoList = new ArrayList<CouponVo>();
         if(list!=null && list.size()>0){
             list.forEach(p->{
-                p.setStartTimeStr(DateUtil.commonFormatDateDo(p.getStartTime()));
-                p.setEndTimeStr(DateUtil.commonFormatDateDo(p.getEndTime()));
+//                p.setStartTimeStr(DateUtil.commonFormatDateDo(p.getStartTime()));
+//                p.setEndTimeStr(DateUtil.commonFormatDateDo(p.getEndTime()));
                 if(userCouponList!=null && userCouponList.size()>0){//已使用过新用户专用券，则不再展示该类型券
                     boolean flag = false;
                     inner:for (SmallUserCoupon userCoupon:userCouponList){
@@ -121,9 +124,11 @@ public class CouponApiController {
                 }else{
                     p.setReceivedStatus(0);//未领取
                 }
+                CouponVo couponVo = CouponUtil.getCouponvo(p);
+                couponVoList.add(couponVo);
             });
         }
-        page.setList(list);
+        page.setList(couponVoList);
         return R.ok().put("page", page);
     }
 
