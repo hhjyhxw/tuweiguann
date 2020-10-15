@@ -3,6 +3,7 @@ package com.icloud.modules.small.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.icloud.api.vo.QueryMycouponVo;
 import com.icloud.common.DateUtil;
 import com.icloud.common.MapEntryUtils;
 import com.icloud.common.PageUtils;
@@ -72,5 +73,8 @@ public class SmallGroupShopService extends BaseServiceImpl<SmallGroupShopMapper,
     }
 
 
+    public List<Long> getCategoryidList(QueryMycouponVo queryMycouponVo) {
+        return smallGroupShopMapper.getCategoryidList(queryMycouponVo);
+    }
 }
 

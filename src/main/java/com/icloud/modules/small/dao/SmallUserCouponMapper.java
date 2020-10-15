@@ -18,7 +18,9 @@ public interface SmallUserCouponMapper extends BaseMapper<SmallUserCoupon> {
 
 	List<SmallUserCoupon> queryMixList(Map<String,Object> map);
 
+    /*查询我的某个店铺的 未使用的优惠券 我的优惠券列表*/
     List<MycouponVo> queryMixListVo(Map<String, Object> map);
 
-    List<MycouponVo> getCategoryidList(QueryMycouponVo queryMycouponVo);
+    /*支付页面 查询我的某个店铺的 未使用的优惠券*/
+    List<MycouponVo> getMycouponList(List<Long> categoryIds,Long userId,Long shopId);
 }

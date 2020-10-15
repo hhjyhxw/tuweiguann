@@ -67,8 +67,8 @@ public class SmallUserCouponService extends BaseServiceImpl<SmallUserCouponMappe
         return true;
     }
 
-    public List<MycouponVo> getCategoryidList(QueryMycouponVo queryMycouponVo) {
-        return smallUserCouponMapper.getCategoryidList(queryMycouponVo);
+    public List<MycouponVo> getMycouponList(List<Long> categoryIds,Long userId,Long shopId) {
+        return smallUserCouponMapper.getMycouponList(categoryIds,userId,shopId);
     }
 }
 

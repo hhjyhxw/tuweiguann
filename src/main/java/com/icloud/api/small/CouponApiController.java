@@ -183,18 +183,20 @@ public class CouponApiController {
                 StringUtil.checkStr(pageSize)?Integer.parseInt(pageSize):10,
                 query);
         List<MycouponVo> list = (List<MycouponVo>) page.getList();
-//        List<MycouponVo> newlist = new ArrayList<>();
+        List<CouponVo> couponVoList = new ArrayList<CouponVo>();
         if(list!=null && list.size()>0){
             list.forEach(p->{
 
                 if(p.getStatus()==0 && p.getEndTime().before(new Date())){
                     p.setStatus(2);//已过期
                 }
-                p.setStartTimeStr(DateUtil.commonFormatDateDo(p.getStartTime()));
-                p.setEndTimeStr(DateUtil.commonFormatDateDo(p.getEndTime()));
+//                p.setStartTimeStr(DateUtil.commonFormatDateDo(p.getStartTime()));
+//                p.setEndTimeStr(DateUtil.commonFormatDateDo(p.getEndTime()));
+                CouponVo couponVo = CouponUtil.getMyCouponvo(p);
+                couponVoList.add(couponVo);
             });
         }
-        page.setList(list);
+        page.setList(couponVoList);
         return R.ok().put("page", page);
     }
 
@@ -257,6 +259,7 @@ public class CouponApiController {
     public R queryMycouponList(@RequestBody QueryMycouponVo queryMycouponVo,@LoginUser WxUser user){
         ValidatorUtils.validateEntityForFront(queryMycouponVo);
         try {
+
             List<SmallGroupShop> grouplist = smallGroupShopService.list(new QueryWrapper<SmallGroupShop>().in("id",queryMycouponVo.getGroupId()));
             for (SmallGroupShop goods:grouplist){
                 if("1".equals(goods.getCommonFlag())){
@@ -264,16 +267,20 @@ public class CouponApiController {
                     return R.ok().put("list",null);
                 }
             }
-
-            queryMycouponVo.setUserId(user.getId());
-            List<MycouponVo> list = smallUserCouponService.getCategoryidList(queryMycouponVo);
+            //查询分类id
+            List<Long> categoryIdList = smallGroupShopService.getCategoryidList(queryMycouponVo);
+            //我的该店铺可用优惠券
+            List<MycouponVo> list = smallUserCouponService.getMycouponList(categoryIdList,user.getId(),queryMycouponVo.getShopId());
+            List<CouponVo> couponVoList = new ArrayList<CouponVo>();
             if(list!=null && list.size()>0) {
                 list.forEach(p -> {
-                    p.setStartTimeStr(DateUtil.commonFormatDateDo(p.getStartTime()));
-                    p.setEndTimeStr(DateUtil.commonFormatDateDo(p.getEndTime()));
+//                    p.setStartTimeStr(DateUtil.commonFormatDateDo(p.getStartTime()));
+//                    p.setEndTimeStr(DateUtil.commonFormatDateDo(p.getEndTime()));
+                    CouponVo couponVo = CouponUtil.getMyCouponvo(p);
+                    couponVoList.add(couponVo);
                 });
             }
-            return R.ok().put("list",list);
+            return R.ok().put("list",couponVoList);
         }catch (Exception e){
             e.printStackTrace();
         }

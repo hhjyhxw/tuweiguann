@@ -19,6 +19,8 @@ public class CouponVo {
     private String drawed;//已抢2100张
     /* 是否已领取 0未领取，1已领取*/
     private Integer receivedStatus;
+//    0未使用、1已使用、2已过期
+    private Integer status;
 
 
 }

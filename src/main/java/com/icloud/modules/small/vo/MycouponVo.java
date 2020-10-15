@@ -10,6 +10,7 @@ import java.util.Date;
 public class MycouponVo {
     /*  */
     private Long id;
+
     private Long userId;
     /* 代金券id */
     private Long couponId;

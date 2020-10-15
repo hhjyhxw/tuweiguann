@@ -119,4 +119,20 @@ select * from t_small_group_shop t
             </if>
         </where>
     </select>
+
+
+    <!--根据店铺id 和商品sku 查询分类idlist-->
+    <select id="getCategoryidList" resultType="java.lang.Long">
+        select cg.id from t_small_sku sk,t_small_spu sp,t_small_category cg where
+        <where>
+            sk.spu_id = sp.id and sp.category_id = cg.id
+            and sp.shop_id = #{shopId}
+            and sk.id in
+            <foreach item="item" index="index" collection="skuId" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+
 </mapper>
