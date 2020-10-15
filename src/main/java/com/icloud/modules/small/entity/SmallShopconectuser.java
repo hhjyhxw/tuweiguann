@@ -32,9 +32,6 @@ public class SmallShopconectuser implements Serializable {
    	   	   /* 店铺id */
        @TableField("shop_id")
        private Long shopId;
-        /* 店铺id */
-        @TableField("dept_id")
-        private Long deptId;
    	   	   /* 创建时间 */
        @TableField("create_time")
        private Date createTime;

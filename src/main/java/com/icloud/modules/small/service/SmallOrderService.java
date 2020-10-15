@@ -235,7 +235,7 @@ public class SmallOrderService extends BaseServiceImpl<SmallOrderMapper,SmallOrd
                     .eq("user_id",user.getId())
                     .eq("group_id",preOrder.getGroupId()[i])
                     .eq("sku_id",preOrder.getSkuId()[i])
-                    .eq("supplier_id",preOrder.getShopId()));
+                    .eq("shop_id",preOrder.getShopId()));
 
         }
 //        Shop shop = (Shop) shopService.getById(preOrder.getSupplierId());
@@ -432,7 +432,7 @@ public class SmallOrderService extends BaseServiceImpl<SmallOrderMapper,SmallOrd
                     .eq("user_id",user.getId())
                     .eq("group_id",preOrder.getGroupId()[i])
                     .eq("sku_id",preOrder.getNum()[i])
-                    .eq("supplier_id",preOrder.getShopId()));
+                    .eq("shop_id",preOrder.getShopId()));
 
         }
         Shop shop = (Shop) shopService.getById(preOrder.getShopId());
