@@ -112,7 +112,7 @@ public class CouponUtil {
                 vo.setBtn("去使用");
                 vo.setDrawed("");
             }
-        }else if(mycouponVo.getSurplus().intValue()==1){
+        }else if(mycouponVo.getStatus().intValue()==1){
             //已使用
             vo.setStatus(1);
             vo.setColor("#FF3456");
@@ -127,7 +127,7 @@ public class CouponUtil {
             vo.setDesc("有效期"+DateUtil.formatDate(mycouponVo.getEndTime()));
             vo.setBtn("已使用");
             vo.setDrawed("");
-        }else if(mycouponVo.getSurplus().intValue()==2){
+        }else if(mycouponVo.getStatus().intValue()==2){
             //已过期
             vo.setStatus(2);
             vo.setColor("#696969");
