@@ -141,7 +141,7 @@ select * from t_small_user_coupon t
     <select id="getMycouponList" resultMap="BaseResultMapVo">
         select DISTINCT t.id,t.*,cp.title,cp.description,cp.surplus,cp.discount,cp.min,cp.category_id from t_small_user_coupon t,t_small_sku sk,t_small_spu sp,t_small_category cg,t_small_coupon cp
          <where>
-             t.coupon_id = cp.id and
+             t.coupon_id = cp.id
              and cp.category_id=cg.id and sk.spu_id=sp.id and sp.category_id=cg.id
              and sp.shop_id = #{shopId}
              and t.user_id = #{userId}
