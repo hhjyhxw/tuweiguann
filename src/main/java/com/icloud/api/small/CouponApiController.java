@@ -276,7 +276,7 @@ public class CouponApiController {
                 list.forEach(p -> {
 //                    p.setStartTimeStr(DateUtil.commonFormatDateDo(p.getStartTime()));
 //                    p.setEndTimeStr(DateUtil.commonFormatDateDo(p.getEndTime()));
-                    CouponVo couponVo = CouponUtil.getMyCouponvo(p);
+                    CouponVo couponVo = CouponUtil.getMyCouponvoForpay(p);
                     couponVoList.add(couponVo);
                 });
             }

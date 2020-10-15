@@ -32,6 +32,7 @@ public class CouponUtil {
                 vo.setHeight("180rpx");
                 vo.setUnit("￥");
                 vo.setNumber(String.valueOf(smallCoupon.getDiscount().intValue()));
+                vo.setMin(String.valueOf(smallCoupon.getMin().intValue()));
                 vo.setTxt("满"+(smallCoupon.getMin().intValue())+"可用");
                 vo.setTitle(smallCoupon.getTitle());
                 vo.setDesc("有效期"+DateUtil.formatDate(smallCoupon.getEndTime()));
@@ -44,6 +45,7 @@ public class CouponUtil {
                 vo.setHeight("180rpx");
                 vo.setUnit("￥");
                 vo.setNumber(String.valueOf(smallCoupon.getDiscount().intValue()));
+                vo.setMin(String.valueOf(smallCoupon.getMin().intValue()));
                 vo.setTxt("满"+(smallCoupon.getMin().intValue())+"可用");
                 vo.setTitle(smallCoupon.getTitle());
                 vo.setDesc("有效期"+DateUtil.formatDate(smallCoupon.getEndTime()));
@@ -59,6 +61,7 @@ public class CouponUtil {
             vo.setHeight("180rpx");
             vo.setUnit("￥");
             vo.setNumber(String.valueOf(smallCoupon.getDiscount().intValue()));
+            vo.setMin(String.valueOf(smallCoupon.getMin().intValue()));
             vo.setTxt("满"+(smallCoupon.getMin().intValue())+"可用");
             vo.setTitle(smallCoupon.getTitle());
             vo.setDesc("有效期"+DateUtil.formatDate(smallCoupon.getEndTime()));
@@ -89,6 +92,7 @@ public class CouponUtil {
                 vo.setHeight("180rpx");
                 vo.setUnit("￥");
                 vo.setNumber(String.valueOf(mycouponVo.getDiscount().intValue()));
+                vo.setMin(String.valueOf(mycouponVo.getMin().intValue()));
                 vo.setTxt("满"+(mycouponVo.getMin().intValue())+"可用");
                 vo.setTitle(mycouponVo.getTitle());
                 vo.setDesc("有效期"+DateUtil.formatDate(mycouponVo.getEndTime()));
@@ -101,6 +105,7 @@ public class CouponUtil {
                 vo.setHeight("180rpx");
                 vo.setUnit("￥");
                 vo.setNumber(String.valueOf(mycouponVo.getDiscount().intValue()));
+                vo.setMin(String.valueOf(mycouponVo.getMin().intValue()));
                 vo.setTxt("满"+(mycouponVo.getMin().intValue())+"可用");
                 vo.setTitle(mycouponVo.getTitle());
                 vo.setDesc("有效期"+DateUtil.formatDate(mycouponVo.getEndTime()));
@@ -116,6 +121,7 @@ public class CouponUtil {
             vo.setHeight("180rpx");
             vo.setUnit("￥");
             vo.setNumber(String.valueOf(mycouponVo.getDiscount().intValue()));
+            vo.setMin(String.valueOf(mycouponVo.getMin().intValue()));
             vo.setTxt("满"+(mycouponVo.getMin().intValue())+"可用");
             vo.setTitle(mycouponVo.getTitle());
             vo.setDesc("有效期"+DateUtil.formatDate(mycouponVo.getEndTime()));
@@ -130,6 +136,7 @@ public class CouponUtil {
             vo.setHeight("180rpx");
             vo.setUnit("￥");
             vo.setNumber(String.valueOf(mycouponVo.getDiscount().intValue()));
+            vo.setMin(String.valueOf(mycouponVo.getMin().intValue()));
             vo.setTxt("满"+(mycouponVo.getMin().intValue())+"可用");
             vo.setTitle(mycouponVo.getTitle());
             vo.setDesc("有效期"+DateUtil.formatDate(mycouponVo.getEndTime()));
@@ -160,6 +167,7 @@ public class CouponUtil {
                 vo.setHeight("180rpx");
                 vo.setUnit("￥");
                 vo.setNumber(String.valueOf(mycouponVo.getDiscount().intValue()));
+                vo.setMin(String.valueOf(mycouponVo.getMin().intValue()));
                 vo.setTxt("满"+(mycouponVo.getMin().intValue())+"可用");
                 vo.setTitle(mycouponVo.getTitle());
                 vo.setDesc("有效期"+DateUtil.formatDate(mycouponVo.getEndTime()));
@@ -172,6 +180,8 @@ public class CouponUtil {
                 vo.setHeight("180rpx");
                 vo.setUnit("￥");
                 vo.setNumber(String.valueOf(mycouponVo.getDiscount().intValue()));
+                vo.setMin(String.valueOf(mycouponVo.getMin().intValue()));
+                vo.setMin(String.valueOf(mycouponVo.getMin().intValue()));
                 vo.setTxt("满"+(mycouponVo.getMin().intValue())+"可用");
                 vo.setTitle(mycouponVo.getTitle());
                 vo.setDesc("有效期"+DateUtil.formatDate(mycouponVo.getEndTime()));
