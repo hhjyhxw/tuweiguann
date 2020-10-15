@@ -306,7 +306,7 @@ public class OrderApiController {
     @ResponseBody
     public R getTotalOrderAmount(@LoginUser WxUser user,Long shopId) {
         List<SmallOrder> orderlistSum = smallOrderService.list(new QueryWrapper<SmallOrder>().eq("user_id",user.getId())
-                .eq("shopId",shopId));
+                .eq("shop_id",shopId));
         BigDecimal totalAmount = CartOrderUtil.getOrderTotalAmount(orderlistSum);
         return R.ok().put("totalAmount",totalAmount);
     }

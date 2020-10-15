@@ -78,11 +78,6 @@ public class SmallOrderService extends BaseServiceImpl<SmallOrderMapper,SmallOrd
 
     @Override
     public PageUtils<SmallOrder> findByPage(int pageNo, int pageSize, Map<String, Object> query) {
-//        try {
-//            query =  MapEntryUtils.mapvalueToBeanValueAndBeanProperyToColum(query, SmallOrder.class);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         PageHelper.startPage(pageNo, pageSize);
         List<SmallOrder> list = smallOrderMapper.queryMixList(MapEntryUtils.clearNullValue(query));
         PageInfo<SmallOrder> pageInfo = new PageInfo<SmallOrder>(list);

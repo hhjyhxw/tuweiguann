@@ -235,7 +235,7 @@ public class CartApiController {
     @ResponseBody
     public R countCart(@RequestParam Long shopId,@LoginUser WxUser user) {
         if(shopId==null){
-            return R.error("shopId为空");
+            return R.ok().put("totalNum",0);
         }
 //        int num = smallCartService.count(new QueryWrapper<SmallCart>()
 //                .eq("user_id",user.getId())
