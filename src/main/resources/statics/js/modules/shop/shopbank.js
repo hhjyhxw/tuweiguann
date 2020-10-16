@@ -15,10 +15,26 @@ $(function () {
                         '<span class="label label-danger">禁用</span>' :
                         '<span class="label label-success">正常</span>';
                 }},
+            { label: '审核状态', name: 'approveFlag', width: 60, formatter: function(value, options, row){
+                    return value === '0' ?
+                        '<span class="label label-danger">待审核</span>' :
+                        (value==='1'?'<span class="label label-success">审核通过</span>':
+                            (value==='2'?'<span class="label label-success">审核不通过</span>':'待审核'));
+                }},
+            { label: '审核不通过原因', name: 'msg', index: 'msg', width: 80 },
 			{ label: '创建人', name: 'createdBy', index: 'created_by', width: 80 }, 			
 			{ label: '创建时间', name: 'createdTime', index: 'created_time', width: 80 }, 			
 			{ label: '更新人', name: 'updatedBy', index: 'updated_by', width: 80 }, 			
-			{ label: '更新时间', name: 'updatedTime', index: 'updated_time', width: 80 }			
+			{ label: '更新时间', name: 'updatedTime', index: 'updated_time', width: 80 },
+            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                    var actions = [];
+                    if(row.approveFlag!='1' && row.approveFlag!='0'){
+                        actions.push('<a title="提交审核" onclick="vm.subtoShenhe('+row.id+')"><i class="fa fa-pencil">提交审核</i></a>&nbsp;');
+                    }
+
+                    /*  actions.push('<a title="提现记录" onclick="vm.update('+row.id+',0)"><i class="fa fa-trash-o">提现记录</i></a>&nbsp;');*/
+                    return actions.join('');
+                }}
         ],
 		viewrecords: true,
         height: 385,
@@ -80,6 +96,39 @@ var vm = new Vue({
             vm.shopName = null;
             vm.getShopList('');
 		},
+        subtoShenhe : function (id) {
+            // var id = getSelectedRow();
+            console.log("id==="+id);
+            if(id == null){
+                return ;
+            }
+            vm.getInfo(id);
+                vm.shopBank.status=0;
+                vm.shopBank.approveFlag=0;//待审核
+                var lock = false;
+                layer.confirm('确定提交审核？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    if(!lock) {
+                        lock = true;
+                        $.ajax({
+                            type: "POST",
+                            url: baseURL + "shop/shopbank/update",
+                            contentType: "application/json",
+                            data: JSON.stringify(vm.shopBank),
+                            success: function(r){
+                                if(r.code == 0){
+                                    layer.msg("操作成功", {icon: 1});
+                                    $("#jqGrid").trigger("reloadGrid");
+                                }else{
+                                    layer.alert(r.msg);
+                                }
+                            }
+                        });
+                    }
+                }, function(){
+                });
+        },
 		update: function (event) {
 			var id = getSelectedRow();
 			if(id == null){
@@ -143,10 +192,12 @@ var vm = new Vue({
              });
 		},
 		getInfo: function(id){
+            $.ajaxSettings.async = false;
 			$.get(baseURL + "shop/shopbank/info/"+id, function(r){
                 vm.shopBank = r.shopBank;
                 vm.getShopList(r.shopBank.shopId);
             });
+            $.ajaxSettings.async = true;
 		},
 		reload: function (event) {
 			vm.showList = true;
@@ -161,7 +212,9 @@ var vm = new Vue({
             $.ajaxSettings.async = false;
             $.get(baseURL + "shop/shop/selectlist", function(r){
                 vm.shopList = r.list;
+                console.log("r======"+JSON.stringify(r.list))
                 if(id!=null && id!=''){
+                    console.log("id======"+JSON.stringify(id))
                     vm.setShopName(vm.shopBank.shopId);
                 }else{
                     if(r.list!=null && r.list.length>0){
@@ -178,10 +231,13 @@ var vm = new Vue({
             vm.shopName = vm.shopList[index].shopName;
         },
         setShopName:function(shopId){
+            console.log("shopId======"+JSON.stringify(shopId))
             if(vm.shopList!=null && vm.shopList.length>0 && shopId!=null){
                 vm.shopList.forEach(p=>{
-                    if(p.id===shopId){
+                    console.log("p.id.shopId======"+JSON.stringify(Number(p.id)===Number(shopId)))
+                    if(Number(p.id)===Number(shopId)){
                         vm.shopName = p.shopName;
+                        return;
                     }
                 });
             }
