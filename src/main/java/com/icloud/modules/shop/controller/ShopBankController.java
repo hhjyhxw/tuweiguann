@@ -72,7 +72,7 @@ public class ShopBankController  extends AbstractController {
     @RequestMapping("/shenhe")
     @RequiresPermissions("shop:shopbank:shenhe")
     public R shenhe(@RequestBody ShopBank shopBank){
-        ValidatorUtils.validateEntity(shopBank);
+//        ValidatorUtils.validateEntity(shopBank);
         shopBank.setUpdatedTime(new Date());
         shopBank.setUpdatedBy(getUser().getUsername());
         shopBankService.updateById(shopBank);

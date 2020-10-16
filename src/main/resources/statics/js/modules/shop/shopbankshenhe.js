@@ -15,10 +15,27 @@ $(function () {
                         '<span class="label label-danger">禁用</span>' :
                         '<span class="label label-success">正常</span>';
                 }},
-			{ label: '创建人', name: 'createdBy', index: 'created_by', width: 80 }, 			
+            { label: '审核状态', name: 'approveFlag', width: 60, formatter: function(value, options, row){
+                    return value === '0' ?
+                        '<span class="label label-danger">未审核</span>' :
+                        (value==='1'?'<span class="label label-success">审核通过</span>':
+                        (value==='2'?'<span class="label label-success">审核不通过</span>':'未审核'));
+                }},
+            { label: '审核不通过原因', name: 'msg', index: 'msg', width: 80 },
+            { label: '创建人', name: 'createdBy', index: 'created_by', width: 80 },
 			{ label: '创建时间', name: 'createdTime', index: 'created_time', width: 80 }, 			
 			{ label: '更新人', name: 'updatedBy', index: 'updated_by', width: 80 }, 			
-			{ label: '更新时间', name: 'updatedTime', index: 'updated_time', width: 80 }			
+			{ label: '更新时间', name: 'updatedTime', index: 'updated_time', width: 80 },
+            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                    var actions = [];
+                    if(row.approveFlag!='1'){
+                        actions.push('<a title="审核通过" onclick="vm.updatepass('+row.id+')"><i class="fa fa-pencil">审核通过</i></a>&nbsp;');
+                        actions.push('<a title="审核不通过" onclick="vm.updateUnpass('+row.id+')"><i class="fa fa-pencil">审核不通过</i></a>&nbsp;');
+                    }
+
+                    /*  actions.push('<a title="提现记录" onclick="vm.update('+row.id+',0)"><i class="fa fa-trash-o">提现记录</i></a>&nbsp;');*/
+                    return actions.join('');
+                }}
         ],
 		viewrecords: true,
         height: 385,
@@ -86,9 +103,65 @@ var vm = new Vue({
             vm.getInfo(id);
 
 		},
+        updatepass : function (id) {
+            // var id = getSelectedRow();
+            console.log("id==="+id);
+            if(id == null){
+                return ;
+            }
+            var shopBank = {
+                id:id,
+                status:'1',
+                approveFlag:'1'
+            }
+            var lock = false;
+            layer.confirm('确定审核通过？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                if(!lock) {
+                    lock = true;
+                    $.ajax({
+                        type: "POST",
+                        url: baseURL + "shop/shopbank/shenhe",
+                        contentType: "application/json",
+                        data: JSON.stringify(shopBank),
+                        success: function(r){
+                            if(r.code == 0){
+                                layer.msg("操作成功", {icon: 1});
+                                $("#jqGrid").trigger("reloadGrid");
+                            }else{
+                                layer.alert(r.msg);
+                            }
+                        }
+                    });
+                }
+            }, function(){
+            });
+            vm.getInfo(id)
+        },
+        updateUnpass : function (id) {
+            if(id == null){
+                return ;
+            }
+            vm.showList = false;
+            vm.title = "审核不通过";
+            vm.shopBank.status = '0';
+            vm.approveFlag='2',
+            vm.msg='',
+            vm.shopBank.id = id;
+            // vm.getInfo(id)
+        },
 		saveOrUpdate: function (event) {
+            if(vm.shopBank.id==null){
+                return;
+            }
+            if(vm.shopBank.msg==null || vm.shopBank.msg==''){
+                layer.msg("不通过原因不能为空", {icon: 2});
+                return;
+            }
 		    $('#btnSaveOrUpdate').button('loading').delay(1000).queue(function() {
                 var url = "shop/shopbank/shenhe";
+
                 $.ajax({
                     type: "POST",
                     url: baseURL + url,
@@ -109,35 +182,7 @@ var vm = new Vue({
                 });
 			});
 		},
-		del: function (event) {
-			var ids = getSelectedRows();
-			if(ids == null){
-				return ;
-			}
-			var lock = false;
-            layer.confirm('确定要删除选中的记录？', {
-                btn: ['确定','取消'] //按钮
-            }, function(){
-               if(!lock) {
-                    lock = true;
-		            $.ajax({
-                        type: "POST",
-                        url: baseURL + "shop/shopbank/delete",
-                        contentType: "application/json",
-                        data: JSON.stringify(ids),
-                        success: function(r){
-                            if(r.code == 0){
-                                layer.msg("操作成功", {icon: 1});
-                                $("#jqGrid").trigger("reloadGrid");
-                            }else{
-                                layer.alert(r.msg);
-                            }
-                        }
-				    });
-			    }
-             }, function(){
-             });
-		},
+
 		getInfo: function(id){
 			$.get(baseURL + "shop/shopbank/shenheinfo/"+id, function(r){
                 vm.shopBank = r.shopBank;

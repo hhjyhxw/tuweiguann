@@ -102,7 +102,7 @@ public class SmallGroupShopController extends AbstractController {
         List<SmallGroupShop> list = smallGroupShopService.list(new QueryWrapper<SmallGroupShop>()
                     .eq("sku_id",smallGroupShop.getSkuId())
                     .eq("spu_id",smallGroupShop.getSpuId())
-                    .eq("supplier_id",smallGroupShop.getShopId()));
+                    .eq("shop_id",smallGroupShop.getShopId()));
 
         if(list!=null && list.size()>0){
             return R.error("该商品已加入团购列表");
@@ -134,7 +134,7 @@ public class SmallGroupShopController extends AbstractController {
         List<SmallGroupShop> list = smallGroupShopService.list(new QueryWrapper<SmallGroupShop>()
                 .eq("sku_id",smallGroupShop.getSkuId())
                 .eq("spu_id",smallGroupShop.getSpuId())
-                .eq("supplier_id",smallGroupShop.getShopId()));
+                .eq("shop_id",smallGroupShop.getShopId()));
         if(list!=null && list.size()>0 && list.get(0).getId().longValue()!=smallGroupShop.getId().longValue()){
             return R.error("该商品已加入团购列表");
         }

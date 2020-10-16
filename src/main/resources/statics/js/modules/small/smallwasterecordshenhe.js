@@ -6,13 +6,14 @@ $(function () {
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
 			{ label: '店铺', name: 'shop.shopName', index: 'shop_id', width: 80 },
             { label: '金额', name: 'amount', index: 'amount', width: 80 },
-			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 }, 			
-            { label: '审核', name: 'approveFlag', width: 60, formatter: function(value, options, row){
+			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 },
+            { label: '审核状态', name: 'approveFlag', width: 60, formatter: function(value, options, row){
                     return value === '0' ?
                         '<span class="label label-danger">未审核</span>' :
-                        (value==='1'?'<span class="label label-success">审核通过</span>':'不通过');
+                        (value==='1'?'<span class="label label-success">审核通过</span>':
+                            (value==='2'?'<span class="label label-success">审核不通过</span>':'未审核'));
                 }},
-			{ label: '审核描述', name: 'msg', index: 'msg', width: 80 },
+			{ label: '审核不通过原因', name: 'msg', index: 'msg', width: 80 },
 			{ label: '审核时间', name: 'approveTime', index: 'approve_time', width: 80 }, 			
 			{ label: '审核人', name: 'approveBy', index: 'approve_by', width: 80 },
 			{ label: '申请人', name: 'createBy', index: 'create_by', width: 80 },

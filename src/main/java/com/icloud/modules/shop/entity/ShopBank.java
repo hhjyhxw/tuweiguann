@@ -70,6 +70,13 @@ public class ShopBank implements Serializable {
         @TableField("bank_code")
         private String bankCode;
 
+        /* 审核状态0未审核 1通过 2不通过 */
+        @TableField("approve_flag")
+        private String approveFlag;
+        /* 审核不通过描述 */
+        @TableField("msg")
+        private String msg;
+
         /* 店铺 */
         @TableField(exist = false)
         private Shop shop;
