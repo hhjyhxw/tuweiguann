@@ -5,6 +5,8 @@
  */
 package com.icloud.config.quartz.job;
 
+import com.icloud.modules.job.task.ITask;
+import org.quartz.Job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -18,7 +20,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @EnableScheduling
-public class DealSendPrizeFairJob {
+public class DealSendPrizeFairJob implements ITask {
 
 	public final static Logger log = LoggerFactory.getLogger(DealSendPrizeFairJob.class);
 	
@@ -61,4 +63,14 @@ public class DealSendPrizeFairJob {
 		log.info("===============todDalSendPrizeFairJob end ===============");
 	}
 
+
+
+	@Override
+	public void run(String params) {
+		try {
+			todDalSendPrizeFairJob();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
