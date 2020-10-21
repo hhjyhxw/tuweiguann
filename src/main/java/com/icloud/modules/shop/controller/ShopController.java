@@ -59,7 +59,7 @@ public class ShopController extends AbstractController {
 //    @DataFilter
     public R list(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
-        if(getUserId() == Constant.SUPER_ADMIN) {
+        if(getUserId()!= Constant.SUPER_ADMIN) {
             query.put(Constant.SQL_FILTER, shopFilterUtils.getSQLFilterForshopsell());
         }
         PageUtils page = shopService.findByPage(query.getPageNum(),query.getPageSize(), query);

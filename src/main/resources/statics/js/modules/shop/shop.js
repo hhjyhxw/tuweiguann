@@ -71,9 +71,27 @@ $(function () {
 						(value==='1'?'<span class="label label-success">审核通过</span>':'审核失败');
 				}},
 			{ label: '创建人', name: 'createdBy', index: 'created_by', width: 80 }, 			
-			{ label: '创建时间', name: 'createdTime', index: 'created_time', width: 80 }, 			
+			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+			    if(value!=null){
+			        return getDateTime(value,"yyyyMMddHHmmss");
+			    }else{
+			        return "";
+			    }
+            }},
 			{ label: '更新人', name: 'updatedBy', index: 'updated_by', width: 80 }, 			
-			{ label: '更新时间', name: 'updatedTime', index: 'updated_time', width: 80 }			
+            { label: '更新时间', name: 'updatedTime', index: "updated_time", width: 85, formatter: function(value, options, row){
+                      if(value!=null){
+                        return getDateTime(value,"yyyyMMddHHmmss");
+                      }else{
+                            return "";
+                        }
+            }},
+            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                var actions = [];
+                    actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                    actions.push('<a class="btn btn-primary" onclick="vm.del('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                return actions.join('');
+            }}
         ],
 		viewrecords: true,
         height: 385,
@@ -211,13 +229,18 @@ var vm = new Vue({
             status:0,
             sysFlag:0,
             review:0,
+            shopName:'',
             commissionRate:0,
         },
         user: {
 		    userId:null
         },
+        q:{
+         shopName:'',
+        }
 	},
     created: function(){
+        this.getUser();
     },
 	methods: {
 		query: function () {
@@ -242,8 +265,8 @@ var vm = new Vue({
             };
             vm.getShopTree();
 		},
-		update: function (event) {
-			var id = getSelectedRow();
+		update: function (id) {
+//			var id = getSelectedRow();
 			if(id == null){
 				return ;
 			}
@@ -280,11 +303,16 @@ var vm = new Vue({
                 });
 			});
 		},
-		del: function (event) {
-			var ids = getSelectedRows();
-			if(ids == null){
-				return ;
-			}
+		del: function (id) {
+//			var ids = getSelectedRows();
+//			if(ids == null){
+//				return ;
+//			}
+			if(id == null){
+                return ;
+            }
+            var ids = [];
+            ids.push(id);
 			var lock = false;
             layer.confirm('确定要删除选中的记录？', {
                 btn: ['确定','取消'] //按钮

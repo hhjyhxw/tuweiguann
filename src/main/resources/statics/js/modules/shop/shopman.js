@@ -14,15 +14,33 @@ $(function () {
                         '<span class="label label-danger">管理员</span>' :
                         '<span class="label label-success">店员</span>';
                 }},
-            { label: '状态', name: 'role', width: 60, formatter: function(value, options, row){
-                    return value === '0' ?
-                        '<span class="label label-danger">关闭</span>' :
-                        '<span class="label label-success">开启</span>';
+            { label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
+                    return value == '0' ?
+                        '<span class="label label-danger">停用</span>' :
+                        '<span class="label label-success">启用</span>';
                 }},
             { label: '创建人', name: 'createdBy', index: 'created_by', width: 80 },
-			{ label: '创建时间', name: 'createdTime', index: 'created_time', width: 80 }, 			
-			{ label: '更新人', name: 'updatedBy', index: 'updated_by', width: 80 }, 			
-			{ label: '更新时间', name: 'updatedTime', index: 'updated_time', width: 80 }			
+			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+                if(value!=null){
+                    return getDateTime(value,"yyyyMMddHHmmss");
+                }else{
+                    return "";
+                }
+            }},
+            { label: '更新人', name: 'updatedBy', index: 'updated_by', width: 80 },
+            { label: '更新时间', name: 'updatedTime', index: "updated_time", width: 85, formatter: function(value, options, row){
+                      if(value!=null){
+                        return getDateTime(value,"yyyyMMddHHmmss");
+                      }else{
+                            return "";
+                        }
+            }},
+            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                var actions = [];
+                    actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                    actions.push('<a class="btn btn-primary" onclick="vm.del('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                return actions.join('');
+            }}
         ],
 		viewrecords: true,
         height: 385,
@@ -81,8 +99,8 @@ var vm = new Vue({
             vm.shopName = null;
             vm.getShopList('');
 		},
-		update: function (event) {
-			var id = getSelectedRow();
+		update: function (id) {
+//			var id = getSelectedRow();
 			if(id == null){
 				return ;
 			}
@@ -114,11 +132,13 @@ var vm = new Vue({
                 });
 			});
 		},
-		del: function (event) {
-			var ids = getSelectedRows();
-			if(ids == null){
+		del: function (id) {
+//			var ids = getSelectedRows();
+			if(id == null){
 				return ;
 			}
+            var ids = [];
+            ids.push(id);
 			var lock = false;
             layer.confirm('确定要删除选中的记录？', {
                 btn: ['确定','取消'] //按钮

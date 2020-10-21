@@ -14,19 +14,23 @@ $(function () {
                             (value==='2'?'<span class="label label-success">审核不通过</span>':'未审核'));
                 }},
 			{ label: '审核不通过原因', name: 'msg', index: 'msg', width: 80 },
-			{ label: '审核时间', name: 'approveTime', index: 'approve_time', width: 80 }, 			
+			{ label: '审核时间', name: 'approveTime', index: "approve_time", width: 85, formatter: function(value, options, row){
+              if(value!=null){
+                return getDateTime(value,"yyyyMMddHHmmss");
+              }else{
+                    return "";
+                }
+            }},
 			{ label: '审核人', name: 'approveBy', index: 'approve_by', width: 80 },
 			{ label: '申请人', name: 'createBy', index: 'create_by', width: 80 },
-            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
-                    var actions = [];
-                    if(row.approveFlag!='1'){
-                        actions.push('<a title="审核通过" onclick="vm.updatepass('+row.id+')"><i class="fa fa-pencil">审核通过</i></a>&nbsp;');
-                        actions.push('<a title="审核不通过" onclick="vm.updateUnpass('+row.id+')"><i class="fa fa-pencil">审核不通过</i></a>&nbsp;');
-                    }
-
-                    /*  actions.push('<a title="提现记录" onclick="vm.update('+row.id+',0)"><i class="fa fa-trash-o">提现记录</i></a>&nbsp;');*/
-                    return actions.join('');
-                }}
+            {header:'操作', name:'操作', width:139, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                var actions = [];
+                if(row.approveFlag!='1'){
+                    actions.push('<a class="btn btn-primary" onclick="vm.updatepass('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;审核通过</a>&nbsp;');
+                     actions.push('<a class="btn btn-primary" onclick="vm.updateUnpass('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;审核不通过</a>&nbsp;');
+                }
+                return actions.join('');
+            }}
         ],
 		viewrecords: true,
         height: 385,
