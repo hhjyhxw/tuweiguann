@@ -46,7 +46,29 @@
 		 function getDateTime(date,fomat){
 			 
 			 var myDate = new Date(date);
-			
+			 if(fomat=='yyyyMMddHHmmss'){
+                  var m = myDate.getMonth()+1;
+                     if(m<10){
+                         m='0'+m;
+                     }
+                     var d = myDate.getDate();
+                     if(d<10){
+                         d='0'+d;
+                     }
+                     var h = myDate.getHours();
+                     if(h<10){
+                         h='0'+h;
+                     }
+                     var ms = myDate.getMinutes();
+                     if(ms<10){
+                         ms='0'+ms;
+                     }
+                     var s = myDate.getSeconds();
+                     if(s<10){
+                         s='0'+s;
+                     }
+                     return myDate.getFullYear()+""+m+""+d+" "+h+""+ms+""+s;
+             }
 			 if(fomat=='yyyy-MM-dd HH:mm'){
 				 return myDate.getFullYear()+"-"+ (myDate.getMonth()+1)+"-"+myDate.getDate()+" "
 				 +myDate.getHours()+":"+ myDate.getMinutes();

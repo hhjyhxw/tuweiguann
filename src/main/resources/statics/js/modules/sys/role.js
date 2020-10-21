@@ -7,7 +7,18 @@ $(function () {
             { label: '角色名称', name: 'roleName', index: "role_name", width: 75 },
             { label: '所属部门', name: 'shopName', sortable: false, width: 75 },
             { label: '备注', name: 'remark', width: 100 },
-            { label: '创建时间', name: 'createTime', index: "create_time", width: 80}
+            { label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+                return getDateTime(row.createTime,"yyyyMMddHHmmss");
+            }},
+
+            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                var actions = [];
+                  /*  actions.push('<a class="btn btn-primary" onclick="vm.add()" style="padding: 3px 8px;"><i class="fa fa-plus"></i>&nbsp;新增</a>&nbsp;');*/
+                    actions.push('<a class="btn btn-primary" onclick="vm.update('+row.roleId+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                    actions.push('<a class="btn btn-primary" onclick="vm.del('+row.roleId+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                /*  actions.push('<a title="提现记录" onclick="vm.update('+row.id+',0)"><i class="fa fa-trash-o">提现记录</i></a>&nbsp;');*/
+                return actions.join('');
+            }}
         ],
         viewrecords: true,
         height: 385,
@@ -114,15 +125,15 @@ var vm = new Vue({
         add: function(){
             vm.showList = false;
             vm.title = "新增";
-            vm.role = {deptName:null, deptId:null};
+            vm.role = {shopName:null, shopId:null};
             vm.getMenuTree(null);
             //加载店铺
             vm.shoplist();
 
             vm.getDataTree();
         },
-        update: function () {
-            var roleId = getSelectedRow();
+        update: function (roleId) {
+            //var roleId = getSelectedRow();
             if(roleId == null){
                 return ;
             }
@@ -133,12 +144,14 @@ var vm = new Vue({
             vm.getMenuTree(roleId);
             vm.shoplist();
         },
-        del: function () {
-            var roleIds = getSelectedRows();
-            if(roleIds == null){
+        del: function (roleId) {
+//            var roleIds = getSelectedRows();
+            if(roleId == null){
                 return ;
             }
 
+            var roleIds = [];
+            roleIds.push(roleId);
             confirm('确定要删除选中的记录？', function(){
                 $.ajax({
                     type: "POST",
