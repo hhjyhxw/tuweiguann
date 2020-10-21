@@ -42,8 +42,8 @@ var vm = new Vue({
             vm.menu = {parentName:null,parentId:0,type:1,orderNum:0};
             vm.getMenu();
         },
-        update: function () {
-            var menuId = getMenuId();
+        update: function (menuId) {
+//            var menuId = getMenuId();
             if(menuId == null){
                 return ;
             }
@@ -56,8 +56,8 @@ var vm = new Vue({
                 vm.getMenu();
             });
         },
-        del: function () {
-            var menuId = getMenuId();
+        del: function (menuId) {
+//            var menuId = getMenuId();
             if(menuId == null){
                 return ;
             }
@@ -173,7 +173,15 @@ Menu.initColumn = function () {
         }},
         {title: '排序号', field: 'orderNum', align: 'center', valign: 'middle', sortable: true, width: '100px'},
         {title: '菜单URL', field: 'url', align: 'center', valign: 'middle', sortable: true, width: '160px'},
-        {title: '授权标识', field: 'perms', align: 'center', valign: 'middle', sortable: true}]
+        {title: '授权标识', field: 'perms', align: 'center', valign: 'middle', sortable: true},
+        {title:'操作', field:'操作', width:90, sortable:false, title:"操作", align:'center', formatter: function(item, index){
+                        var actions = [];
+                          /*  actions.push('<a class="btn btn-primary" onclick="vm.add()" style="padding: 3px 8px;"><i class="fa fa-plus"></i>&nbsp;新增</a>&nbsp;');*/
+                            actions.push('<a class="btn btn-primary" onclick="vm.update('+item.menuId+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                            actions.push('<a class="btn btn-primary" onclick="vm.del('+item.menuId+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                        return actions.join('');
+                  }}
+        ]
     return columns;
 };
 

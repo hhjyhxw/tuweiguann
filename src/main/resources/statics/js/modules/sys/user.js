@@ -24,7 +24,6 @@ $(function () {
 //                                    actions.push('<a class="btn btn-primary" onclick="vm.add()" style="padding: 3px 8px;"><i class="fa fa-plus"></i>&nbsp;新增</a>&nbsp;');
                                     actions.push('<a class="btn btn-primary" onclick="vm.update('+row.userId+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
                                     actions.push('<a class="btn btn-primary" onclick="vm.del('+row.userId+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
-                                /*  actions.push('<a title="提现记录" onclick="vm.update('+row.id+',0)"><i class="fa fa-trash-o">提现记录</i></a>&nbsp;');*/
                                 return actions.join('');
                             }}
         ],
