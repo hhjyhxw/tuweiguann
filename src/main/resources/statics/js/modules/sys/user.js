@@ -1,4 +1,5 @@
 $(function () {
+
     $("#jqGrid").jqGrid({
         url: baseURL + 'sys/user/list',
         datatype: "json",
@@ -13,7 +14,15 @@ $(function () {
 					'<span class="label label-danger">禁用</span>' : 
 					'<span class="label label-success">正常</span>';
 			}},
-			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85}
+			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85},
+			{header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                                var actions = [];
+                                    actions.push('<a class="btn btn-primary" onclick="vm.add()" style="padding: 3px 8px;"><i class="fa fa-plus"></i>&nbsp;新增</a>&nbsp;');
+                                    actions.push('<a class="btn btn-primary" onclick="vm.update('+row.userId+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                                    actions.push('<a class="btn btn-primary" onclick="vm.del('+row.userId+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                                /*  actions.push('<a title="提现记录" onclick="vm.update('+row.id+',0)"><i class="fa fa-trash-o">提现记录</i></a>&nbsp;');*/
+                                return actions.join('');
+                            }}
         ],
 		viewrecords: true,
         height: 385,
@@ -80,7 +89,7 @@ var vm = new Vue({
             vm.showList = false;
             vm.title = "新增";
             vm.roleList = {};
-            vm.user = {deptName:null, deptId:null, status:1, roleIdList:[]};
+            vm.user = {shopName:null, shopId:null, status:1, roleIdList:[]};
 
             //获取角色信息
             this.getRoleList();
@@ -99,8 +108,8 @@ var vm = new Vue({
                 }
             })
         },
-        update: function () {
-            var userId = getSelectedRow();
+        update: function (userId) {
+//            var userId = getSelectedRow();
             if(userId == null){
                 return ;
             }
@@ -120,12 +129,13 @@ var vm = new Vue({
 
             window.location.href=baseURL+"sys/permissions/index/"+userId;
         },
-        del: function () {
-            var userIds = getSelectedRows();
-            if(userIds == null){
+        del: function (userId) {
+//            var userIds = getSelectedRows();
+            if(userId == null){
                 return ;
             }
-
+            var userIds = [];
+            userIds.push(userId);
             confirm('确定要删除选中的记录？', function(){
                 $.ajax({
                     type: "POST",

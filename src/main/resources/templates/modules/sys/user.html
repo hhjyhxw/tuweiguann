@@ -13,13 +13,16 @@
 			</div>
 			<a class="btn btn-default" @click="query">查询</a>
 			<#if shiro.hasPermission("sys:user:save")>
-			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<!--<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>-->
+				<input type="hidden" id="sys_user_save" value="1" />
 			</#if>
 			<#if shiro.hasPermission("sys:user:update")>
-			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<!--<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>-->
+				<input type="hidden" id="sys_user_update" value="1" />
 			</#if>
 			<#if shiro.hasPermission("sys:user:delete")>
-			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			<!--<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>-->
+				<input type="hidden" id="sys_user_delete" value="1" />
 			</#if>
 		</div>
 	    <table id="jqGrid"></table>
