@@ -13,7 +13,29 @@
 <div id="icloudapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn">
-			<#if shiro.hasPermission("bsactivity:bsactivityad:save")>
+            <div class="form-group col-sm-2">
+                <input type="text" class="form-control" v-model="q.adName" @keyup.enter="query" placeholder="广告名称">
+            </div>
+            <div class="form-group col-sm-1">
+                <select class="form-control"  v-model="q.status">
+                    <option value="0">停用</option>
+                    <option value="1">使用</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-1">
+                <select class="form-control"  v-model="q.posittionId">
+                    <option value="0">首页广告</option>
+                    <option value="1">其他</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-2">
+                <input type="text" class="form-control" v-model="q.shopName" @keyup.enter="query" placeholder="所属店铺">
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+            <#if shiro.hasPermission("bsactivity:bsactivityad:save")>
+            <a class="btn btn-primary" @click="add"  style="float: right; padding: 3px 8px;margin-right:7rem"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            </#if>
+			<!--<#if shiro.hasPermission("bsactivity:bsactivityad:save")>
             <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
 			</#if>
 			<#if shiro.hasPermission("bsactivity:bsactivityad:update")>
@@ -21,7 +43,7 @@
 			</#if>
 			<#if shiro.hasPermission("bsactivity:bsactivityad:delete")>
             <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-			</#if>
+			</#if>-->
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
@@ -56,13 +78,21 @@
                     <a class="btn btn-primary" id="upload" style="margin-left:11rem;"><i class="fa fa-plus"></i>&nbsp;图片url</a>
                 </div>
             </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">跳转url</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="bsactivityAd.addJumpurl" placeholder="跳转url"/>
-                        </div>
-                    </div>
-
+			<div class="form-group">
+                <div class="col-sm-2 control-label">跳转url</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="bsactivityAd.addJumpurl" placeholder="跳转url"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">广告位</div>
+                <div class="col-sm-10">
+                    <select class="form-control"  v-model="bsactivityAd.posittionId">
+                        <option value="0" selected>首页广告</option>
+                        <option value="1">其他</option>
+                    </select>
+                </div>
+            </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">状态</div>
                 <label class="radio-inline">

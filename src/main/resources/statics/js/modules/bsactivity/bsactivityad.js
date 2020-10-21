@@ -5,20 +5,39 @@ $(function () {
         colModel: [			
 			{ label: '编号', name: 'id', index: 'id', width: 50, key: true },
 			{ label: '名称', name: 'adName', index: 'ad_name', width: 80 }, 			
-			{ label: '图片url', name: 'adImgurl', index: 'ad_imgurl', width: 80 }, 			
+			 { label: '图片url', name: 'adImgurl', width: 60, formatter: function(value, options, row){
+                return '<img style="height: 3rem;width: 3rem;" src="'+value+'"/>';
+            }},
 			{ label: '跳转url', name: 'addJumpurl', index: 'add_jumpurl', width: 80 }, 			
 			{ label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
                                     				return value === 0 ?
                                     					'<span class="label label-danger">停用</span>' :
                                     					'<span class="label label-success">启用</span>';
                                     			}},
-			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 }, 			
+			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+                      if(value!=null){
+                        return getDateTime(value,"yyyyMMddHHmmss");
+                      }else{
+                            return "";
+                        }
+            }},
 			{ label: '创建人', name: 'createOperator', index: 'create_operator', width: 80 }, 			
-			{ label: '修改时间', name: 'modifyTime', index: 'modify_time', width: 80 }, 			
+			{ label: '修改时间', name: 'modifyTime', index: "modify_time", width: 85, formatter: function(value, options, row){
+                      if(value!=null){
+                        return getDateTime(value,"yyyyMMddHHmmss");
+                      }else{
+                            return "";
+                        }
+            }},
 			{ label: '修改人', name: 'modifyOperator', index: 'modify_operator', width: 80 }, 			
 			{ label: '所在广告位', name: 'posittionId', index: 'posittion_id', width: 80 }, 			
-			{ label: '排序', name: 'sortNum', index: 'sort_num', width: 80 }
-
+			{ label: '排序', name: 'sortNum', index: 'sort_num', width: 80 },
+            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                var actions = [];
+                    actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                    actions.push('<a class="btn btn-primary" onclick="vm.del('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                return actions.join('');
+            }}
 			//{header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
             //				var actions = [];
             //				actions.push('<a title="修改" style="display: inline-block;padding: 0 0.5rem;" onclick="vm.update('+row.id+')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>&nbsp;')
@@ -99,6 +118,12 @@ var vm = new Vue({
         user: {
             userId:null
         },
+        q:{
+            adName:'',
+            shopName:'',
+            status:null,
+            posittionId:null
+        }
 	},
     created: function(){
         this.getUser();
@@ -115,8 +140,8 @@ var vm = new Vue({
             vm.deptName = '',
             vm.shopName = ''
 		},
-		update: function (event) {
-			var id = getSelectedRow();
+		update: function (id) {
+//			var id = getSelectedRow();
 			if(id == null){
 				return ;
 			}
@@ -148,11 +173,13 @@ var vm = new Vue({
                 });
 			});
 		},
-		del: function (event) {
-			var ids = getSelectedRows();
-			if(ids == null){
+		del: function (id) {
+//			var ids = getSelectedRows();
+			if(id == null){
 				return ;
 			}
+			var ids = [];
+            ids.push(id);
 			var lock = false;
             layer.confirm('确定要删除选中的记录？', {
                 btn: ['确定','取消'] //按钮
@@ -189,7 +216,8 @@ var vm = new Vue({
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
-                page:page
+                postData:vm.q,
+                page: 1
             }).trigger("reloadGrid");
 		},
         //加载AttibutList
@@ -214,6 +242,12 @@ var vm = new Vue({
                     }
                 });
             }
+        },
+         //获取用户信息
+        getUser: function(){
+            $.getJSON(baseURL+"sys/user/info?_"+$.now(), function(r){
+                vm.user = r.user;
+            });
         },
 	}
 });

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -71,6 +72,8 @@ public class BsactivityAdController extends AbstractController {
     @RequestMapping("/save")
     @RequiresPermissions("bsactivity:bsactivityad:save")
     public R save(@RequestBody BsactivityAd bsactivityAd){
+        bsactivityAd.setCreateTime(new Date());
+        bsactivityAd.setCreateOperator(getUser().getUsername());
         bsactivityAdService.save(bsactivityAd);
         return R.ok();
     }
@@ -83,6 +86,8 @@ public class BsactivityAdController extends AbstractController {
     @RequiresPermissions("bsactivity:bsactivityad:update")
     public R update(@RequestBody BsactivityAd bsactivityAd){
         ValidatorUtils.validateEntity(bsactivityAd);
+        bsactivityAd.setModifyTime(new Date());
+        bsactivityAd.setModifyOperator(getUser().getUsername());
         bsactivityAdService.updateById(bsactivityAd);
         
         return R.ok();
