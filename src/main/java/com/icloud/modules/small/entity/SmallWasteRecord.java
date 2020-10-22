@@ -4,9 +4,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.icloud.common.validator.group.AddGroup;
+import com.icloud.common.validator.group.shop.SuSmallWasteGroup;
 import com.icloud.modules.shop.entity.Shop;
 import lombok.Data;
+import lombok.NonNull;
+import org.springframework.format.annotation.NumberFormat;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
@@ -28,6 +33,7 @@ public class SmallWasteRecord implements Serializable {
     @TableId(value="id", type= IdType.AUTO)
     private Long id;
     /* 店铺id */
+    @NotNull(message = "店铺不能为空",groups = SuSmallWasteGroup.class)
     @TableField("shop_id")
     private Long shopId;
     /* 支付方式1微信 2支付包 3银行卡 */
@@ -37,6 +43,7 @@ public class SmallWasteRecord implements Serializable {
     @TableField("waste_flag")
     private String wasteFlag;
     /* 金额 */
+    @NotNull(message = "提现金额不能为空",groups = SuSmallWasteGroup.class)
     @TableField("amount")
     private BigDecimal amount;
     /* 创建时间 */

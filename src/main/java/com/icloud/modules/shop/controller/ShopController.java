@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.DataFilter;
+import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
 import com.icloud.common.Constant;
 import com.icloud.common.SnowflakeUtils;
@@ -126,6 +127,7 @@ public class ShopController extends AbstractController {
     /**
      * 查询处需要提现的店铺名称 和店铺余额列表，方便店铺管理员提交提现
      */
+    @SysLog("提交体现申请")
     @RequestMapping("/withdraw")
     @RequiresPermissions("shop:shop:withdraw")
     public R withdraw(@RequestBody SmallWasteRecord smallWasteRecord){
@@ -238,6 +240,7 @@ public class ShopController extends AbstractController {
     /**
      * 保存
      */
+    @SysLog("添加店铺")
     @RequestMapping("/save")
     @RequiresPermissions("shop:shop:save")
     public R save(@RequestBody Shop shop){
@@ -263,6 +266,7 @@ public class ShopController extends AbstractController {
     /**
      * 修改
      */
+    @SysLog("修改店铺")
     @RequestMapping("/update")
     @RequiresPermissions("shop:shop:update")
     public R update(@RequestBody Shop shop){
@@ -277,6 +281,7 @@ public class ShopController extends AbstractController {
     /**
      * 删除
      */
+    @SysLog("删除店铺")
     @RequestMapping("/delete")
     @RequiresPermissions("shop:shop:delete")
     public R delete(@RequestBody Long[] ids){

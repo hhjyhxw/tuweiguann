@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Map;
 
 import com.icloud.annotation.DataFilter;
+import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
 import com.icloud.modules.shop.entity.Shop;
 import com.icloud.modules.shop.service.ShopService;
@@ -67,6 +68,7 @@ public class SmallCouponController extends AbstractController{
     /**
      * 保存
      */
+    @SysLog("添加优惠券")
     @RequestMapping("/save")
     @RequiresPermissions("small:smallcoupon:save")
     public R save(@RequestBody SmallCoupon smallCoupon){
@@ -80,6 +82,7 @@ public class SmallCouponController extends AbstractController{
     /**
      * 修改
      */
+    @SysLog("修改优惠券")
     @RequestMapping("/update")
     @RequiresPermissions("small:smallcoupon:update")
     public R update(@RequestBody SmallCoupon smallCoupon){
@@ -93,6 +96,7 @@ public class SmallCouponController extends AbstractController{
     /**
      * 删除
      */
+    @SysLog("删除优惠券")
     @RequestMapping("/delete")
     @RequiresPermissions("small:smallcoupon:delete")
     public R delete(@RequestBody Long[] ids){

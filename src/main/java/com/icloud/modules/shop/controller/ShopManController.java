@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Map;
 
 import com.icloud.annotation.DataFilter;
+import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
 import com.icloud.modules.shop.entity.Shop;
 import com.icloud.modules.shop.service.ShopService;
@@ -68,6 +69,7 @@ public class ShopManController extends AbstractController {
     /**
      * 保存
      */
+    @SysLog("添加店员")
     @RequestMapping("/save")
     @RequiresPermissions("shop:shopman:save")
     public R save(@RequestBody ShopMan shopMan){
@@ -82,6 +84,7 @@ public class ShopManController extends AbstractController {
     /**
      * 修改
      */
+    @SysLog("修改店员")
     @RequestMapping("/update")
     @RequiresPermissions("shop:shopman:update")
     public R update(@RequestBody ShopMan shopMan){
@@ -97,6 +100,7 @@ public class ShopManController extends AbstractController {
     /**
      * 删除
      */
+    @SysLog("删除店员")
     @RequestMapping("/delete")
     @RequiresPermissions("shop:shopman:delete")
     public R delete(@RequestBody Long[] ids){

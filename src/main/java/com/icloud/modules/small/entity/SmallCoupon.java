@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.icloud.modules.shop.entity.Shop;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -87,9 +88,9 @@ public class SmallCoupon implements Serializable {
        @TableField("shop_id")
        private Long shopId;
 
-        /* 是否已领取 */
-        @TableField(exist = false)
-        private Integer receivedStatus;
+    /* 是否已领取 */
+    @TableField(exist = false)
+    private Integer receivedStatus;
 
     /* 优惠券有效开始时间（领取优惠券时写入） */
     @TableField(exist = false)
@@ -97,5 +98,12 @@ public class SmallCoupon implements Serializable {
     /* 优惠券有效结束时间（领取优惠券过期时间根据策略计算） */
     @TableField(exist = false)
     private String endTimeStr;
+
+    /*关联分类*/
+    @TableField(exist = false)
+    private SmallCategory smallCategory;
+    /*消费商户*/
+    @TableField(exist = false)
+    private Shop shop;
    	
 }

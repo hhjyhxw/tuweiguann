@@ -20,6 +20,8 @@ public class MyPropertitys {
     //
     private Session session;
 
+
+
     /**
      * spring redis session 相关参数
      */
@@ -31,4 +33,6 @@ public class MyPropertitys {
         private String cookieName;//#cookie名字
 
     }
+
+
 }

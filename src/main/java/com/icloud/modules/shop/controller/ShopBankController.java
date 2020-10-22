@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Map;
 
 import com.icloud.annotation.DataFilter;
+import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
 import com.icloud.modules.shop.entity.Shop;
 import com.icloud.modules.shop.service.ShopService;
@@ -69,6 +70,7 @@ public class ShopBankController  extends AbstractController {
     /**
      * 修改
      */
+    @SysLog("银行卡审核")
     @RequestMapping("/shenhe")
     @RequiresPermissions("shop:shopbank:shenhe")
     public R shenhe(@RequestBody ShopBank shopBank){
@@ -104,6 +106,7 @@ public class ShopBankController  extends AbstractController {
     /**
      * 保存
      */
+    @SysLog("添加银行卡")
     @RequestMapping("/save")
     @RequiresPermissions("shop:shopbank:save")
     public R save(@RequestBody ShopBank shopBank){
@@ -118,6 +121,7 @@ public class ShopBankController  extends AbstractController {
     /**
      * 修改
      */
+    @SysLog("修改银行卡")
     @RequestMapping("/update")
     @RequiresPermissions("shop:shopbank:update")
     public R update(@RequestBody ShopBank shopBank){
@@ -132,6 +136,7 @@ public class ShopBankController  extends AbstractController {
     /**
      * 删除
      */
+    @SysLog("删除银行卡")
     @RequestMapping("/delete")
     @RequiresPermissions("shop:shopbank:delete")
     public R delete(@RequestBody Long[] ids){

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.DataFilter;
+import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
 import com.icloud.common.Constant;
 import com.icloud.modules.shop.entity.Shop;
@@ -86,6 +87,7 @@ public class SmallGroupShopController extends AbstractController {
     /**
      * 保存
      */
+    @SysLog("上架商品")
     @RequestMapping("/save")
     @RequiresPermissions("small:smallgroupshop:save")
     public R save(@RequestBody SmallGroupShop smallGroupShop){
@@ -117,6 +119,7 @@ public class SmallGroupShopController extends AbstractController {
     /**
      * 修改
      */
+    @SysLog("修改上架商品")
     @RequestMapping("/update")
     @RequiresPermissions("small:smallgroupshop:update")
     public R update(@RequestBody SmallGroupShop smallGroupShop){
@@ -147,6 +150,7 @@ public class SmallGroupShopController extends AbstractController {
     /**
      * 删除
      */
+    @SysLog("删除上架商品")
     @RequestMapping("/delete")
     @RequiresPermissions("small:smallgroupshop:delete")
     public R delete(@RequestBody Long[] ids){

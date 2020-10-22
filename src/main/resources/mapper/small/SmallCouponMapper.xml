@@ -34,14 +34,14 @@ id,title,coup_type,description,total,surplus,limits,discount,min,status,category
 
 
 <select id="queryMixList" resultMap="BaseResultMap">
-select * from t_small_coupon t
+select t.*,s.shop_name as "shop.shopName",c.title as "smallCategory.title"from t_small_coupon t
+    left join shop s on t.shop_id = s.id
+    left join t_small_category c on t.category_id = c.id
 <where>
 <if test="id != null">
     and t.id = #{id}
 </if>
-<if test="title != null">
-    and t.title = #{title}
-</if>
+
 <if test="coupType != null">
     and t.coup_type = #{coupType}
 </if>
@@ -89,10 +89,20 @@ select * from t_small_coupon t
 <if test="shopId != null">
     and t.shop_id = #{shopId}
 </if>
+<if test="title != null">
+    and t.title LIKE CONCAT('%', '${title}', '%')
+</if>
+<if test="shopName != null and shopName!=''">
+    and s.shop_name LIKE CONCAT('%', '${shopName}', '%')
+</if>
+<if test="categoryTitle != null and categoryTitle!=''">
+    and c.title LIKE CONCAT('%', '${categoryTitle}', '%')
+</if>
     <if test="sql_filter != null and sql_filter!=''">
         and ${sql_filter}
     </if>
 </where>
+
     order by t.create_time desc
 </select>
 </mapper>

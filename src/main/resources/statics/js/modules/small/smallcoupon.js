@@ -53,8 +53,8 @@ $(function () {
 			/*{ label: '使用类型，如满减', name: 'coupType', index: 'coup_type', width: 80 }, 	*/
 			/*{ label: '描述', name: 'description', index: 'description', width: 80 },*/
 			{ label: '发行总数', name: 'total', index: 'total', width: 80 },
-            { label: '已领取数', name: 'total', index: 'total', width: 80 },
-            { label: '优惠券类型', name: 'orderStatus', width: 60, formatter: function(value, options, row){
+            { label: '已领取数', name: 'freezeStore', index: 'freezeStore', width: 80 },
+            { label: '优惠券类型', name: 'surplus', width: 60, formatter: function(value, options, row){
                     return value === 0 ?
                         '<span class="label label-danger">默认类型</span>' :
                         (value===1?'<span class="label label-success">新用户专用</span>':
@@ -63,15 +63,37 @@ $(function () {
 			{ label: '每人限领', name: 'limits', index: 'limits', width: 80 },
 			{ label: '满多少（元）', name: 'min', index: 'min', width: 80 },
             { label: '减多少（元）', name: 'discount', index: 'discount', width: 80 },
-			{ label: '是否可用 0不用 1可用', name: 'status', index: 'status', width: 80 }, 			
-			{ label: '可用分类', name: 'categoryId', index: 'category_id', width: 80 },
+			{ label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
+                return value === 0 ?
+                    '<span class="label label-danger">停用</span>' :
+                    (value===1?'<span class="label label-success">启用</span>':
+                        '不可用');
+            }},
+			{ label: '可用分类', name: 'smallCategory.title', index: 'category_id', width: 80 },
+			{ label: '所属店铺', name: 'shop.shopName', index: 'shop_id', width: 80 },
 		/*	{ label: '过期天数', name: 'days', index: 'days', width: 80 },
 			{ label: '领取开始时间', name: 'startTime', index: 'start_time', width: 80 }, 			
 			{ label: '领取/使用结束时间', name: 'endTime', index: 'end_time', width: 80 }, 	*/
-			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 }, 			
-			{ label: '修改时间', name: 'modifyTime', index: 'modify_time', width: 80 }, 			
-			/*{ label: '商户id', name: 'shopId', index: 'supplier_id', width: 80 },
-			{ label: '企业Id', name: 'deptId', index: 'dept_id', width: 80 }			*/
+			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+                if(value!=null){
+                    return getDateTime(value,"yyyyMMddHHmmss");
+                }else{
+                    return "";
+                }
+            }},
+            { label: '更新时间', name: 'updatedTime', index: "updated_time", width: 85, formatter: function(value, options, row){
+                      if(value!=null){
+                        return getDateTime(value,"yyyyMMddHHmmss");
+                      }else{
+                            return "";
+                        }
+            }},
+            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                var actions = [];
+                    actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                    actions.push('<a class="btn btn-primary" onclick="vm.del('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                return actions.join('');
+            }}
         ],
 		viewrecords: true,
         height: 385,
@@ -116,7 +138,11 @@ var vm = new Vue({
         shopList:[],
         shopName:'',
         q:{
-            name:'',
+            title:'',
+            shopName:'',
+            categoryTitle:'',
+            status:null,
+            surplus:null,//0通用类型 ，1新用户专用
         },
 
     },
@@ -139,8 +165,8 @@ var vm = new Vue({
             };
 			vm.getShopList('');
 		},
-		update: function (event) {
-			var id = getSelectedRow();
+		update: function (id) {
+			//var id = getSelectedRow();
 			if(id == null){
 				return ;
 			}
@@ -192,11 +218,13 @@ var vm = new Vue({
                 });
 			});
 		},
-		del: function (event) {
-			var ids = getSelectedRows();
-			if(ids == null){
+		del: function (id) {
+//			var ids = getSelectedRows();
+			if(id == null){
 				return ;
 			}
+			var ids = [];
+            ids.push(id);
 			var lock = false;
             layer.confirm('确定要删除选中的记录？', {
                 btn: ['确定','取消'] //按钮
@@ -234,7 +262,8 @@ var vm = new Vue({
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
-                page:page
+                postData:vm.q,
+                page: 1
             }).trigger("reloadGrid");
 		},
         //加载分类树

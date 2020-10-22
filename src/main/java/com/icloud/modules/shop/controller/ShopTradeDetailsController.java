@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import com.icloud.annotation.DataFilter;
+import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
 import com.icloud.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -38,6 +39,7 @@ public class ShopTradeDetailsController extends AbstractController {
     /**
      * 列表
      */
+    @SysLog("查询资金明细")
     @RequestMapping("/list")
     @RequiresPermissions("shop:shoptradedetails:list")
     @DataFilter

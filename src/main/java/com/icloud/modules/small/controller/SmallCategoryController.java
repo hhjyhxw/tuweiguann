@@ -2,6 +2,7 @@ package com.icloud.modules.small.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.icloud.annotation.DataFilter;
+import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
 import com.icloud.common.Constant;
 import com.icloud.common.R;
@@ -128,6 +129,7 @@ public class SmallCategoryController extends AbstractController {
     /**
      * 保存
      */
+    @SysLog("添加商品分类")
     @RequestMapping("/save")
     @RequiresPermissions("small:smallcategory:save")
     public R save(@RequestBody SmallCategory smallCategory){
@@ -139,6 +141,7 @@ public class SmallCategoryController extends AbstractController {
     /**
      * 修改
      */
+    @SysLog("修改商品分类")
     @RequestMapping("/update")
     @RequiresPermissions("small:smallcategory:update")
     public R update(@RequestBody SmallCategory smallCategory){
@@ -151,6 +154,7 @@ public class SmallCategoryController extends AbstractController {
     /**
      * 删除
      */
+    @SysLog("删除商品分类")
     @RequestMapping("/delete")
     @RequiresPermissions("small:smallcategory:delete")
     public R delete(@RequestBody Long[] ids){

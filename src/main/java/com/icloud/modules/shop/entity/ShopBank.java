@@ -8,6 +8,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -39,6 +40,7 @@ public class ShopBank implements Serializable {
        private String subBranch;
    	   	   /* 银行卡号 */
        @NotBlank(message = "银行卡号不能为空")
+       @Pattern(regexp = "^[1][3,4,5,6,7,8,9][0-9]{9}$", message = "手机号格式有误")
        @TableField("card_no")
        private String cardNo;
    	   	   /* 用户姓名 */

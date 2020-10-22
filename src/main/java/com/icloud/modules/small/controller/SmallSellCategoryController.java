@@ -2,6 +2,7 @@ package com.icloud.modules.small.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.DataFilter;
+import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
 import com.icloud.common.Constant;
 import com.icloud.common.PageUtils;
@@ -96,6 +97,7 @@ public class SmallSellCategoryController extends AbstractController {
     /**
      * 保存
      */
+    @SysLog("添加自定义商品分类")
     @RequestMapping("/save")
     @RequiresPermissions("small:smallsellcategory:save")
     public R save(@RequestBody SmallSellCategory smallSellCategory){
@@ -108,6 +110,7 @@ public class SmallSellCategoryController extends AbstractController {
     /**
      * 修改
      */
+    @SysLog("修改自定义商品分类")
     @RequestMapping("/update")
     @RequiresPermissions("small:smallsellcategory:update")
     public R update(@RequestBody SmallSellCategory smallSellCategory){
@@ -120,6 +123,7 @@ public class SmallSellCategoryController extends AbstractController {
     /**
      * 删除
      */
+    @SysLog("删除自定义商品分类")
     @RequestMapping("/delete")
     @RequiresPermissions("small:smallsellcategory:delete")
     public R delete(@RequestBody Long[] ids){

@@ -3,9 +3,12 @@ package com.icloud.modules.small.controller;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.DataFilter;
+import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
 import com.icloud.exceptions.ApiException;
 import com.icloud.exceptions.BaseException;
@@ -93,6 +96,7 @@ public class SmallWasteRecordController extends AbstractController{
     /**
      * 审核通过 或者不通过
      */
+    @SysLog("提现审核")
     @RequestMapping("/shenhe")
     @RequiresPermissions("small:smallwasterecord:shenhe")
     public R shenhe(@RequestBody SmallWasteRecord smallWasteRecord){
@@ -100,21 +104,34 @@ public class SmallWasteRecordController extends AbstractController{
         smallWasteRecord.setModifyTime(new Date());
         smallWasteRecord.setApproveBy(getUser().getUsername());
         smallWasteRecord.setApproveTime(new Date());
+        //审核不通过
+        if("2".equals(smallWasteRecord.getApproveFlag())){
 
-        //判断是否审核通过，通过发起企业付款
-        smallWasteRecordService.payWasteRecord(smallWasteRecord);
-//        smallWasteRecordService.updateById(smallWasteRecord);
-
+        }
+        //审核通过
+        if("1".equals(smallWasteRecord.getApproveFlag())){
+            //判断是否审核通过，通过发起企业付款
+            smallWasteRecordService.payWasteRecord(smallWasteRecord);
+        }
         return R.ok();
     }
 
     /**
      * 保存
      */
+    @SysLog("提交提现申请")
     @RequestMapping("/save")
     @RequiresPermissions("small:smallwasterecord:save")
     public R save(@RequestBody SmallWasteRecord smallWasteRecord){
         ValidatorUtils.validateEntity(smallWasteRecord);
+        //判断是否存在提现申请未处理
+        List<SmallWasteRecord> list = smallWasteRecordService.list(new QueryWrapper<SmallWasteRecord>()
+                .eq("shop_id",smallWasteRecord.getShopId())//店铺id
+                .eq("waste_flag","2")//提现类型
+                .eq("approve_flag","0"));//未审核
+        if(list!=null && list.size()>0){
+            throw new BaseException("您有提现记录正在审核中，不能再次提交");
+        }
         if(smallWasteRecord.getAmount().compareTo(new BigDecimal(0))<=0){
             throw new BaseException("提现金额不能小于0");
         }
@@ -133,6 +150,7 @@ public class SmallWasteRecordController extends AbstractController{
     /**
      * 修改
      */
+    @SysLog("修改提现申请")
     @RequestMapping("/update")
     @RequiresPermissions("small:smallwasterecord:update")
     public R update(@RequestBody SmallWasteRecord smallWasteRecord){
@@ -145,6 +163,7 @@ public class SmallWasteRecordController extends AbstractController{
     /**
      * 删除
      */
+    @SysLog("删除提现申请")
     @RequestMapping("/delete")
     @RequiresPermissions("small:smallwasterecord:delete")
     public R delete(@RequestBody Long[] ids){

@@ -2,6 +2,7 @@ package com.icloud.modules.small.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.icloud.annotation.DataFilter;
+import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
 import com.icloud.common.PageUtils;
 import com.icloud.common.R;
@@ -83,6 +84,7 @@ public class SmallSpuController extends AbstractController {
     /**
      * 保存
      */
+    @SysLog("添加仓库商品")
     @RequestMapping("/save")
     @RequiresPermissions("small:smallspu:save")
     public R save(@RequestBody SmallSpu smallSpu){
@@ -112,6 +114,7 @@ public class SmallSpuController extends AbstractController {
     /**
      * 修改
      */
+    @SysLog("修改仓库商品")
     @RequestMapping("/update")
     @RequiresPermissions("small:smallspu:update")
     public R update(@RequestBody SmallSpu smallSpu){
@@ -138,6 +141,7 @@ public class SmallSpuController extends AbstractController {
     /**
      * 删除
      */
+    @SysLog("删除仓库商品")
     @RequestMapping("/delete")
     @RequiresPermissions("small:smallspu:delete")
     public R delete(@RequestBody Long[] ids){
