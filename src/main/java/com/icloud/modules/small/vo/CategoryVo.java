@@ -12,6 +12,7 @@ public class CategoryVo {
     private Integer sortNum;
     private Integer status;
     private String title;
+    private String picUrl;
 
 
 }
