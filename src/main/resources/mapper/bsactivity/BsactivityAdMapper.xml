@@ -28,19 +28,26 @@ id,ad_name,ad_imgurl,add_jumpurl,status,create_time,create_operator,modify_time,
 
 
     <select id="queryMixList" resultMap="BaseResultMap">
-            select * from t_bsactivity_ad t
+            select t.*,s.shop_name as "shop.shopName" from t_bsactivity_ad t
+            left join shop s on t.shop_id = s.id
             <where>
-             <if test="adName != null and adName !='' ">
-                and t.ad_name = #{adName}
-            </if>
             <if test="status != null">
                 and t.status = #{status}
             </if>
             <if test="shopId != null">
                 and t.shop_id = #{shopId}
             </if>
+            <if test="shopId != null">
+                and t.posittionId = #{posittionId}
+            </if>
             <if test="sysFlag != null and sysFlag!=''">
                 and t.sys_flag = #{sysFlag}
+            </if>
+             <if test="adName != null and adName !='' ">
+                and t.ad_name LIKE CONCAT('%', '${adName}', '%')
+            </if>
+            <if test="shopName != null and shopName!=''">
+                and s.shop_name LIKE CONCAT('%', '${shopName}', '%')
             </if>
             <if test="sql_filter != null and sql_filter!=''">
                 and ${sql_filter}

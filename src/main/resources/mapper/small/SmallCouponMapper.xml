@@ -79,7 +79,7 @@ select t.*,s.shop_name as "shop.shopName",c.title as "smallCategory.title"from t
 <!--<if test="endTime != null">
     <![CDATA[ and t.end_time  >  #{endTime}  ]]>
 </if>-->
-    and t.end_time >now()
+    <!--and t.end_time >now()-->
 <if test="createTime != null">
     and t.create_time = #{createTime}
 </if>

@@ -81,7 +81,7 @@ $(function () {
                     return "";
                 }
             }},
-            { label: '更新时间', name: 'updatedTime', index: "updated_time", width: 85, formatter: function(value, options, row){
+            { label: '更新时间', name: 'modifyTime', index: "modify_time", width: 85, formatter: function(value, options, row){
                       if(value!=null){
                         return getDateTime(value,"yyyyMMddHHmmss");
                       }else{

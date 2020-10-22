@@ -30,7 +30,12 @@ $(function () {
                         }
             }},
 			{ label: '修改人', name: 'modifyOperator', index: 'modify_operator', width: 80 }, 			
-			{ label: '所在广告位', name: 'posittionId', index: 'posittion_id', width: 80 }, 			
+			{ label: '所在广告位', name: 'posittionId', width: 60, formatter: function(value, options, row){
+                return value === 0 ?
+                    '<span class="label label-danger">首页广告</span>' :
+                    '<span class="label label-success">其他</span>';
+            }},
+			{ label: '所属店铺', name: 'shop.shopName', index: 'shop_id', width: 80 },
 			{ label: '排序', name: 'sortNum', index: 'sort_num', width: 80 },
             {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                 var actions = [];
