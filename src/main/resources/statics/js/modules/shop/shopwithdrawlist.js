@@ -11,7 +11,9 @@ $(function () {
 			{ label: '店铺余额', name: 'balance', index: 'balance', width: 80 },
             {header:'操作', name:'操作', width:50, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                     var actions = [];
-                        actions.push('<a title="提现" onclick="vm.update('+row.id+')"><i class="fa fa-pencil">提现</i></a>&nbsp;');
+                        if(row.balance>0){
+                             actions.push('<a title="提现" onclick="vm.update('+row.id+')"><i class="fa fa-pencil">提现</i></a>&nbsp;');
+                        }
                       /*  actions.push('<a title="提现记录" onclick="vm.update('+row.id+',0)"><i class="fa fa-trash-o">提现记录</i></a>&nbsp;');*/
                     return actions.join('');
                 }}
@@ -43,31 +45,6 @@ $(function () {
     });
 
 
-    new AjaxUpload('#upload', {
-        action: baseURL + "sys/oss/uploadFront",
-        name: 'file',
-        autoSubmit:true,
-        responseType:"json",
-        onSubmit:function(file, extension){
-            if (!(extension && /^(jpg|jpeg|png|gif)$/.test(extension.toLowerCase()))){
-                alert('只支持jpg、png、gif格式的图片！');
-                return false;
-            }
-        },
-        onComplete : function(file, r){
-            console.log("r=="+JSON.stringify(r));
-            console.log("file=="+file);
-            if(r.code == 0){
-                alert("上传成功!");
-                vm.shop.shopImg = r.url;
-                console.log("vm.shop.shopImg=="+vm.shop.shopImg);
-                //vm.reload();
-            }else{
-                alert(r.msg);
-            }
-        }
-    });
-
 
 });
 
@@ -82,7 +59,8 @@ var vm = new Vue({
             wasteFlag:'2',
             amount:0,
             approveFlag:'0',
-            wasteState:'0'
+            wasteState:'0',
+            bankId:null
         },//提现记录
 		shop: {
             parentName:'',
@@ -92,6 +70,7 @@ var vm = new Vue({
             review:0,
             commissionRate:0,
         },
+        banklist:[],//所属店铺 审核通过的银行卡
 
 	},
     created: function(){
@@ -142,6 +121,10 @@ var vm = new Vue({
                 layer.msg("提现金额不能大于:"+vm.shop.balance, {icon: 2});
                 return;
             }
+            if(vm.smallWasteRecord.bankId==null || vm.smallWasteRecord.bankId==''){
+                layer.msg("请选择提现银行卡", {icon: 2});
+                return;
+            }
 		    $('#btnSaveOrUpdate').button('loading').delay(1000).queue(function() {
                 var url = "shop/shop/withdraw";
                 $.ajax({
@@ -164,41 +147,21 @@ var vm = new Vue({
                 });
 			});
 		},
-		del: function (event) {
-			var ids = getSelectedRows();
-			if(ids == null){
-				return ;
-			}
-			var lock = false;
-            layer.confirm('确定要删除选中的记录？', {
-                btn: ['确定','取消'] //按钮
-            }, function(){
-               if(!lock) {
-                    lock = true;
-		            $.ajax({
-                        type: "POST",
-                        url: baseURL + "shop/shop/delete",
-                        contentType: "application/json",
-                        data: JSON.stringify(ids),
-                        success: function(r){
-                            if(r.code == 0){
-                                layer.msg("操作成功", {icon: 1});
-                                $("#jqGrid").trigger("reloadGrid");
-                            }else{
-                                layer.alert(r.msg);
-                            }
-                        }
-				    });
-			    }
-             }, function(){
-             });
-		},
+
 		getInfo: function(id){
 			$.get(baseURL + "shop/shop/withdrawinfo/"+id, function(r){
                 vm.shop = r.shop;
                 vm.smallWasteRecord.shopId = r.shop.id;
+                vm.getShopBankList(r.shop.id);
             });
 		},
+        //获取店铺审核通过的银行卡列表
+		getShopBankList: function(shopId){
+            $.get(baseURL + "shop/shopbank/bankList?shopId="+shopId, function(r){
+                console.log("list===="+JSON.stringify(r));
+                vm.banklist = r.list;
+            });
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');

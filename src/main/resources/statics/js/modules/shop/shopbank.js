@@ -3,11 +3,12 @@ $(function () {
         url: baseURL + 'shop/shopbank/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
+			{ label: 'id', name: 'id', index: 'id', width: 30, key: true },
             { label: '所属店铺', name: 'shop.shopName', index: 'shop_id', width: 80 },
 			{ label: '银行名称', name: 'bankName', index: 'bank_name', width: 80 }, 			
-			{ label: '支行名称', name: 'subBranch', index: 'sub_branch', width: 80 }, 			
-			{ label: '银行卡号', name: 'cardNo', index: 'card_no', width: 80 }, 			
+			{ label: '支行名称', name: 'subBranch', index: 'sub_branch', width: 80 },
+			{ label: '银行编号', name: 'bankCode', index: 'bank_code', width: 80 },
+			{ label: '银行卡号', name: 'cardNo', index: 'card_no', width: 80 },
 			{ label: '用户姓名', name: 'userName', index: 'user_name', width: 80 }, 			
 			{ label: '手机号', name: 'mobile', index: 'mobile', width: 80 }, 			
             { label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
@@ -17,24 +18,39 @@ $(function () {
                 }},
             { label: '审核状态', name: 'approveFlag', width: 60, formatter: function(value, options, row){
                     return value === '0' ?
-                        '<span class="label label-danger">待审核</span>' :
-                        (value==='1'?'<span class="label label-success">审核通过</span>':
-                            (value==='2'?'<span class="label label-success">审核不通过</span>':'待审核'));
+                        '<span class="label label-danger">未审核</span>' :
+                        (value==='1'?'<span class="label label-success">审核中</span>':
+                        (value==='2'?'<span class="label label-success">审核通过</span>':
+                        (value==='3'?'<span class="label label-success">审核失败</span>':'')));
                 }},
             { label: '审核不通过原因', name: 'msg', index: 'msg', width: 80 },
-			{ label: '创建人', name: 'createdBy', index: 'created_by', width: 80 }, 			
-			{ label: '创建时间', name: 'createdTime', index: 'created_time', width: 80 }, 			
-			{ label: '更新人', name: 'updatedBy', index: 'updated_by', width: 80 }, 			
-			{ label: '更新时间', name: 'updatedTime', index: 'updated_time', width: 80 },
-            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
-                    var actions = [];
-                    if(row.approveFlag!='1' && row.approveFlag!='0'){
-                        actions.push('<a title="提交审核" onclick="vm.subtoShenhe('+row.id+')"><i class="fa fa-pencil">提交审核</i></a>&nbsp;');
+	/*		{ label: '创建人', name: 'createdBy', index: 'created_by', width: 80 },
+            { label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+                if(value!=null){
+                    return getDateTime(value,"yyyyMMddHHmmss");
+                }else{
+                    return "";
+                }
+            }},
+            { label: '更新人', name: 'updatedBy', index: 'updated_by', width: 80 },
+            { label: '更新时间', name: 'modifyTime', index: "modify_time", width: 85, formatter: function(value, options, row){
+                      if(value!=null){
+                        return getDateTime(value,"yyyyMMddHHmmss");
+                      }else{
+                            return "";
+                        }
+            }},*/
+            {header:'操作', name:'操作', width:115, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                var actions = [];
+                    actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                    actions.push('<a class="btn btn-primary" onclick="vm.del('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                    if(row.approveFlag=='0' || row.approveFlag=='3'){//待审核 和审核失败的可以重新提交审核
+                         actions.push('<a class="btn btn-primary" onclick="vm.subtoShenhe('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;提交审核</a>&nbsp;');
+//                        actions.push('<a class="btn btn-primary" onclick="vm.subtoShenhe('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o">提交审核</i></a>&nbsp;');
                     }
+                return actions.join('');
+            }}
 
-                    /*  actions.push('<a title="提现记录" onclick="vm.update('+row.id+',0)"><i class="fa fa-trash-o">提现记录</i></a>&nbsp;');*/
-                    return actions.join('');
-                }}
         ],
 		viewrecords: true,
         height: 385,
@@ -78,6 +94,8 @@ var vm = new Vue({
             cardNo:'',
             userName:'',
             mobile:'',
+            status:'',
+            approveFlag:''
         },
 
 	},
@@ -104,7 +122,7 @@ var vm = new Vue({
             }
             vm.getInfo(id);
                 vm.shopBank.status=0;
-                vm.shopBank.approveFlag=0;//待审核
+                vm.shopBank.approveFlag=1;//待审核
                 var lock = false;
                 layer.confirm('确定提交审核？', {
                     btn: ['确定','取消'] //按钮
@@ -129,15 +147,14 @@ var vm = new Vue({
                 }, function(){
                 });
         },
-		update: function (event) {
-			var id = getSelectedRow();
+		update: function (id) {
+//			var id = getSelectedRow();
 			if(id == null){
 				return ;
 			}
 			vm.showList = false;
             vm.title = "修改";
             vm.getInfo(id);
-
 		},
 		saveOrUpdate: function (event) {
 		    $('#btnSaveOrUpdate').button('loading').delay(1000).queue(function() {
@@ -162,11 +179,13 @@ var vm = new Vue({
                 });
 			});
 		},
-		del: function (event) {
-			var ids = getSelectedRows();
-			if(ids == null){
+		del: function (id) {
+//			var ids = getSelectedRows();
+			if(id == null){
 				return ;
 			}
+			var ids = [];
+            ids.push(id);
 			var lock = false;
             layer.confirm('确定要删除选中的记录？', {
                 btn: ['确定','取消'] //按钮

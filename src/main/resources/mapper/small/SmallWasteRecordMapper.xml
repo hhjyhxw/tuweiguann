@@ -21,11 +21,13 @@
      <result property="modifyTime" column="modify_time"/>
      <result property="approveBy" column="approve_by"/>
      <result property="createBy" column="create_by"/>
+     <result property="bankId" column="bank_id"/>
+
     </resultMap>
 
    <!-- 基础字段列 -->
    <sql id="Base_Column_List" >
-id,shop_id,pay_type,waste_flag,amount,create_time,approve_flag,waste_state,transaction_id,order_no,msg,approve_time,modify_time,approve_by,create_by
+id,shop_id,pay_type,waste_flag,amount,create_time,approve_flag,waste_state,transaction_id,order_no,msg,approve_time,modify_time,approve_by,create_by,bank_id
     </sql>
 
 

@@ -18,8 +18,9 @@ $(function () {
             { label: '审核状态', name: 'approveFlag', width: 60, formatter: function(value, options, row){
                     return value === '0' ?
                         '<span class="label label-danger">未审核</span>' :
-                        (value==='1'?'<span class="label label-success">审核通过</span>':
-                        (value==='2'?'<span class="label label-success">审核不通过</span>':'未审核'));
+                        (value==='1'?'<span class="label label-success">待审核</span>':
+                        (value==='2'?'<span class="label label-success">审核通过</span>':
+                        (value==='3'?'<span class="label label-success">审核失败</span>':'未审核')));
                 }},
             { label: '审核不通过原因', name: 'msg', index: 'msg', width: 80 },
             { label: '创建人', name: 'createdBy', index: 'created_by', width: 80 },
@@ -40,7 +41,7 @@ $(function () {
             }},
             {header:'操作', name:'操作', width:139, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                     var actions = [];
-                    if(row.approveFlag!='1'){
+                    if(row.approveFlag=='1'){
                         actions.push('<a class="btn btn-primary" onclick="vm.updatepass('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;审核通过</a>&nbsp;');
                          actions.push('<a class="btn btn-primary" onclick="vm.updateUnpass('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;审核不通过</a>&nbsp;');
 //                        actions.push('<a title="审核通过" onclick="vm.updatepass('+row.id+')"><i class="fa fa-pencil">审核通过</i></a>&nbsp;');
@@ -126,7 +127,7 @@ var vm = new Vue({
             var shopBank = {
                 id:id,
                 status:'1',
-                approveFlag:'1'
+                approveFlag:'2'
             }
             var lock = false;
             layer.confirm('确定审核通过？', {
@@ -160,7 +161,7 @@ var vm = new Vue({
             vm.showList = false;
             vm.title = "审核不通过";
             vm.shopBank.status = '0';
-            vm.approveFlag='2',
+            vm.approveFlag='3',
             vm.msg='',
             vm.shopBank.id = id;
             // vm.getInfo(id)

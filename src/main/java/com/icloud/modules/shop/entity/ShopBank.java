@@ -40,7 +40,6 @@ public class ShopBank implements Serializable {
        private String subBranch;
    	   	   /* 银行卡号 */
        @NotBlank(message = "银行卡号不能为空")
-       @Pattern(regexp = "^[1][3,4,5,6,7,8,9][0-9]{9}$", message = "手机号格式有误")
        @TableField("card_no")
        private String cardNo;
    	   	   /* 用户姓名 */
@@ -49,6 +48,7 @@ public class ShopBank implements Serializable {
        private String userName;
    	   	   /* 手机号 */
        @NotBlank(message = "用户手机号不能为空")
+       @Pattern(regexp = "^[1][3,4,5,6,7,8,9][0-9]{9}$", message = "手机号格式有误")
        @TableField("mobile")
        private String mobile;
    	   	   /* 状态 0：禁用，1：正常 */
@@ -72,7 +72,7 @@ public class ShopBank implements Serializable {
         @TableField("bank_code")
         private String bankCode;
 
-        /* 审核状态0未审核 1通过 2不通过 */
+        /* 审核状态0未审核 1提交审核 2审核通过 3审核不通过 */
         @TableField("approve_flag")
         private String approveFlag;
         /* 审核不通过描述 */

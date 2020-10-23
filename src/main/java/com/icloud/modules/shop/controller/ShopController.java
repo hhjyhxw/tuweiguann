@@ -134,6 +134,15 @@ public class ShopController extends AbstractController {
         Shop shop = (Shop)shopService.getById(smallWasteRecord.getShopId());
         smallWasteRecord.setCreateBy(getUser().getUsername());
         smallWasteRecord.setCreateTime(new Date());
+        ValidatorUtils.validateEntity(smallWasteRecord);
+        //判断是否存在提现申请未处理
+        List<SmallWasteRecord> list = smallWasteRecordService.list(new QueryWrapper<SmallWasteRecord>()
+                .eq("shop_id",smallWasteRecord.getShopId())//店铺id
+                .eq("waste_flag","2")//提现类型
+                .eq("approve_flag","0"));//未审核
+        if(list!=null && list.size()>0){
+            throw new BaseException("您有提现记录正在审核中，不能再次提交");
+        }
         if(smallWasteRecord.getAmount().compareTo(new BigDecimal(0))<=0){
             throw new BaseException("提现金额不能小于0");
         }

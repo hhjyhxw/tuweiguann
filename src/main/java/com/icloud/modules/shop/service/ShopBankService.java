@@ -36,5 +36,6 @@ public class ShopBankService extends BaseServiceImpl<ShopBankMapper,ShopBank> {
         PageUtils<ShopBank> page = new PageUtils<ShopBank>(list,(int)pageInfo.getTotal(),pageSize,pageNo);
         return page;
     }
+
 }
 

@@ -36,6 +36,9 @@ public class SmallWasteRecord implements Serializable {
     @NotNull(message = "店铺不能为空",groups = SuSmallWasteGroup.class)
     @TableField("shop_id")
     private Long shopId;
+    @NotNull(message = "银行卡不能为空",groups = SuSmallWasteGroup.class)
+    @TableField("bank_id")
+    private Long bankId;
     /* 支付方式1微信 2支付包 3银行卡 */
     @TableField("pay_type")
     private String payType;
@@ -49,7 +52,7 @@ public class SmallWasteRecord implements Serializable {
     /* 创建时间 */
     @TableField("create_time")
     private Date createTime;
-    /* 审批状态0未审核 1通过 2不通过 */
+   /* 提现申请=0，提现处理=1，提现成功=2，提现失败=3*/
     @TableField("approve_flag")
     private String approveFlag;
     /* 支付状态0未支付 1已支付 2关闭 */

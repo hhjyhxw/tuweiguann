@@ -2,8 +2,10 @@ package com.icloud.modules.shop.controller;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.DataFilter;
 import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
@@ -66,6 +68,23 @@ public class ShopBankController  extends AbstractController {
 
         return R.ok().put("page", page);
     }
+
+
+    /**
+     * 审核通过的银行卡列表（拥有提交提现申请）
+     * @param shopId
+     * @return
+     */
+    @RequestMapping("/bankList")
+    public R bankList(@RequestParam Long shopId){
+        List<ShopBank> list = shopBankService.list(new QueryWrapper<ShopBank>()
+                .eq("shop_id",shopId)
+                .eq("approve_flag","2")//审核通过
+                .eq("status","1"));//启用中
+
+        return R.ok().put("list", list);
+    }
+
 
     /**
      * 修改

@@ -106,7 +106,7 @@ public class SmallWasteRecordController extends AbstractController{
         smallWasteRecord.setApproveTime(new Date());
         //审核不通过
         if("2".equals(smallWasteRecord.getApproveFlag())){
-
+            smallWasteRecordService.updateById(smallWasteRecord);
         }
         //审核通过
         if("1".equals(smallWasteRecord.getApproveFlag())){
@@ -119,29 +119,28 @@ public class SmallWasteRecordController extends AbstractController{
     /**
      * 保存
      */
-    @SysLog("提交提现申请")
     @RequestMapping("/save")
     @RequiresPermissions("small:smallwasterecord:save")
     public R save(@RequestBody SmallWasteRecord smallWasteRecord){
-        ValidatorUtils.validateEntity(smallWasteRecord);
-        //判断是否存在提现申请未处理
-        List<SmallWasteRecord> list = smallWasteRecordService.list(new QueryWrapper<SmallWasteRecord>()
-                .eq("shop_id",smallWasteRecord.getShopId())//店铺id
-                .eq("waste_flag","2")//提现类型
-                .eq("approve_flag","0"));//未审核
-        if(list!=null && list.size()>0){
-            throw new BaseException("您有提现记录正在审核中，不能再次提交");
-        }
-        if(smallWasteRecord.getAmount().compareTo(new BigDecimal(0))<=0){
-            throw new BaseException("提现金额不能小于0");
-        }
-        Shop shop = (Shop) shopService.getById(smallWasteRecord.getShopId());
-        if(shop.getBalance()==null){
-            throw new BaseException("账户余额为空，不能提现");
-        }
-        if(shop.getBalance().compareTo(smallWasteRecord.getAmount())<0){
-            throw new BaseException("提现金额不能大于店铺余额，不能提现");
-        }
+//        ValidatorUtils.validateEntity(smallWasteRecord);
+//        //判断是否存在提现申请未处理
+//        List<SmallWasteRecord> list = smallWasteRecordService.list(new QueryWrapper<SmallWasteRecord>()
+//                .eq("shop_id",smallWasteRecord.getShopId())//店铺id
+//                .eq("waste_flag","2")//提现类型
+//                .eq("approve_flag","0"));//未审核
+//        if(list!=null && list.size()>0){
+//            throw new BaseException("您有提现记录正在审核中，不能再次提交");
+//        }
+//        if(smallWasteRecord.getAmount().compareTo(new BigDecimal(0))<=0){
+//            throw new BaseException("提现金额不能小于0");
+//        }
+//        Shop shop = (Shop) shopService.getById(smallWasteRecord.getShopId());
+//        if(shop.getBalance()==null){
+//            throw new BaseException("账户余额为空，不能提现");
+//        }
+//        if(shop.getBalance().compareTo(smallWasteRecord.getAmount())<0){
+//            throw new BaseException("提现金额不能大于店铺余额，不能提现");
+//        }
 //        smallWasteRecordService.createWaste(smallWasteRecord);
 
         return R.ok();
@@ -150,7 +149,6 @@ public class SmallWasteRecordController extends AbstractController{
     /**
      * 修改
      */
-    @SysLog("修改提现申请")
     @RequestMapping("/update")
     @RequiresPermissions("small:smallwasterecord:update")
     public R update(@RequestBody SmallWasteRecord smallWasteRecord){
@@ -163,7 +161,6 @@ public class SmallWasteRecordController extends AbstractController{
     /**
      * 删除
      */
-    @SysLog("删除提现申请")
     @RequestMapping("/delete")
     @RequiresPermissions("small:smallwasterecord:delete")
     public R delete(@RequestBody Long[] ids){

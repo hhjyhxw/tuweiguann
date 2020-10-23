@@ -180,7 +180,7 @@ $(function () {
                         '<span class="label label-success">上架</span>';
                 }},*/
 			// { label: '商户id', name: 'shopId', index: 'shop_id', width: 80 },
-            { label: '所属零售户', name: 'shop.shopName', index: 'shop_id', width: 80 },
+            { label: '所属店铺', name: 'shop.shopName', index: 'shop_id', width: 80 },
 			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
                 if(value!=null){
                     return getDateTime(value,"yyyyMMddHHmmss");
