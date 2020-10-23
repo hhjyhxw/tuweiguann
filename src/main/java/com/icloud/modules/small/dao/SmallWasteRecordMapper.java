@@ -14,4 +14,6 @@ import java.util.Map;
 public interface SmallWasteRecordMapper extends BaseMapper<SmallWasteRecord> {
 
 	List<SmallWasteRecord> queryMixList(Map<String,Object> map);
+
+    List<SmallWasteRecord> queryShenhelistMixList(Map<String, Object> clearNullValue);
 }

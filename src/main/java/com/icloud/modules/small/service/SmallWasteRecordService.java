@@ -71,6 +71,13 @@ public class SmallWasteRecordService extends BaseServiceImpl<SmallWasteRecordMap
         return page;
     }
 
+    public PageUtils<SmallWasteRecord> queryShenhelistMixList(int pageNo, int pageSize, Map<String, Object> query) {
+        PageHelper.startPage(pageNo, pageSize);
+        List<SmallWasteRecord> list = smallWasteRecordMapper.queryShenhelistMixList(MapEntryUtils.clearNullValue(query));
+        PageInfo<SmallWasteRecord> pageInfo = new PageInfo<SmallWasteRecord>(list);
+        PageUtils<SmallWasteRecord> page = new PageUtils<SmallWasteRecord>(list,(int)pageInfo.getTotal(),pageSize,pageNo);
+        return page;
+    }
     /**
      * 生成资金流失记录
      */
@@ -78,17 +85,21 @@ public class SmallWasteRecordService extends BaseServiceImpl<SmallWasteRecordMap
         try {
             SmallWasteRecord smallWasteRecordold = smallWasteRecordMapper.selectById(smallWasteRecord.getId());
             Shop shop = (Shop) shopService.getById(smallWasteRecordold.getShopId());
-            //提现收款账户
-            ShopBank shopBank = null;
-            List<ShopBank> shopBanklist = shopBankService.list(new QueryWrapper<ShopBank>().eq("shop_id",shop.getId()).eq("status","1"));
-            if(shopBanklist==null || shopBanklist.size()==0){
-                throw new BaseException("收款账号不存在,提现失败");
-            }
-            shopBank = shopBanklist.get(0);
+//            //提现收款账户
+//            ShopBank shopBank = null;
+//            List<ShopBank> shopBanklist = shopBankService.list(new QueryWrapper<ShopBank>().eq("shop_id",shop.getId()).eq("status","1"));
+//            if(shopBanklist==null || shopBanklist.size()==0){
+//                throw new BaseException("收款账号不存在,提现失败");
+//            }
+            ShopBank shopBank = (ShopBank) shopBankService.getById(smallWasteRecordold.getBankId());
             //本地账户余额
             BigDecimal shopbanlance = shop.getBalance()!=null?shop.getBalance():new BigDecimal(0);
             if(smallWasteRecordold.getAmount().compareTo(shopbanlance)>0){
-                throw new BaseException("账号余额不足,提现失败");
+                smallWasteRecord.setApproveBy("3");
+                smallWasteRecord.setMsg("账号余额不足,提现失败");
+                smallWasteRecordMapper.updateById(smallWasteRecordold);
+                return;
+//                throw new BaseException("账号余额不足,提现失败");
             }
 
             CreateTradeDetailsVo tradeDetailsVo = new CreateTradeDetailsVo();

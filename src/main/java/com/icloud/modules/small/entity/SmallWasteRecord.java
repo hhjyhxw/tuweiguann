@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.icloud.common.validator.group.AddGroup;
 import com.icloud.common.validator.group.shop.SuSmallWasteGroup;
 import com.icloud.modules.shop.entity.Shop;
+import com.icloud.modules.shop.entity.ShopBank;
 import lombok.Data;
 import lombok.NonNull;
 import org.springframework.format.annotation.NumberFormat;
@@ -82,5 +83,7 @@ public class SmallWasteRecord implements Serializable {
     /*  */
     @TableField(exist = false)
     private Shop shop;
+    @TableField(exist = false)
+    private ShopBank bank;
 
 }

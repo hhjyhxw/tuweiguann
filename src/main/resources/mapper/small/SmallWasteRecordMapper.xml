@@ -30,6 +30,79 @@
 id,shop_id,pay_type,waste_flag,amount,create_time,approve_flag,waste_state,transaction_id,order_no,msg,approve_time,modify_time,approve_by,create_by,bank_id
     </sql>
 
+    <!--提现审核列表-->
+ <select id="queryShenhelistMixList" resultMap="BaseResultMap">
+     select t.*,s.shop_name as "shop.shopName", CONCAT(b.bank_name,'/',b.sub_branch) as "bank.bankName",b.card_no as "bank.cardNo",b.user_name as "bank.userName",b.mobile as "bank.mobile"
+     from t_small_waste_record t
+     left join shop s on t.shop_id =s.id
+     left join shop_bank b on t.bank_id = b.id
+        <where>
+            t.shop_id=s.id
+            <if test="id != null">
+                and t.id = #{id}
+            </if>
+            <if test="shopId != null">
+                and t.shop_id = #{shopId}
+            </if>
+            <if test="payType != null">
+                and t.pay_type = #{payType}
+            </if>
+            <if test="wasteFlag != null">
+                and t.waste_flag = #{wasteFlag}
+            </if>
+            <if test="amount != null">
+                and t.amount = #{amount}
+            </if>
+            <if test="createTime != null">
+                and t.create_time = #{createTime}
+            </if>
+            <if test="approveFlag != null">
+                and t.approve_flag = #{approveFlag}
+            </if>
+            <if test="wasteState != null">
+                and t.waste_state = #{wasteState}
+            </if>
+            <if test="transactionId != null">
+                and t.transaction_id = #{transactionId}
+            </if>
+            <if test="orderNo != null">
+                and t.order_no = #{orderNo}
+            </if>
+            <if test="msg != null">
+                and t.msg = #{msg}
+            </if>
+            <if test="approveTime != null">
+                and t.approve_time = #{approveTime}
+            </if>
+            <if test="modifyTime != null">
+                and t.modify_time = #{modifyTime}
+            </if>
+            <if test="approveBy != null">
+                and t.approve_by = #{approveBy}
+            </if>
+            <if test="shopName != null and shopName!=''">
+                and s.shop_name like CONCAT('%', '${shopName}', '%')
+            </if>
+            <if test="bankName != null and bankName!=''">
+                and b.bank_name like CONCAT('%', '${bankName}', '%')
+            </if>
+            <if test="subBranch != null and subBranch!=''">
+                and b.sub_branch like CONCAT('%', '${subBranch}', '%')
+            </if>
+            <if test="cardNo != null and cardNo!=''">
+                and b.card_no like CONCAT('%', '${cardNo}', '%')
+            </if>
+            <if test="userName != null and userName!=''">
+                and b.user_name like CONCAT('%', '${userName}', '%')
+            </if>
+            <if test="mobile != null and mobile!=''">
+                and b.mobile like CONCAT('%', '${mobile}', '%')
+            </if>
+            <if test="sql_filter != null and sql_filter!=''">
+                and ${sql_filter}
+            </if>
+        </where>
+    </select>
 
 <select id="queryMixList" resultMap="BaseResultMap">
     select t.*,s.shop_name as "shop.shopName" from t_small_waste_record t,shop s

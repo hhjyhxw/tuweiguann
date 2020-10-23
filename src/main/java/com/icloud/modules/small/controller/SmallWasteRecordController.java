@@ -67,7 +67,7 @@ public class SmallWasteRecordController extends AbstractController{
     public R shenhelist(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
         query.put("wasteFlag","2");//提现类型
-        PageUtils page = smallWasteRecordService.findByPage(query.getPageNum(),query.getPageSize(), query);
+        PageUtils page = smallWasteRecordService.queryShenhelistMixList(query.getPageNum(),query.getPageSize(), query);
 
         return R.ok().put("page", page);
     }
@@ -102,14 +102,19 @@ public class SmallWasteRecordController extends AbstractController{
     public R shenhe(@RequestBody SmallWasteRecord smallWasteRecord){
 
         smallWasteRecord.setModifyTime(new Date());
+        //提交到处理状态
+        if("1".equals(smallWasteRecord.getApproveFlag())){
+            smallWasteRecordService.updateById(smallWasteRecord);
+            return R.ok();
+        }
         smallWasteRecord.setApproveBy(getUser().getUsername());
         smallWasteRecord.setApproveTime(new Date());
         //审核不通过
-        if("2".equals(smallWasteRecord.getApproveFlag())){
+        if("3".equals(smallWasteRecord.getApproveFlag())){
             smallWasteRecordService.updateById(smallWasteRecord);
         }
         //审核通过
-        if("1".equals(smallWasteRecord.getApproveFlag())){
+        if("2".equals(smallWasteRecord.getApproveFlag())){
             //判断是否审核通过，通过发起企业付款
             smallWasteRecordService.payWasteRecord(smallWasteRecord);
         }
