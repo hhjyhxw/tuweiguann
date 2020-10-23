@@ -44,7 +44,11 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		smallShopconectuser: {}
+		smallShopconectuser: {},
+		q:{
+		    nickname:'',
+		    shopName:'',
+		}
 	},
 	methods: {
 		query: function () {
@@ -126,7 +130,8 @@ var vm = new Vue({
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
-                page:page
+                 postData:vm.q,
+                 page: 1
             }).trigger("reloadGrid");
 		}
 	}

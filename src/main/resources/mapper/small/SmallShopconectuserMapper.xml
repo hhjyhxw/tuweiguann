@@ -36,7 +36,7 @@ t.user_id = u.id and t.shop_id = p.id
     and t.create_time = #{createTime}
 </if>
 <if test="shopName != null and shopName!=''">
-    and s.shop_name like CONCAT('%', '${shopName}', '%')
+    and p.shop_name like CONCAT('%', '${shopName}', '%')
 </if>
 <if test="nickname != null and nickname!=''">
     and u.nickname like CONCAT('%', '${nickname}', '%')
