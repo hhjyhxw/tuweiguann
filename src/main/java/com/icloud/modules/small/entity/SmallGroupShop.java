@@ -81,10 +81,18 @@ public class SmallGroupShop implements Serializable {
         /* 是否是公共商品0 不是 1是*/
         @TableField("common_flag")
         private String commonFlag;
-
+        /*关联分类*/
+        @TableField(exist = false)
+        private SmallCategory smallCategory;
         /* 所属商户 */
         @TableField(exist = false)
         private Shop shop;
+        /* 公共商品所在店铺 */
+        @TableField(exist = false)
+        private Shop sysShop;
+        /* 剩余库存 */
+//        @TableField(exist = false)
+//        private Integer remainStock;
 
         @TableField(exist = false)
         private SmallSpu spu;

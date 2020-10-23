@@ -6,20 +6,48 @@ $(function () {
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
 			/*{ label: 'spuId', name: 'spuId', index: 'spu_id', width: 80 },
             { label: 'skuId', name: 'skuId', index: 'spu_id', width: 80 },*/
-            { label: '商品图片', name: 'img', width: 60, formatter: function(value, options, row){
+            { label: '商品图片', name: 'sku.img', width: 60, formatter: function(value, options, row){
                     return '<img style="height: 3rem;width: 3rem;" src="'+value+'"/>';
                 }},
-            { label: '商品名称', name: 'title', index: 'title', width: 80 },
-            { label: '商品类型', name: 'commonFlag', width: 60, formatter: function(value, options, row){
+            { label: '商品名称', name: 'sku.title', index: 'title', width: 80 },
+            { label: '商品类型', name: 'commonFlag', width: 50, formatter: function(value, options, row){
                     return value == '0' ?
                         '<span class="label label-danger">自营商品</span>' :
                         (value=='1'?'<span class="label label-success">公共商品</span>':'其他');
 
                 }},
-            { label: '现价', name: 'price', index: 'price', width: 80 },
-			{ label: '原价', name: 'originalPrice', index: 'originalPrice', width: 80 },
-			{ label: '剩余库存', name: 'remainStock', index: 'remainStock', width: 80 },
-            { label: '店铺名称', name: 'shopName', index: 'shopName', width: 80 }
+            { label: '现价(元)', name: 'minPrice', index: 'minPrice', width: 50 },
+			{ label: '原价(元)', name: 'maxPrice', index: 'maxPrice', width: 50 },
+			{ label: '剩余库存', name: 'sku.remainStock', index: 'remainStock', width: 50 },
+            { label: '店铺名称', name: 'shop.shopName', index: 'shopName', width: 80 },
+            { label: '所属分类', name: 'smallCategory.title', index: 'category_id', width: 80 },
+            { label: '公共商品所在店铺', name: 'sysShop.shopName', index: 'shopName', width: 80 },
+            { label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
+                    return value === 0 ?
+                        '<span class="label label-danger">下架</span>' :
+                        '<span class="label label-success">上架</span>';
+                }},
+          /*  { label: '所属零售户', name: 'shop.shopName', index: 'shop_id', width: 80 },*/
+            { label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+                if(value!=null){
+                    return getDateTime(value,"yyyyMMddHHmmss");
+                }else{
+                    return "";
+                }
+            }},
+            { label: '更新时间', name: 'modifyTime', index: "modify_time", width: 85, formatter: function(value, options, row){
+                      if(value!=null){
+                        return getDateTime(value,"yyyyMMddHHmmss");
+                      }else{
+                            return "";
+                        }
+            }},
+            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                var actions = [];
+                    actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                    actions.push('<a class="btn btn-primary" onclick="vm.del('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                return actions.join('');
+            }}
 
         ],
 		viewrecords: true,
@@ -65,7 +93,9 @@ var vm = new Vue({
 
         q:{
             title:'',
-            shopName:''
+            shopName:'',
+            sysShopName:'',
+            categoryTitle:'',
         }
 	},
     created: function(){
@@ -86,8 +116,8 @@ var vm = new Vue({
             vm.goodName='',
             vm.getShopList('');
 		},
-		update: function (event) {
-			var id = getSelectedRow();
+		update: function (id) {
+//			var id = getSelectedRow();
 			if(id == null){
 				return ;
 			}
@@ -119,11 +149,13 @@ var vm = new Vue({
                 });
 			});
 		},
-		del: function (event) {
-			var ids = getSelectedRows();
-			if(ids == null){
+		del: function (id) {
+//			var ids = getSelectedRows();
+			if(id == null){
 				return ;
 			}
+			var ids = [];
+            ids.push(id);
 			var lock = false;
             layer.confirm('确定要删除选中的记录？', {
                 btn: ['确定','取消'] //按钮

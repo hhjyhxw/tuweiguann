@@ -6,69 +6,101 @@
 
     <!-- 基础map -->
     <resultMap type="com.icloud.modules.small.entity.SmallGroupShop" id="BaseResultMap">
-     <id property="id" column="id"/>
-     <result property="spuId" column="spu_id"/>
-     <result property="skuId" column="sku_id"/>
-     <result property="minPrice" column="min_price"/>
-     <result property="maxPrice" column="max_price"/>
-     <result property="gmtStart" column="gmt_start"/>
-     <result property="gmtEnd" column="gmt_end"/>
-     <result property="minimumNumber" column="minimum_number"/>
-     <result property="alreadyBuyNumber" column="already_buy_number"/>
-     <result property="automaticRefund" column="automatic_refund"/>
-     <result property="status" column="status"/>
-     <result property="createTime" column="create_time"/>
-     <result property="modifyTime" column="modify_time"/>
-     <result property="shopId" column="shop_id"/>
+        <id property="id" column="id"/>
+        <result property="spuId" column="spu_id"/>
+        <result property="skuId" column="sku_id"/>
+        <result property="minPrice" column="min_price"/>
+        <result property="maxPrice" column="max_price"/>
+        <result property="gmtStart" column="gmt_start"/>
+        <result property="gmtEnd" column="gmt_end"/>
+        <result property="minimumNumber" column="minimum_number"/>
+        <result property="alreadyBuyNumber" column="already_buy_number"/>
+        <result property="automaticRefund" column="automatic_refund"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="shopId" column="shop_id"/>
         <result property="sysShopId" column="sys_shop_id"/>
         <result property="commonFlag" column="common_flag"/>
     </resultMap>
 
-   <!-- 基础字段列 -->
-   <sql id="Base_Column_List" >
-id,spu_id,min_price,max_price,gmt_start,gmt_end,minimum_number,already_buy_number,automatic_refund,status,create_time,modify_time,shop_id,sku_id
+    <!-- 基础字段列 -->
+    <sql id="Base_Column_List" >
+        id,spu_id,sku_id,min_price,max_price,gmt_start,gmt_end,minimum_number,already_buy_number,automatic_refund,status,create_time,modify_time,shop_id,sys_shop_id,common_flag
     </sql>
 
 
-<select id="queryMixList" resultMap="BaseResultMap">
-select * from t_small_group_shop t
-<where>
-<if test="id != null">
-    and t.id = #{id}
-</if>
-<if test="spu_id != null">
-    and t.spu_id = #{spu_id}
-</if>
-<if test="min_price != null">
-    and t.min_price = #{min_price}
-</if>
-<if test="max_price != null">
-    and t.max_price = #{max_price}
-</if>
-<if test="gmt_start != null">
-    and t.gmt_start = #{gmt_start}
-</if>
-<if test="gmt_end != null">
-    and t.gmt_end = #{gmt_end}
-</if>
-<if test="minimum_number != null">
-    and t.minimum_number = #{minimum_number}
-</if>
-<if test="already_buy_number != null">
-    and t.already_buy_number = #{already_buy_number}
-</if>
-<if test="automatic_refund != null">
-    and t.automatic_refund = #{automatic_refund}
-</if>
-<if test="status != null">
-    and t.status = #{status}
-</if>
-<if test="sql_filter != null and sql_filter!=''">
-    and ${sql_filter}
-</if>
-</where>
-    order by t.create_time desc
-</select>
+    <select id="queryMixList" resultMap="BaseResultMap">
+        select t.*,sk.title as "sku.title",IFNULL(sk.img,sp.img) as "sku.img",sk.stock-IFNULL(sk.freeze_stock,0) as "sku.remainStock", sp.category_id category_id,s.shop_name as "shop.shopName",ss.shop_name as "sysShop.shopName",c.title as "smallCategory.title"	from t_small_group_shop t
+        LEFT JOIN t_small_sku sk on t.sku_id = sk.id
+        LEFT JOIN t_small_spu sp on t.spu_id = sp.id
+        LEFT JOIN shop s on t.shop_id = s.id
+        LEFT JOIN shop ss on t.sys_shop_id = ss.id
+        LEFT JOIN t_small_category c on category_id = c.id
+        <where>
+            <if test="id != null">
+                and t.id = #{id}
+            </if>
+            <if test="spuId != null">
+                and t.spu_id = #{spuId}
+            </if>
+            <if test="skuId != null">
+                and t.sku_id = #{skuId}
+            </if>
+            <if test="minPrice != null">
+                and t.min_price = #{minPrice}
+            </if>
+            <if test="maxPrice != null">
+                and t.max_price = #{maxPrice}
+            </if>
+            <if test="gmtStart != null">
+                and t.gmt_start = #{gmtStart}
+            </if>
+            <if test="gmtEnd != null">
+                and t.gmt_end = #{gmtEnd}
+            </if>
+            <if test="minimumNumber != null">
+                and t.minimum_number = #{minimumNumber}
+            </if>
+            <if test="alreadyBuyNumber != null">
+                and t.already_buy_number = #{alreadyBuyNumber}
+            </if>
+            <if test="automaticRefund != null">
+                and t.automatic_refund = #{automaticRefund}
+            </if>
+            <if test="status != null">
+                and t.status = #{status}
+            </if>
+            <if test="createTime != null">
+                and t.create_time = #{createTime}
+            </if>
+            <if test="modifyTime != null">
+                and t.modify_time = #{modifyTime}
+            </if>
+            <if test="shopId != null">
+                and t.shop_id = #{shopId}
+            </if>
+            <if test="sysShopId != null">
+                and t.sys_shop_id = #{sysShopId}
+            </if>
+            <if test="title != null and title!=''">
+                and sk.title LIKE CONCAT('%', '${title}', '%')
+            </if>
+            <if test="shopName != null and shopName!=''">
+                and s.shop_name LIKE CONCAT('%', '${shopName}', '%')
+            </if>
+            <if test="sysShopName != null and sysShopName!=''">
+                and ss.shop_name LIKE CONCAT('%', '${sysShopName}', '%')
+            </if>
+            <if test="categoryTitle != null and categoryTitle!=''">
+                and c.title LIKE CONCAT('%', '${categoryTitle}', '%')
+            </if>
+            <if test="sql_filter != null and sql_filter!=''">
+                and ${sql_filter}
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
 
     <!-- 基础map -->
     <resultMap type="com.icloud.modules.small.vo.GroupSkuVo" id="GroupSkuMap">

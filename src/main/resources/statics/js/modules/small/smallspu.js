@@ -52,8 +52,51 @@ $(function () {
             }
         }
     });
+
 });
 
+
+
+
+function showImg(outdiv,indiv,bigimg,thiselement){
+    var winW = $(window).width();
+    var winH = $(window).height();
+    var src = $(thiselement).attr('src');
+    console.log("src=="+src);
+    $(bigimg).attr("src",src);
+    $("<img/>").attr("src",src).load(function(){
+        var imgW = this.width;
+        var imgH = this.height;
+        var scale= imgW/imgH;
+         console.log("imgW=="+imgW);
+        if( imgW > winW ){
+            $(bigimg).css("width","100%").css("height","auto");
+            imgH = winW/scale;
+            var h=(winH-imgH)/2;
+            $(indiv).css({"left":0,"top":h});
+        }else{
+            $(bigimg).css("width",imgW+'px').css("height",imgH+'px');
+            var w=(winW-imgW)/2;
+            var h=(winH-imgH)/2;
+            $(indiv).css({"left":w,"top":h});
+        }
+
+        $(outdiv).fadeIn("fast");
+        $(outdiv).click(function(){
+            $(this).fadeOut("fast");
+        });
+    });
+}
+
+function clickimg(obj){
+
+    var thiselement=$(obj);
+    showImg("#outdiv",".indiv","#bigimg",thiselement);
+}
+//$('.imgclass').click(function(){
+//    var thiselement=$(this);
+//    showImg("#outdiv",".indiv","#bigimg",thiselement);
+//});
 
 
 /**
@@ -120,12 +163,15 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '原价', name: 'price', index: 'price', width: 80 },
-			{ label: '现价', name: 'originalPrice', index: 'original_price', width: 80 }, 			
-			{ label: '商品名称', name: 'title', index: 'title', width: 80 },
-			{ label: '销量', name: 'sales', index: 'sales', width: 80 },
-            { label: '总库存', name: 'stock', index: 'stock', width: 80 },
-            { label: '剩余库存', name: 'remainStock', index: 'remainStock', width: 80 },
+			{ label: '商品名称', name: 'title', index: 'title', width: 115 },
+			{ label: '商品图片', name: 'img', width: 60, formatter: function(value, options, row){
+                return '<img style="height: 3rem;width: 3rem;" src="'+value+'" />';
+            }},
+            { label: '原价(元)', name: 'price', index: 'price', width: 50 },
+            { label: '现价(元)', name: 'originalPrice', index: 'original_price', width: 50 },
+			{ label: '销量', name: 'sales', index: 'sales', width: 50 },
+            { label: '总库存', name: 'stock', index: 'stock', width: 50 },
+            { label: '剩余库存', name: 'remainStock', index: 'remainStock', width: 50 },
             // { label: '分类id', name: 'categoryId', index: 'category_id', width: 80 },
             { label: '所属分类', name: 'smallCategory.title', index: 'category_id', width: 80 },
           /*  { label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
@@ -135,8 +181,26 @@ $(function () {
                 }},*/
 			// { label: '商户id', name: 'shopId', index: 'shop_id', width: 80 },
             { label: '所属零售户', name: 'shop.shopName', index: 'shop_id', width: 80 },
-            { label: '创建时间', name: 'createTime', index: 'create_time', width: 80 },
-			{ label: '修改时间', name: 'modifyTime', index: 'modify_time', width: 80 }			
+			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+                if(value!=null){
+                    return getDateTime(value,"yyyyMMddHHmmss");
+                }else{
+                    return "";
+                }
+            }},
+            { label: '更新时间', name: 'modifyTime', index: "modify_time", width: 85, formatter: function(value, options, row){
+                      if(value!=null){
+                        return getDateTime(value,"yyyyMMddHHmmss");
+                      }else{
+                            return "";
+                        }
+            }},
+            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                var actions = [];
+                    actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                    actions.push('<a class="btn btn-primary" onclick="vm.del('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                return actions.join('');
+            }}
         ],
 		viewrecords: true,
         height: 385,
@@ -239,8 +303,8 @@ var vm = new Vue({
             vm.getCategory();
             vm.getRetailList();
 		},
-		update: function (event) {
-			var id = getSelectedRow();
+		update: function (id) {
+//			var id = getSelectedRow();
 			if(id == null){
 				return ;
 			}
@@ -301,11 +365,13 @@ var vm = new Vue({
                 });
 			});
 		},
-		del: function (event) {
-			var ids = getSelectedRows();
-			if(ids == null){
+		del: function (id) {
+//			var ids = getSelectedRows();
+			if(id == null){
 				return ;
 			}
+			var ids = [];
+            ids.push(id);
 			var lock = false;
             layer.confirm('确定要删除选中的记录？', {
                 btn: ['确定','取消'] //按钮

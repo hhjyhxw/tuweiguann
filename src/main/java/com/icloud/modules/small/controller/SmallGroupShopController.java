@@ -59,7 +59,8 @@ public class SmallGroupShopController extends AbstractController {
     @DataFilter
     public R list(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
-        PageUtils page = smallGroupShopService.queryGroupAndSkuForhou(query.getPageNum(),query.getPageSize(), query);
+//        PageUtils page = smallGroupShopService.queryGroupAndSkuForhou(query.getPageNum(),query.getPageSize(), query);
+        PageUtils page = smallGroupShopService.findByPage(query.getPageNum(),query.getPageSize(), query);
         return R.ok().put("page", page);
     }
 
