@@ -34,8 +34,8 @@ $(function () {
 			{ label: '变更后余额', name: 'afterBlance', index: 'after_blance', width: 80 }, 			
 			{ label: '创建人', name: 'createdBy', index: 'created_by', width: 80 }, 			
 			{ label: '创建时间', name: 'createdTime', index: 'created_time', width: 80 }, 			
-			{ label: '更新人', name: 'updatedBy', index: 'updated_by', width: 80 }, 			
-			{ label: '更新时间', name: 'updatedTime', index: 'updated_time', width: 80 }			
+			/*{ label: '更新人', name: 'updatedBy', index: 'updated_by', width: 80 },
+			{ label: '更新时间', name: 'updatedTime', index: 'updated_time', width: 80 }*/
         ],
 		viewrecords: true,
         height: 385,
@@ -74,6 +74,8 @@ var vm = new Vue({
             orderNo:'',
             shopName:'',
             bizType:null,
+            startTime:null,
+            endTime:null
         }
 	},
 	methods: {

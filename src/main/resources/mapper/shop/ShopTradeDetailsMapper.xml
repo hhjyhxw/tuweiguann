@@ -61,11 +61,14 @@ id,shop_id,trade_no,order_no,biz_type,in_or_out,before_blance,amount,after_blanc
 <if test="createdBy != null">
     and t.created_by = #{createdBy}
 </if>
-<if test="createdTime != null">
-    and t.created_time = #{createdTime}
-</if>
 <if test="updatedBy != null">
     and t.updated_by = #{updatedBy}
+</if>
+<if test="startTime != null" >
+    <![CDATA[ and t.created_time  >=  #{startTime}  ]]>
+</if>
+<if test="endTime != null" >
+    <![CDATA[ and t.created_time  <=  #{endTime}  ]]>
 </if>
 <if test="shopName != null and shopName!=''">
     and s.shop_name like CONCAT('%', '${shopName}', '%')
@@ -74,5 +77,6 @@ id,shop_id,trade_no,order_no,biz_type,in_or_out,before_blance,amount,after_blanc
     and ${sql_filter}
 </if>
 </where>
+    order by created_time desc
 </select>
 </mapper>
