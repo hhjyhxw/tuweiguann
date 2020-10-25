@@ -14,9 +14,14 @@ import com.icloud.config.DeptUtils;
 import com.icloud.config.ServerConfig;
 import com.icloud.config.ShopFilterUtils;
 import com.icloud.exceptions.BaseException;
-import com.icloud.modules.small.entity.SmallCategory;
-import com.icloud.modules.small.entity.SmallWasteRecord;
-import com.icloud.modules.small.service.SmallWasteRecordService;
+import com.icloud.modules.bsactivity.entity.BsactivityAd;
+import com.icloud.modules.bsactivity.service.BsactivityAdService;
+import com.icloud.modules.shop.entity.ShopBank;
+import com.icloud.modules.shop.entity.ShopMan;
+import com.icloud.modules.shop.service.ShopBankService;
+import com.icloud.modules.shop.service.ShopManService;
+import com.icloud.modules.small.entity.*;
+import com.icloud.modules.small.service.*;
 import com.icloud.modules.small.vo.ShopTreeVo;
 import com.icloud.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -52,6 +57,19 @@ public class ShopController extends AbstractController {
     private ShopFilterUtils shopFilterUtils;
     @Autowired
     private ServerConfig serverConfig;
+    @Autowired
+    private SmallOrderService smallOrderService;
+    @Autowired
+    private SmallSpuService smallSpuService;
+    @Autowired
+    private ShopBankService shopBankService;
+    @Autowired
+    private ShopManService shopManService;
+    @Autowired
+    private BsactivityAdService bsactivityAdService;
+    @Autowired
+    private SmallCouponService smallCouponService;
+
     /**
      * 列表
      */
@@ -310,8 +328,47 @@ public class ShopController extends AbstractController {
     @RequestMapping("/delete")
     @RequiresPermissions("shop:shop:delete")
     public R delete(@RequestBody Long[] ids){
+        if(ids==null || ids.length==0){
+            return R.ok();
+        }
+        for (int i=0;i<ids.length;i++){
+            //关联店铺
+            List<Shop> list = shopService.list(new QueryWrapper<Shop>().eq("parent_id",ids[i]));
+            if(list!=null && list.size()>0){
+                return R.error("有子店铺不能删除！");
+            }
+            //关联商品库
+            List<SmallOrder> smallOrderlist =  smallOrderService.list(new QueryWrapper<SmallOrder>().eq("shop_id",ids[i]));
+            if(smallOrderlist!=null && smallOrderlist.size()>0){
+                return R.error("有关联订单不能删除！");
+            }
+            //关联订单
+            List<SmallSpu> smallSpulist =  smallSpuService.list(new QueryWrapper<SmallSpu>().eq("shop_id",ids[i]));
+            if(smallSpulist!=null && smallSpulist.size()>0){
+                return R.error("有关联商品不能删除！");
+            }
+            //关联银行卡
+            List<ShopBank> shopBanklist =  shopBankService.list(new QueryWrapper<ShopBank>().eq("shop_id",ids[i]));
+            if(shopBanklist!=null && shopBanklist.size()>0){
+                return R.error("有关联银行卡不能删除！");
+            }
+            //关联店员
+            List<ShopMan> shopManlist =  shopManService.list(new QueryWrapper<ShopMan>().eq("shop_id",ids[i]));
+            if(shopManlist!=null && shopManlist.size()>0){
+                return R.error("有关联店员不能删除！");
+            }
+            //关联广告
+            List<BsactivityAd> bsactivityAdlist =  bsactivityAdService.list(new QueryWrapper<BsactivityAd>().eq("shop_id",ids[i]));
+            if(bsactivityAdlist!=null && bsactivityAdlist.size()>0){
+                return R.error("有关联广告不能删除！");
+            }
+            //关联优惠券
+            List<SmallCoupon> smallCouponlist =  smallCouponService.list(new QueryWrapper<SmallCoupon>().eq("shop_id",ids[i]));
+            if(smallCouponlist!=null && smallCouponlist.size()>0){
+                return R.error("有关联优惠券不能删除！");
+            }
+        }
         shopService.removeByIds(Arrays.asList(ids));
-
         return R.ok();
     }
 

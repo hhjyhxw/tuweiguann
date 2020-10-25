@@ -371,7 +371,8 @@ var vm = new Vue({
                         success: function(r){
                             if(r.code == 0){
                                 layer.msg("操作成功", {icon: 1});
-                                $("#jqGrid").trigger("reloadGrid");
+//                                $("#jqGrid").trigger("reloadGrid");
+                                vm.reload();
                             }else{
                                 layer.alert(r.msg);
                             }
