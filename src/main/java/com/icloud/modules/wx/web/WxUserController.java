@@ -20,7 +20,7 @@ import java.util.Map;
  * 菜单主连接： modules/wx/wxUser.html
  */
 @RestController
-@RequestMapping(value = "/wx/wxUser")
+@RequestMapping(value = "/wx/wxuser")
 public class WxUserController {
 
     @Autowired
@@ -31,7 +31,6 @@ public class WxUserController {
      */
     @SysLog("查询用户列表")
     @RequestMapping("/list")
-    @RequiresPermissions("wx:wxUser:list")
     public R list(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
         PageUtils page = wxUserService.findByPage(query.getPageNum(),query.getPageSize(), query);

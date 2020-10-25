@@ -291,6 +291,18 @@
                             <input type="radio" name="review" value="2" v-model="shop.review"/> 审核失败
                         </label>
                     </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">绑定微信账号</div>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" @click="selectWxUser()"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                {{nickname}}
+                                <span class="caret"></span>
+                            </button>
+                            <!--  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                  <li v-for="(item,index) in skuList" :key="index"><a href="#" @click="selectSku(index)">{{item.title}}</a></li>
+                              </ul>-->
+                        </div>
+                    </div>
 
 
             <div class="sright">

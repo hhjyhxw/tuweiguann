@@ -19,10 +19,32 @@
      <result property="createTime" column="create_time"/>
      <result property="modifyTime" column="modify_time"/>
      <result property="phone" column="phone"/>
+     <result property="xcxopenid" column="xcxopenid"/>
+
     </resultMap>
 
    <!-- 基础字段列 -->
    <sql id="Base_Column_List" >
 id,openid,nickname,sex,province,city,country,headimgurl,privilege,unionid,create_time,modify_time,phone
     </sql>
+
+    <select id="queryMixList" resultMap="BaseResultMap">
+        select * from t_wx_user t
+        <where>
+            <if test="id != null">
+                and t.id = #{id}
+            </if>
+            <if test="nickname != null and nickname!=''">
+                and t.nickname like CONCAT('%', '${nickname}', '%')
+            </if>
+            <if test="openid != null and openid!=''">
+                and t.openid like CONCAT('%', '${openid}', '%')
+            </if>
+            <if test="xcxopenid != null and xcxopenid!=''">
+                and t.xcxopenid like CONCAT('%', '${xcxopenid}', '%')
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
+
 </mapper>

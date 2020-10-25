@@ -229,6 +229,7 @@ var vm = new Vue({
             shopName:'',
             commissionRate:0,
         },
+        nickname:'',
         user: {
 		    userId:null
         },
@@ -452,6 +453,41 @@ var vm = new Vue({
                 table.setExpandAll(false);
                 table.init();
                 Dept.table = table;
+        },
+        selectWxUser:function(){
+            this.wxUserWinIndex = layer.open({
+                title: '选择sku',
+                type: 2,
+                maxmin: true,
+                move:true,
+                shadeClose: true,
+                area: ['65%', '65%'],
+                btn: ['<i class="fa fa-check"></i> 确定', '<i class="fa fa-close"></i> 关闭'],
+                content: baseURL + "modules/wx/wxuserWin.html",
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var wxUser = iframeWin.vm.wxUser;
+                    console.log("wxUser====="+JSON.stringify(wxUser));
+                    if($.trim(wxUser.id) == '') {
+                        layer.msg("请选择微信用户",{icon: 0,time: 1000});return;
+                    }
+                    vm.nickname = wxUser.nickname;
+                    vm.shop.userId = wxUser.id;
+                    console.log("vm.shop====="+JSON.stringify(vm.shop));
+                    console.log("vm.nickname====="+JSON.stringify(vm.nickname));
+                    layer.close(index);
+                },
+                success: function (layero, index) {
+                    /*var info = '<font color="red" class="pull-left mt10">提示：双击可快速选择。</font>';
+                    layero.find('.layui-layer-btn').append(info);*/
+                }
+            });
+        },
+         //双击选中用户
+        wxuserforgroupWinDblClick: function (wxUser) {
+            vm.nickname = wxUser.nickname;
+            vm.shop.userId = wxUser.id;
+            layer.close(vm.wxUserWinIndex);
         },
         //获取用户信息
         getUser: function(){

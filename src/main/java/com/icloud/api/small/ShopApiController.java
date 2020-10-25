@@ -72,10 +72,10 @@ public class ShopApiController {
         //1、默认读取平台店铺
         List<Shop> shoplist = new ArrayList<Shop>();
         //系统店铺及系统店铺分店一定读取
-        List<Shop> sysshoplist = shopService.list(new QueryWrapper<Shop>().eq("sys_flag","1"));
+        List<Shop> sysshoplist = shopService.list(new QueryWrapper<Shop>().eq("sys_flag","1").eq("status","1"));
         if(sysshoplist!=null && sysshoplist.size()>0){
             shoplist = sysshoplist;
-            List<Shop> sonlist = shopService.list(new QueryWrapper<Shop>().eq("parent_id",sysshoplist.get(0).getId()));
+            List<Shop> sonlist = shopService.list(new QueryWrapper<Shop>().eq("parent_id",sysshoplist.get(0).getId()).eq("status","1"));
             if(sonlist!=null && sonlist.size()>0){
                 shoplist.addAll(sonlist);
             }
