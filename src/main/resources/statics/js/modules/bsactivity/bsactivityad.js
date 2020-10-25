@@ -4,12 +4,12 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: '编号', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '名称', name: 'adName', index: 'ad_name', width: 80 }, 			
+			{ label: '名称', name: 'adName', index: 'ad_name', width: 60 },
 			 { label: '图片url', name: 'adImgurl', width: 60, formatter: function(value, options, row){
                 return '<img style="height: 3rem;width: 3rem;" src="'+value+'"/>';
             }},
-			{ label: '跳转url', name: 'addJumpurl', index: 'add_jumpurl', width: 80 }, 			
-			{ label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
+			/*{ label: '跳转url', name: 'addJumpurl', index: 'add_jumpurl', width: 80 }, 			*/
+			{ label: '状态', name: 'status', width: 50, formatter: function(value, options, row){
                                     				return value === 0 ?
                                     					'<span class="label label-danger">停用</span>' :
                                     					'<span class="label label-success">启用</span>';
@@ -21,7 +21,7 @@ $(function () {
                             return "";
                         }
             }},
-			{ label: '创建人', name: 'createOperator', index: 'create_operator', width: 80 }, 			
+			{ label: '创建人', name: 'createOperator', index: 'create_operator', width: 50 },
 			{ label: '修改时间', name: 'modifyTime', index: "modify_time", width: 85, formatter: function(value, options, row){
                       if(value!=null){
                         return getDateTime(value,"yyyyMMddHHmmss");
@@ -29,14 +29,14 @@ $(function () {
                             return "";
                         }
             }},
-			{ label: '修改人', name: 'modifyOperator', index: 'modify_operator', width: 80 }, 			
+			{ label: '修改人', name: 'modifyOperator', index: 'modify_operator', width: 50 },
 			{ label: '所在广告位', name: 'posittionId', width: 60, formatter: function(value, options, row){
                 return value === 0 ?
                     '<span class="label label-danger">首页广告</span>' :
                     '<span class="label label-success">其他</span>';
             }},
 			{ label: '所属店铺', name: 'shop.shopName', index: 'shop_id', width: 80 },
-			{ label: '排序', name: 'sortNum', index: 'sort_num', width: 80 },
+			{ label: '排序', name: 'sortNum', index: 'sort_num', width: 50 },
             {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                 var actions = [];
                     actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');

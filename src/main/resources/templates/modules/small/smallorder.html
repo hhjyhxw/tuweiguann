@@ -26,6 +26,31 @@
             margin: 0.3rem 0.3rem 0.3rem -0.2rem !important;
             padding: 10px 2px 0px 2px !important;
         }
+
+        .form-control-none{
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            /* border: 1px solid #ccc; */
+            border-radius: 4px;
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            border: none;
+        }
+
+        .control-label-bold {
+            padding-top: 7px;
+            margin-bottom: 0;
+            text-align: right;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -78,115 +103,127 @@
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
-														                    <div class="form-group">
-                        <div class="col-sm-2 control-label">下单渠道</div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label-bold">下单渠道:</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.channel" placeholder="下单渠道"/>
+                            <input type="text" class="form-control-none" v-model="smallOrder.channel" placeholder="" readonly/>
                         </div>
                     </div>
 											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">订单号</div>
+                        <div class="col-sm-2 control-label-bold">订单号:</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.orderNo" placeholder="订单号"/>
+                            <input type="text" class="form-control-none" v-model="smallOrder.orderNo" placeholder="" readonly/>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">用户id</div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label-bold">用户id:</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.userId" placeholder="用户id"/>
+                            <input type="text" class="form-control-none" v-model="smallOrder.userId" placeholder="" readonly/>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">店铺id</div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label-bold">用户昵称:</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.supplierId" placeholder="店铺id"/>
+                            <input type="text" class="form-control-none" v-model="smallOrder.userId" placeholder="" readonly/>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">0生成、处理中、已完成</div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label-bold">店铺名称:</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.orderStatus" placeholder="0生成、处理中、已完成"/>
+                            <input type="text" class="form-control-none" v-model="smallOrder.supplierId" placeholder="" readonly/>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">0未支付、1支付中、2已支付</div>
+					 <div class="form-group">
+                        <div class="col-sm-2 control-label-bold">
+                            订单状态:
+                        </div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.payStatus" placeholder="0未支付、1支付中、2已支付"/>
+                            <input type="text" v-if="smallOrder.orderStatus==0" class="form-control-none" value="用户创建" readonly/>
+                            <input type="text" v-if="smallOrder.orderStatus==1" class="form-control-none" value="处理中"  readonly/>
+                            <input type="text" v-if="smallOrder.orderStatus==2" class="form-control-none" value="已完成"  readonly/>
                         </div>
                     </div>
-											                    <div class="form-group">
+					<div class="form-group">
+                        <div class="col-sm-2 control-label-bold">支付状态:</div>
+                        <div class="col-sm-10">
+                            <input type="text" v-if="smallOrder.payStatus==0" class="form-control-none" value="未支付" readonly/>
+                            <input type="text" v-if="smallOrder.payStatus==1" class="form-control-none" value="支付中"  readonly/>
+                            <input type="text" v-if="smallOrder.payStatus==2" class="form-control-none" value="已支付"  readonly/>
+                        </div>
+                    </div>
+					<!--<div class="form-group">
                         <div class="col-sm-2 control-label">0生成、1、退款中、2已退款</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.refundStatus" placeholder="0生成、1、退款中、2已退款"/>
+                            <input type="text" class="form-form-control-none" v-model="smallOrder.refundStatus" placeholder="0生成、1、退款中、2已退款"/>
                         </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">0未发货、1发货中、2已发货</div>
+                    </div>-->
+					<div class="form-group">
+                        <div class="col-sm-2 control-label-bold">发货状态:</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.shipStatus" placeholder="0未发货、1发货中、2已发货"/>
+                            <input type="text" v-if="smallOrder.shipStatus==0" class="form-control-none" value="未发货" readonly/>
+                            <input type="text" v-if="smallOrder.shipStatus==1" class="form-control-none" value="发货中"  readonly/>
+                            <input type="text" v-if="smallOrder.shipStatus==2" class="form-control-none" value="已发货"  readonly/>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">商品(sku)原始价总额</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.skuOriginalTotalPrice" placeholder="商品(sku)原始价总额"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
+
+					<!--<div class="form-group">
                         <div class="col-sm-2 control-label">商品(sku)现价总额</div>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" v-model="smallOrder.skuTotalPrice" placeholder="商品(sku)现价总额"/>
                         </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">运费</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.freightPrice" placeholder="运费"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">代金券优惠价</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.couponPrice" placeholder="代金券优惠价"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
+                    </div>-->
+
+					<!--						                    <div class="form-group">
                         <div class="col-sm-2 control-label">代金券id</div>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" v-model="smallOrder.couponId" placeholder="代金券id"/>
                         </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">实付订单金额</div>
+                    </div>-->
+					<div class="form-group">
+                        <div class="col-sm-2 control-label-bold">订单总额(元):</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.actualPrice" placeholder="实付订单金额"/>
+                            <input type="text" class="form-control-none" v-model="smallOrder.skuTotalPrice" placeholder="" readonly/>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">支付金额</div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label-bold">运费(元):</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.payPrice" placeholder="支付金额"/>
+                            <input type="text" class="form-control-none" v-model="smallOrder.freightPrice" placeholder="" readonly/>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">支付流水id(本地支付流水)</div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label-bold">优惠金额(元):</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.payId" placeholder="支付流水id(本地支付流水)"/>
+                            <input type="text" class="form-control-none" v-model="smallOrder.couponPrice" placeholder="" readonly/>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">支付渠道名称</div>
+					 <div class="form-group">
+                        <div class="col-sm-2 control-label-bold">支付金额(元):</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.payChannel" placeholder="支付渠道名称"/>
+                            <input type="text" class="form-control-none" v-model="smallOrder.payPrice" placeholder="" readonly/>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">支付时间(支付成功回调获取的支付时间)</div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label-bold">支付流水:</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control-none" v-model="smallOrder.payId" placeholder="" readonly/>
+                        </div>
+                    </div>
+					 <div class="form-group">
+                        <div class="col-sm-2 control-label-bold">支付渠道:</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control-none" v-model="smallOrder.payChannel" placeholder="" readonly/>
+                        </div>
+                    </div>
+
+                    <!--
+                    <div class="form-group">
+                    <div class="col-sm-2 control-label">支付时间(支付成功回调获取的支付时间)</div>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" v-model="smallOrder.payTime" placeholder="支付时间(支付成功回调获取的支付时间)"/>
                         </div>
-                    </div>
-											                    <div class="form-group">
+                    </div>-->
+					<!--<div class="form-group">
                         <div class="col-sm-2 control-label">物流方式(物流方式代号)</div>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" v-model="smallOrder.shipCode" placeholder="物流方式(物流方式代号)"/>
@@ -215,8 +252,64 @@
                         <div class="col-sm-10">
                             <input type="text" class="form-control" v-model="smallOrder.confirmTime" placeholder="确认收货时间"/>
                         </div>
+                    </div>-->
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label-bold">收货人:</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control-none" v-model="smallOrder.consignee" placeholder="" readonly/>
+                        </div>
                     </div>
-											                    <div class="form-group">
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label-bold">收货地址:</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control-none" v-model="smallOrder.province" placeholder="" readonly/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label-bold">备注信息:</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control-none" v-model="smallOrder.memo" placeholder="" readonly/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                     <!--   <table class="table table-bordered" style=" margin-left: 20.2rem;
+    margin-top: 2rem;">
+                            <caption>
+                                商品sku列
+                            </caption>
+                            <button id="fat-btn" class="btn btn-primary" style="margin-left: 20.2rem; margin-bottom: -2rem;margin-top: 5rem;"
+                                    type="button" @click="addSku('添加sku','')"> 新增商品sku
+                            </button>
+                            <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>图片</th>
+                                <th>原价</th>
+                                <th>现价</th>
+                                <th>剩余库存</th>
+                                <th style="width: 12rem;">操作</th>
+                                &lt;!&ndash; <th>vip价（团购价）</th>&ndash;&gt;
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(item,index) in skuList" :key="index">
+                                <td>{{item.title}}</td>
+                                <td>
+                                    <img :src="item.img" style="width: 5rem;height: 5rem;"/>
+                                </td>
+                                <td>{{item.originalPrice}}</td>
+                                <td>{{item.price}}</td>
+                                <td>{{item.remainStock}}</td>
+                                <td>
+                                    <a class="btn btn-primary" @click="addSku('编辑sku',item.id)"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+                                    <a class="btn btn-primary" @click="delSku(item.id)"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>-->
+
+                    </div>
+					<!--<div class="form-group">
                         <div class="col-sm-2 control-label">省</div>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" v-model="smallOrder.province" placeholder="省"/>
@@ -239,48 +332,17 @@
                         <div class="col-sm-10">
                             <input type="text" class="form-control" v-model="smallOrder.address" placeholder="详细地址"/>
                         </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label"></div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.memo" placeholder=""/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label"></div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.refundReason" placeholder=""/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label"></div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.consignee" placeholder=""/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label"></div>
+                    </div>-->
+
+
+					<!--<div class="form-group">
+                        <div class="col-sm-2 control-label">收货人手机</div>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" v-model="smallOrder.phone" placeholder=""/>
                         </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label"></div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.createTime" placeholder=""/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label"></div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="smallOrder.modifyTime" placeholder=""/>
-                        </div>
-                    </div>
-							            <div class="form-group">
-                <div class="col-sm-2 control-label"></div>
-                <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="确定"/>
-                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
-            </div>
+                    </div>-->
+
+
         </form>
     </div>
 </div>

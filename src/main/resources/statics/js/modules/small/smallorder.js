@@ -42,7 +42,11 @@ $(function () {
 			/*{ label: '支付时间', name: 'payTime', index: 'pay_time', width: 80 },
 			{ label: '发货时间', name: 'shipTime', index: 'ship_time', width: 80 },
 			{ label: '确认收货时间', name: 'confirmTime', index: 'confirm_time', width: 80 }*/
-
+              {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                    var actions = [];
+                        actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;详情</a>&nbsp;');
+                    return actions.join('');
+                }}
         ],
 		viewrecords: true,
         height: 385,
@@ -96,13 +100,13 @@ var vm = new Vue({
 			vm.title = "新增";
 			vm.smallOrder = {};
 		},
-		update: function (event) {
-			var id = getSelectedRow();
+		update: function (id,item) {
+//			var id = getSelectedRow();
 			if(id == null){
 				return ;
 			}
 			vm.showList = false;
-            vm.title = "修改";
+            vm.title = "订单详情";
             
             vm.getInfo(id)
 		},
