@@ -80,7 +80,15 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		smallOrder: {},
+		smallOrder: {
+		    user:{
+		        nickname:''
+		    },
+		    shop:{
+                shopName:''
+            }
+		},
+		detailList:[],//订单明细
         q:{
             orderNo:'',
             nickname:'',
@@ -165,6 +173,7 @@ var vm = new Vue({
 		getInfo: function(id){
 			$.get(baseURL + "small/smallorder/info/"+id, function(r){
                 vm.smallOrder = r.smallOrder;
+                vm.detailList = r.detailList;
             });
 		},
 		reload: function (event) {

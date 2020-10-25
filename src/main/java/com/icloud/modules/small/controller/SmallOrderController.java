@@ -1,10 +1,17 @@
 package com.icloud.modules.small.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.DataFilter;
 import com.icloud.basecommon.model.Query;
+import com.icloud.common.beanutils.ColaBeanUtils;
+import com.icloud.modules.small.entity.SmallOrderDetail;
+import com.icloud.modules.small.service.SmallOrderDetailService;
+import com.icloud.modules.small.vo.OrderDetailVo;
 import com.icloud.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +41,8 @@ import com.icloud.common.validator.ValidatorUtils;
 public class SmallOrderController extends AbstractController {
     @Autowired
     private SmallOrderService smallOrderService;
+    @Autowired
+    private SmallOrderDetailService smallOrderDetailService;
 
     /**
      * 列表
@@ -55,9 +64,15 @@ public class SmallOrderController extends AbstractController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("small:smallorder:info")
     public R info(@PathVariable("id") Long id){
-        SmallOrder smallOrder = (SmallOrder)smallOrderService.getById(id);
-
-        return R.ok().put("smallOrder", smallOrder);
+//        SmallOrder smallOrder = (SmallOrder)smallOrderService.getById(id);
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("id",id);
+        SmallOrder smallOrder = smallOrderService.queryMixList(params).get(0);//保护用户信息，店铺想信息等
+        List<SmallOrderDetail> detaillist =  smallOrderDetailService.list(new QueryWrapper<SmallOrderDetail>().eq("order_id",smallOrder.getId()));
+        List<OrderDetailVo> detaillistvo = ColaBeanUtils.copyListProperties(detaillist , OrderDetailVo::new, (articleEntity, articleVo) -> {
+            // 回调处理
+        });
+        return R.ok().put("smallOrder", smallOrder).put("detailList",detaillistvo);
     }
 
     /**

@@ -84,6 +84,11 @@ public class SmallOrderService extends BaseServiceImpl<SmallOrderMapper,SmallOrd
         PageUtils<SmallOrder> page = new PageUtils<SmallOrder>(list,(int)pageInfo.getTotal(),pageSize,pageNo);
         return page;
     }
+
+    public  List<SmallOrder> queryMixList(Map<String, Object> query) {
+       return smallOrderMapper.queryMixList(query);
+    }
+
     public R createOrder(CreateOrder preOrder, WxUser user, SmallAddress address,SmallUserCoupon userCoupon,SmallCoupon smallCoupon) {
         BigDecimal totalAmout = new BigDecimal(0);//订单总金额
         BigDecimal origintotalAmout = new BigDecimal(0);//原价总额
