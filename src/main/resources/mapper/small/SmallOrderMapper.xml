@@ -59,7 +59,7 @@ t.shop_id = s.id and t.user_id = u.id
         and t.channel = #{channel}
     </if>
     <if test="orderNo != null and orderNo!=''">
-        and t.order_no = #{orderNo}
+        and t.order_no like CONCAT('%', '${orderNo}', '%')
     </if>
     <if test="userId != null">
         and t.user_id = #{userId}
@@ -146,7 +146,7 @@ t.shop_id = s.id and t.user_id = u.id
         and t.consignee = #{consignee}
     </if>
     <if test="phone != null">
-        and t.phone = #{phone}
+        and t.phone like CONCAT('%', '${phone}', '%')
     </if>
 <if test="startTime != null" >
     <![CDATA[ and t.create_time  >=  #{startTime}  ]]>

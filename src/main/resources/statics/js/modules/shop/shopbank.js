@@ -24,14 +24,15 @@ $(function () {
                         (value==='3'?'<span class="label label-success">审核失败</span>':'')));
                 }},
             { label: '审核不通过原因', name: 'msg', index: 'msg', width: 80 },
-	/*		{ label: '创建人', name: 'createdBy', index: 'created_by', width: 80 },
-            { label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+            { label: '创建时间', name: 'createdTime', index: "created_time", width: 85, formatter: function(value, options, row){
                 if(value!=null){
                     return getDateTime(value,"yyyyMMddHHmmss");
                 }else{
                     return "";
                 }
             }},
+	/*		{ label: '创建人', name: 'createdBy', index: 'created_by', width: 80 },
+
             { label: '更新人', name: 'updatedBy', index: 'updated_by', width: 80 },
             { label: '更新时间', name: 'modifyTime', index: "modify_time", width: 85, formatter: function(value, options, row){
                       if(value!=null){

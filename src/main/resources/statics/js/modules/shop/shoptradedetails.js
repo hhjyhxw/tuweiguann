@@ -33,7 +33,13 @@ $(function () {
 			{ label: '变更金额', name: 'amount', index: 'amount', width: 80 }, 			
 			{ label: '变更后余额', name: 'afterBlance', index: 'after_blance', width: 80 }, 			
 			{ label: '创建人', name: 'createdBy', index: 'created_by', width: 80 }, 			
-			{ label: '创建时间', name: 'createdTime', index: 'created_time', width: 80 }, 			
+			{ label: '创建时间', name: 'createdTime', index: "created_time", width: 85, formatter: function(value, options, row){
+              if(value!=null){
+                return getDateTime(value,"yyyyMMddHHmmss");
+              }else{
+                    return "";
+                }
+            }},
 			/*{ label: '更新人', name: 'updatedBy', index: 'updated_by', width: 80 },
 			{ label: '更新时间', name: 'updatedTime', index: 'updated_time', width: 80 }*/
         ],

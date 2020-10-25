@@ -71,6 +71,9 @@ var vm = new Vue({
             commissionRate:0,
         },
         banklist:[],//所属店铺 审核通过的银行卡
+        q:{
+            shopName:''
+        }
 
 	},
     created: function(){
@@ -166,7 +169,8 @@ var vm = new Vue({
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
-                page:page
+                postData:vm.q,
+                page: 1
             }).trigger("reloadGrid");
 		},
 

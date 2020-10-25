@@ -82,6 +82,12 @@ id,shop_id,titile,province,city,county,address,phone,lnt,lat,distribution_scope,
 <if test="shopName != null and shopName!=''">
     and s.shop_name like CONCAT('%', '${shopName}', '%')
 </if>
+    <if test="startTime != null" >
+        <![CDATA[ and t.created_time  >=  #{startTime}  ]]>
+    </if>
+    <if test="endTime != null" >
+        <![CDATA[ and t.created_time  <=  #{endTime}  ]]>
+    </if>
 <if test="sql_filter != null and sql_filter!=''">
     and ${sql_filter}
 </if>

@@ -114,6 +114,15 @@ select * from shop t
 <if test="updatedTime != null">
     and t.updated_time = #{updatedTime}
 </if>
+<if test="startTime != null" >
+    <![CDATA[ and t.created_time  >=  #{startTime}  ]]>
+</if>
+<if test="endTime != null" >
+    <![CDATA[ and t.created_time  <=  #{endTime}  ]]>
+</if>
+<if test="shopName != null and shopName!=''">
+    and t.shop_name like CONCAT('%', '${shopName}', '%')
+</if>
 <if test="sql_filter != null and sql_filter!=''">
     and ${sql_filter}
 </if>
