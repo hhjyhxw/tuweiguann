@@ -5,6 +5,7 @@ import com.icloud.annotation.DataFilter;
 import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
 import com.icloud.common.Constant;
+import com.icloud.common.DateUtil;
 import com.icloud.common.R;
 import com.icloud.common.beanutils.ColaBeanUtils;
 import com.icloud.common.util.StringUtil;
@@ -55,6 +56,12 @@ public class SmallCategoryController extends AbstractController {
     @RequiresPermissions("small:smallcategory:list")
     public List<CategoryVo> list(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
+        if(StringUtil.checkObj(params.get("startTime")) && !"null".equals(params.get("startTime").toString())){
+            params.put("startTime", DateUtil.getDateWithAll(params.get("startTime").toString()));
+        }
+        if(StringUtil.checkObj(params.get("endTime")) && !"null".equals(params.get("endTime").toString())){
+            params.put("endTime", DateUtil.getDateWithAll(params.get("endTime").toString()));
+        }
         List<SmallCategory> list = smallCategoryService.queryList(query);
         List<CategoryVo> volist = ColaBeanUtils.copyListProperties(list , CategoryVo::new, (articleEntity, articleVo) -> {
             // 回调处理

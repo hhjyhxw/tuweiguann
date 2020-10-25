@@ -2,6 +2,8 @@ package com.icloud.modules.small.vo;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class CategoryVo {
 
@@ -13,6 +15,6 @@ public class CategoryVo {
     private Integer status;
     private String title;
     private String picUrl;
-
-
+    private Date createTime;
+    private Date modifyTime;
 }

@@ -84,6 +84,8 @@ $(function () {
         }
     });
 });
+//列表树结构
+var treetable_url = baseURL + "small/smallcategory/list"
 
 var vm = new Vue({
 	el:'#icloudapp',
@@ -101,8 +103,9 @@ var vm = new Vue({
         },
         q:{
             title:'',
-            startTime:null,
-            endTime:null,
+            parentName:'',
+            startTime:'',
+            endTime:'',
         }
 
 	},
@@ -236,8 +239,27 @@ var vm = new Vue({
         },
         reload: function () {
             vm.showList = true;
-            Dept.table.refresh();
+            vm.getData();
+            //Dept.table.refresh();
         },
+
+        getData:function(){
+             var treetable_url = baseURL + "small/smallcategory/list?title="+vm.q.title+"&parentName="+vm.q.parentName+"&startTime="+vm.q.startTime+"&endTime="+vm.q.endTime;
+             $.get(baseURL + 'small/smallcategory/info', function(r){
+                    // console.info("r==="+JSON.stringify(r))
+                    var colunms = Dept.initColumn();
+                    var table = new TreeTable(Dept.id, treetable_url, colunms);
+                    //console.info("table==="+JSON.stringify(table))
+                    table.setRootCodeValue(r.id);
+                    table.setExpandColumn(2);
+                    table.setIdField("id");
+                    table.setCodeField("id");
+                    table.setParentCodeField("parentId");
+                    table.setExpandAll(false);
+                    table.init();
+                    Dept.table = table;
+                });
+        }
 
 	}
 });
@@ -257,19 +279,33 @@ var Dept = {
 Dept.initColumn = function () {
     var columns = [
         {field: 'selectItem', radio: true},
-        {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle', width: '80px'},
+        {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle', width: '50px'},
        /* {title: '分类名称', field: 'title',visible: false, align: 'center', valign: 'middle', sortable: true, width: '180px'},*/
         {title: '分类名称', field: 'name', align: 'center', valign: 'middle', sortable: true, width: '80px'},
         { title: '分类图标', field: 'picUrl', width: '60px', formatter: function(item, index){
            return '<img style="height: 3rem;width: 3rem;" src="'+item.picUrl+'"/>';
          }},
-        {title: '上级分类', field: 'parentName', align: 'center', valign: 'middle', false: true, width: '80px'},
+        {title: '上级分类', field: 'parentName', align: 'center', valign: 'middle', false: true, width: '50px'},
         { title: '状态', field: 'status', width: '60px', formatter: function(item, index){
                 return item.status === 0 ?
                     '<span class="label label-danger">停用</span>' :
                     '<span class="label label-success">启用</span>';
             }},
-        {title: '排序号', field: 'sortNum', align: 'center', valign: 'middle', sortable: false, width: '80px'},
+        { title: '创建时间', field: 'createTime', align: 'center',  valign: 'middle', false: true, width: '80px', formatter: function(item, index){
+        	if(item.createTime!=null){
+                return getDateTime(item.createTime,"yyyyMMddHHmmss");
+            }else{
+                return "";
+            }
+        }},
+         { title: '修改时间', field: 'modifyTime',align: 'center', width: '80px', valign: 'middle', false: true, formatter: function(item, index){
+             if(item.createTime!=null){
+                return getDateTime(item.createTime,"yyyyMMddHHmmss");
+            }else{
+                return "";
+            }
+        }},
+        {title: '排序号', field: 'sortNum', align: 'center', valign: 'middle', sortable: false, width: '50px'},
         {title:'操作', field:'操作', width: '80px', sortable:false, title:"操作", align:'center', formatter: function(item, index){
                         var actions = [];
                             actions.push('<a class="btn btn-primary" onclick="vm.update('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
@@ -292,11 +328,12 @@ function getCategoryId () {
 }
 
 
-$(function () {
+
+/*$(function () {
     $.get(baseURL + 'small/smallcategory/info', function(r){
         // console.info("r==="+JSON.stringify(r))
         var colunms = Dept.initColumn();
-        var table = new TreeTable(Dept.id, baseURL + "small/smallcategory/list", colunms);
+        var table = new TreeTable(Dept.id, treetable_url, colunms);
         //console.info("table==="+JSON.stringify(table))
         table.setRootCodeValue(r.id);
         table.setExpandColumn(2);
@@ -307,6 +344,7 @@ $(function () {
         table.init();
         Dept.table = table;
     });
-});
+});*/
+vm.getData();
 vm.getCategory();
 

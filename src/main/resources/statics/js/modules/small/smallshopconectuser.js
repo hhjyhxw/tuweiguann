@@ -48,6 +48,8 @@ var vm = new Vue({
 		q:{
 		    nickname:'',
 		    shopName:'',
+		    startTime:null,
+            endTime:null,
 		}
 	},
 	methods: {

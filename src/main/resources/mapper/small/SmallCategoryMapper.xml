@@ -64,21 +64,27 @@ id,title,parent_id,pic_url,level,status,create_time,modify_time
 
 
     <select id="queryList" resultType="com.icloud.modules.small.entity.SmallCategory" resultMap="BaseResultMap">
-        select t.id,t.title,t.parent_id,t.status,t.sort_num,t.title name,t.pic_url,(select t2.title from t_small_category t2 where t2.id=t.parent_id) parentName from t_small_category t
-        <where>
+        select t.id,t.title,t.create_time,t.modify_time,t.parent_id,t.status,t.sort_num,t.title name,t.pic_url,(select t2.title from t_small_category t2 where t2.id=t.parent_id) parentName from t_small_category t
+    <where>
+        <if test="title != null and title!=''">
+            and t.title like CONCAT('%', '${title}', '%')
+        </if>
+        <!--<if test="parentName != null and parentName!=''">
+            and parentName like CONCAT('%', '${parentName}', '%')
+        </if>-->
         <if test="id != null and id!=''">
              t.id = #{id}
         </if>
-        <if test="startTime != null" >
+        <if test="startTime != null and startTime!='' and startTime!='null'" >
             <![CDATA[ and t.create_time  >=  #{startTime}  ]]>
         </if>
-        <if test="endTime != null" >
+        <if test="endTime != null and startTime!='' and startTime!='null'" >
             <![CDATA[ and t.create_time  <=  #{endTime}  ]]>
         </if>
        <!-- <if test="sql_filter != null and sql_filter!=''">
              ${sql_filter}
         </if>-->
-        </where>
+    </where>
         order by t.create_time desc
     </select>
 
