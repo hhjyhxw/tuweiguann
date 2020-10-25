@@ -58,25 +58,28 @@ public class ShopController extends AbstractController {
     @RequestMapping("/list")
     @RequiresPermissions("shop:shop:list")
 //    @DataFilter
-    public R list(@RequestParam Map<String, Object> params){
+    public List<Shop> list(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
-        if(getUserId()!= Constant.SUPER_ADMIN) {
-            query.put(Constant.SQL_FILTER, shopFilterUtils.getSQLFilterForshopsell());
-        }
-        PageUtils page = shopService.findByPage(query.getPageNum(),query.getPageSize(), query);
-        List<Shop> list = page.getList();
-        if(list!=null && list.size()>0){
-            list.forEach(p->{
-                if(p.getParentId()!=null){
-                    Object parent = shopService.getById(p.getId());
-                    if(parent!=null){
-                        p.setParentName((((Shop)parent).getShopName()));
-                    }
-                }
-            });
-        }
-        page.setList(list);
-        return R.ok().put("page", page);
+//        if(getUserId()!= Constant.SUPER_ADMIN) {
+//            query.put(Constant.SQL_FILTER, shopFilterUtils.getSQLFilterForshopsell());
+//        }
+//        PageUtils page = shopService.findByPage(query.getPageNum(),query.getPageSize(), query);
+//        List<Shop> list = page.getList();
+//        if(list!=null && list.size()>0){
+//            list.forEach(p->{
+//                if(p.getParentId()!=null){
+//                    Object parent = shopService.getById(p.getId());
+//                    if(parent!=null){
+//                        p.setParentName((((Shop)parent).getShopName()));
+//                    }
+//                }
+//            });
+//        }
+//        page.setList(list);
+//        return R.ok().put("page", page);
+
+        List<Shop> list =shopService.queryShopTree(query);
+        return list;
     }
 
 
@@ -284,6 +287,19 @@ public class ShopController extends AbstractController {
         shop.setUpdatedBy(getUser().getUsername());
         shopService.updateById(shop);
         
+        return R.ok();
+    }
+
+    /**
+     * 关闭或者开启店铺
+     */
+    @SysLog("关闭或者开启店铺")
+    @RequestMapping("/updateStatus")
+    @RequiresPermissions("shop:shop:update")
+    public R updateStatus(@RequestBody Shop shop){
+        shop.setUpdatedTime(new Date());
+        shop.setUpdatedBy(getUser().getUsername());
+        shopService.updateById(shop);
         return R.ok();
     }
 

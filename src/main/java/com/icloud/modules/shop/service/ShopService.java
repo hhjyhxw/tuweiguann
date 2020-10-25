@@ -40,6 +40,11 @@ public class ShopService extends BaseServiceImpl<ShopMapper,Shop> {
         return page;
     }
 
+
+    public List<Shop> queryShopTree(Map<String, Object> query) {
+        return shopMapper.queryShopTree(query);
+    }
+
     public List<Long> getSubShopIdList(Long shopId) {
         return shopMapper.getSubShopIdList(shopId);
     }

@@ -25,4 +25,11 @@ public interface ShopMapper extends BaseMapper<Shop> {
 	 * @param parentId  上级店铺ID
 	 */
     List<Long> getSubShopIdList(Long parentId);
+
+	/**
+	 * 店铺树
+	 */
+	List<Shop> queryShopTree(Map<String,Object> map);
+
+
 }

@@ -151,4 +151,46 @@ select * from shop t
 		select id from shop where parent_id = #{value}
 	</select>
 
+    <select id="queryShopTree" resultType="com.icloud.modules.shop.entity.Shop">
+        select t.*,(select t2.shop_name from shop t2 where t2.id=t.parent_id) parentName from shop t
+        <where>
+            <if test="sysFlag != null and sysFlag!=''">
+                and t.sys_flag = #{sysFlag}
+            </if>
+            <if test="status != null and status!=''">
+                and t.status = #{status}
+            </if>
+            <if test="shopLevel != null  and shopLevel!=''">
+                and t.shop_level = #{shopLevel}
+            </if>
+            <if test="shopName != null and shopName!=''">
+                and t.shop_name like CONCAT('%', '${shopName}', '%')
+            </if>
+            <if test="description != null and description!=''">
+                and t.description like CONCAT('%', '${description}', '%')
+            </if>
+            <if test="province != null and province!=''">
+                and t.province like CONCAT('%', '${province}', '%')
+            </if>
+            <if test="city != null and city!=''">
+                and t.city like CONCAT('%', '${city}', '%')
+            </if>
+            <if test="county != null and county!=''">
+                and t.county like CONCAT('%', '${county}', '%')
+            </if>
+            <if test="address != null and address!=''">
+                and t.address like CONCAT('%', '${address}', '%')
+            </if>
+            <if test="shopTel != null and shopTel!=''">
+                and t.shop_tel like CONCAT('%', '${shopTel}', '%')
+            </if>
+            <if test="startTime != null and startTime!='' and startTime!='null'" >
+                <![CDATA[ and t.created_time  >=  #{startTime}  ]]>
+            </if>
+            <if test="endTime != null and startTime!='' and startTime!='null'" >
+                <![CDATA[ and t.created_time  <=  #{endTime}  ]]>
+            </if>
+        </where>
+        order by t.created_time desc
+    </select>
 </mapper>

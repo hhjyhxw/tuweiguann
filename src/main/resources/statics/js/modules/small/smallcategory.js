@@ -245,20 +245,17 @@ var vm = new Vue({
 
         getData:function(){
              var treetable_url = baseURL + "small/smallcategory/list?title="+vm.q.title+"&parentName="+vm.q.parentName+"&startTime="+vm.q.startTime+"&endTime="+vm.q.endTime;
-             $.get(baseURL + 'small/smallcategory/info', function(r){
-                    // console.info("r==="+JSON.stringify(r))
-                    var colunms = Dept.initColumn();
-                    var table = new TreeTable(Dept.id, treetable_url, colunms);
-                    //console.info("table==="+JSON.stringify(table))
-                    table.setRootCodeValue(r.id);
-                    table.setExpandColumn(2);
-                    table.setIdField("id");
-                    table.setCodeField("id");
-                    table.setParentCodeField("parentId");
-                    table.setExpandAll(false);
-                    table.init();
-                    Dept.table = table;
-                });
+             var colunms = Dept.initColumn();
+             var table = new TreeTable(Dept.id, treetable_url, colunms);
+            //console.info("table==="+JSON.stringify(table))
+//            table.setRootCodeValue(r.id);
+            table.setExpandColumn(2);
+            table.setIdField("id");
+            table.setCodeField("id");
+            table.setParentCodeField("parentId");
+            table.setExpandAll(false);
+            table.init();
+            Dept.table = table;
         }
 
 	}
@@ -317,15 +314,15 @@ Dept.initColumn = function () {
 };
 
 
-function getCategoryId () {
-    var selected = $('#deptTable').bootstrapTreeTable('getSelections');
-    if (selected.length == 0) {
-        alert("请选择一条记录");
-        return null;
-    } else {
-        return selected[0].id;
-    }
-}
+//function getCategoryId () {
+//    var selected = $('#deptTable').bootstrapTreeTable('getSelections');
+//    if (selected.length == 0) {
+//        alert("请选择一条记录");
+//        return null;
+//    } else {
+//        return selected[0].id;
+//    }
+//}
 
 
 

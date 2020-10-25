@@ -1,4 +1,7 @@
 
+
+
+
 //直接输入地址，光标离开的时候，地址解析
 // $("#village").change(function(){
 //     debugger;
@@ -43,7 +46,7 @@ var setting = {
 var ztree;
 
 $(function () {
-   /* $("#jqGrid").jqGrid({
+    $("#jqGrid").jqGrid({
         url: baseURL + 'shop/shop/list',
         datatype: "json",
         colModel: [			
@@ -114,7 +117,7 @@ $(function () {
         	//隐藏grid底部滚动条
         	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
         }
-    });*/
+    });
 
 
     new AjaxUpload('#upload', {
@@ -233,20 +236,7 @@ var vm = new Vue({
 		    userId:null
         },
         q:{
-            shopName:'',
-            city:'',
-            county:'',
-            address:'',
-            province:'',
-            description:'',
-            status:'',
-            review:'',
-            shopTel:'',
-            sysFlag:'',
-            shopLevel:'',
-            startTime:'',
-            endTime:'',
-
+         shopName:'',
         }
 	},
     created: function(){
@@ -285,40 +275,6 @@ var vm = new Vue({
             
             vm.getInfo(id);
 
-		},
-		updateStatus:function(id,status){
-            if(id == null){
-                return ;
-            }
-            var shop = {
-                id:id,
-                status:status
-            };
-            var text = status=='1'?'开启':'关闭';
-            var lock = false;
-            layer.confirm('确定要'+text+'店铺？', {
-                btn: ['确定','取消'] //按钮
-            }, function(){
-               if(!lock) {
-                    lock = true;
-                    $.ajax({
-                        type: "POST",
-                        url: baseURL + "shop/shop/updateStatus",
-                        contentType: "application/json",
-                         data: JSON.stringify(shop),
-                        success: function(r){
-                            if(r.code == 0){
-                                layer.msg("操作成功", {icon: 1});
-                                //$("#jqGrid").trigger("reloadGrid");
-                                vm.reload();
-                            }else{
-                                layer.alert(r.msg);
-                            }
-                        }
-                   	    });
-                    }
-            }, function(){
-            });
 		},
 		saveOrUpdate: function (event) {
             if(!priceCheck(vm.shop.commissionRate)){
@@ -389,12 +345,11 @@ var vm = new Vue({
 		},
 		reload: function (event) {
 			vm.showList = true;
-//			var page = $("#jqGrid").jqGrid('getGridParam','page');
-//			$("#jqGrid").jqGrid('setGridParam',{
-//                 postData:vm.q,
-//                 page: 1
-//            }).trigger("reloadGrid");
-            vm.getData();
+			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			$("#jqGrid").jqGrid('setGridParam',{ 
+                 postData:vm.q,
+                 page: 1
+            }).trigger("reloadGrid");
 		},
         //加载店铺树
         getShopTree: function(){
@@ -431,26 +386,10 @@ var vm = new Vue({
                         vm.shop.parentId = node[0].id;
                         vm.shop.parentName = node[0].name;
                     }
+
                     layer.close(index);
                 }
             });
-        },
-        getData:function(){
-             var treetable_url = baseURL + "shop/shop/list?shopName="+vm.q.shopName+"&province="+vm.q.province+"&city="+vm.q.city+"&county="+vm.q.county
-                +"&address="+vm.q.address+"&description="+vm.q.description+"&status="+vm.q.status
-                +"&review="+vm.q.review+"&shopTel="+vm.q.shopTel+"&sysFlag="+vm.q.sysFlag
-                +"&shopLevel="+vm.q.shopLevel+"&startTime="+vm.q.startTime+"&endTime="+vm.q.endTime;
-                var colunms = Dept.initColumn();
-                var table = new TreeTable(Dept.id, treetable_url, colunms);
-                //console.info("table==="+JSON.stringify(table))
-//                table.setRootCodeValue(r.id);
-                table.setExpandColumn(2);
-                table.setIdField("id");
-                table.setCodeField("id");
-                table.setParentCodeField("parentId");
-                table.setExpandAll(false);
-                table.init();
-                Dept.table = table;
         },
         //获取用户信息
         getUser: function(){
@@ -460,91 +399,6 @@ var vm = new Vue({
         },
 	}
 });
-
-
-
-var Dept = {
-    id: "deptTable",
-    table: null,
-    layerIndex: -1
-};
-
-
-/**
- * 初始化表格的列
- */
-Dept.initColumn = function () {
-    var columns = [
-        {field: 'selectItem', radio: true},
-        {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle', width: '50px'},
-        {title: '名称', field: 'shopName', align: 'center', valign: 'middle', sortable: true, width: '80px'},
-        { title: '图标', field: 'shopImg', width: '60px', formatter: function(item, index){
-           return '<img style="height: 3rem;width: 3rem;" src="'+item.shopImg+'"/>';
-         }},
-         { title: '系统标志', field: 'sysFlag', width: '60px', formatter: function(item, index){
-             return item.status == '1' ? '<span class="label label-danger">是</span>' :
-                 '<span class="label label-success">否</span>';
-         }},
-         {title: '省份', field: 'province', align: 'center', valign: 'middle', sortable: true, width: '80px'},
-          {title: '城市', field: 'city', align: 'center', valign: 'middle', sortable: true, width: '60px'},
-         {title: '地区', field: 'county', align: 'center', valign: 'middle', sortable: true, width: '60px'},
-       /* {title: '上级店铺', field: 'parentName', align: 'center', valign: 'middle', false: true, width: '50px'},*/
-        { title: '状态', field: 'status', width: '60px', formatter: function(item, index){
-                return item.status =='1' ?
-                    '<span class="label label-danger">启用</span>' :
-                    '<span class="label label-success">停用</span>';
-         }},
-        { label: '审核状态', name: 'review', width: '60px', formatter: function(item, index){
-             return item.review == '0' ?
-                 '<span class="label label-danger">未审核</span>' :
-                 (item.review=='1'?'<span class="label label-success">审核通过</span>':
-                  (item.review=='2'?'<span class="label label-success">审核失败</span>':'<span class="label label-success">未审核</span>'));
-         }},
-      /*   { title: '创建时间', field: 'createTime', align: 'center',  valign: 'middle', false: true, width: '80px', formatter: function(item, index){
-        	if(item.createTime!=null){
-                return getDateTime(item.createTime,"yyyyMMddHHmmss");
-            }else{
-                return "";
-            }
-        }},
-         { title: '修改时间', field: 'modifyTime',align: 'center', width: '80px', valign: 'middle', false: true, formatter: function(item, index){
-             if(item.createTime!=null){
-                return getDateTime(item.createTime,"yyyyMMddHHmmss");
-            }else{
-                return "";
-            }
-        }},
-        {title: '排序号', field: 'sortNum', align: 'center', valign: 'middle', sortable: false, width: '50px'},*/
-        {title:'操作', field:'操作', width: '80px', sortable:false, title:"操作", align:'center', formatter: function(item, index){
-                        var actions = [];
-                            actions.push('<a class="btn btn-primary" onclick="vm.update('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
-                            if(item.status=='0'){
-                                 actions.push('<a class="btn btn-primary" onclick="vm.updateStatus('+item.id+',1)" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;开启</a>&nbsp;');
-                            }
-                             if(item.status=='1'){
-                                 actions.push('<a class="btn btn-primary" onclick="vm.updateStatus('+item.id+',0)" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;关闭</a>&nbsp;');
-                            }
-                            actions.push('<a class="btn btn-primary" onclick="vm.del('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
-                        return actions.join('');
-                    }}
-        ]
-    return columns;
-};
-vm.getData();
-
-//function getShopId () {
-//    var selected = $('#deptTable').bootstrapTreeTable('getSelections');
-//    if (selected.length == 0) {
-//        alert("请选择一条记录");
-//        return null;
-//    } else {
-//        return selected[0].id;
-//    }
-//}
-
-
-
-
 
 var latitudeBaiDu ;
 var longitudeBaiDu ;
