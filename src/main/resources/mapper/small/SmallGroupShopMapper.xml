@@ -142,7 +142,7 @@
     <select id="queryGroupAndSku" resultMap="GroupSkuMap">
         select t.shop_id,t.id,t.sku_id,t.spu_id,k.title,IFNULL(k.img,p.img) img,t.min_price as price,t.max_price original_price,k.stock-k.freeze_stock as remainStock from t_small_group_shop t,t_small_sku k,t_small_spu p
         <where>
-            t.sku_id = k.id and k.spu_id = p.id
+            t.sku_id = k.id and k.spu_id = p.id and t.status=1
             <if test="shopId != null">
                 and t.shop_id = #{shopId}
             </if>
