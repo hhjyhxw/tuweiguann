@@ -32,14 +32,17 @@ t.user_id = u.id and t.shop_id = p.id
 <if test="shopId != null">
     and t.shop_id = #{shopId}
 </if>
-<if test="createTime != null">
-    and t.create_time = #{createTime}
-</if>
 <if test="shopName != null and shopName!=''">
     and p.shop_name like CONCAT('%', '${shopName}', '%')
 </if>
 <if test="nickname != null and nickname!=''">
     and u.nickname like CONCAT('%', '${nickname}', '%')
+</if>
+<if test="startTime != null" >
+    <![CDATA[ and t.create_time  >=  #{startTime}  ]]>
+</if>
+<if test="endTime != null" >
+    <![CDATA[ and t.create_time  <=  #{endTime}  ]]>
 </if>
 <if test="sql_filter != null and sql_filter!=''">
     and ${sql_filter}

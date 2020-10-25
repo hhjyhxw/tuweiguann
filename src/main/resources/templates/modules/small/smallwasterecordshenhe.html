@@ -59,7 +59,26 @@
             <div class="col-lg-1">
                 <a class="btn btn-default" @click="query">查询</a>
             </div>
+
+            <#if shiro.hasPermission("small:smallwasterecord:shenhe")>
+            <a class="btn btn-primary" @click="shenheBatch"  style="float: right; padding: 3px 8px;margin-right:1rem"><i class="fa fa-plus"></i>&nbsp;批量提交</a>
+        </#if>
         </div>
+        <div class="grid-btn">
+            <div class="form-group col-sm-6">
+                <div class="col-sm-1 control-label" style="line-height: 3rem;color:#808080;width:15%;">查询时间段:</div>
+                <el-date-picker
+                        v-model="q.startTime"
+                        type="datetime"
+                        placeholder="选择开始日期" value-format="yyyy-MM-dd HH:mm:ss" >
+                </el-date-picker>
+                <el-date-picker
+                        v-model="q.endTime"
+                        type="datetime"
+                        placeholder="选择结束日期" value-format="yyyy-MM-dd HH:mm:ss" >
+                </el-date-picker>
+            </div>
+    </div>
        <!-- <div class="grid-btn">
             <div class="form-group col-sm-6">
                 <div class="col-sm-1 control-label" style="line-height: 3rem;color:#808080;width:15%;">查询时间段:</div>

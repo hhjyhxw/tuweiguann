@@ -48,8 +48,12 @@ id,title,parent_id,pic_url,level,status,create_time,modify_time
 <if test="status != null">
     and t.status = #{status}
 </if>
-<if test="create_time != null">
-    and t.create_time = #{create_time}
+
+<if test="startTime != null" >
+    <![CDATA[ and t.create_time  >=  #{startTime}  ]]>
+</if>
+<if test="endTime != null" >
+    <![CDATA[ and t.create_time  <=  #{endTime}  ]]>
 </if>
 <if test="sql_filter != null and sql_filter!=''">
     and ${sql_filter}
@@ -64,6 +68,12 @@ id,title,parent_id,pic_url,level,status,create_time,modify_time
         <where>
         <if test="id != null and id!=''">
              t.id = #{id}
+        </if>
+        <if test="startTime != null" >
+            <![CDATA[ and t.create_time  >=  #{startTime}  ]]>
+        </if>
+        <if test="endTime != null" >
+            <![CDATA[ and t.create_time  <=  #{endTime}  ]]>
         </if>
        <!-- <if test="sql_filter != null and sql_filter!=''">
              ${sql_filter}

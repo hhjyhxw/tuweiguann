@@ -143,6 +143,8 @@ var vm = new Vue({
             categoryTitle:'',
             status:null,
             surplus:null,//0通用类型 ，1新用户专用
+            startTime:null,
+            endTime:null,
         },
 
     },

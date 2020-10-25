@@ -257,6 +257,8 @@ var vm = new Vue({
             title:'',
             shopName:'',
             categoryTitle:'',
+            startTime:null,
+            endTime:null,
         }
 	},
 

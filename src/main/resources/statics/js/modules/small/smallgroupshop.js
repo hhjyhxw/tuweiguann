@@ -96,6 +96,8 @@ var vm = new Vue({
             shopName:'',
             sysShopName:'',
             categoryTitle:'',
+            startTime:null,
+            endTime:null,
         }
 	},
     created: function(){

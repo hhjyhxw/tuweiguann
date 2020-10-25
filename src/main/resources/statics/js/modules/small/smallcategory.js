@@ -100,7 +100,9 @@ var vm = new Vue({
             deptId:null,
         },
         q:{
-            title:''
+            title:'',
+            startTime:null,
+            endTime:null,
         }
 
 	},

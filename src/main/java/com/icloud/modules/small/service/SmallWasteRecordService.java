@@ -146,6 +146,26 @@ public class SmallWasteRecordService extends BaseServiceImpl<SmallWasteRecordMap
         }
     }
 
-
+    /**
+     * 所有选中的,状态未 approveFlag=0的记录 状态修改成1
+     * @param ids
+     * @param username
+     */
+    public void shenheBatch(Long[] ids, String username) {
+        if(ids!=null && ids.length>0){
+            List<SmallWasteRecord> recordlist = smallWasteRecordMapper.selectList(new QueryWrapper<SmallWasteRecord>().in("id",ids).eq("approve_flag","0"));
+            if(recordlist!=null && recordlist.size()>0){
+                SmallWasteRecord record = null;
+                for (int i=0;i<recordlist.size();i++){
+                    record = recordlist.get(i);
+                    record.setApproveBy(username);
+                    record.setApproveFlag("1");
+                    record.setApproveTime(new Date());
+                    record.setModifyTime(record.getApproveTime());
+                    smallWasteRecordMapper.updateById(record);
+                }
+            }
+        }
+    }
 }
 

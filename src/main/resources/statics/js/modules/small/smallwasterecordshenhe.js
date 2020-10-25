@@ -89,7 +89,9 @@ var vm = new Vue({
             userName:'',
             mobile:'',
             cardNo:'',
-            approveFlag:''
+            approveFlag:'',
+            startTime:null,
+            endTime:null,
         }
 	},
 
@@ -136,6 +138,38 @@ var vm = new Vue({
             });
             vm.getInfo(id)
 		},
+		//批量提交处理
+		shenheBatch:function (event) {
+                var ids = getSelectedRows();
+                if(ids == null){
+                    return ;
+                }
+                var lock = false;
+                layer.confirm('确定批量提交处理？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    if(!lock) {
+                        lock = true;
+                        $.ajax({
+                            type: "POST",
+                            url: baseURL + "small/smallwasterecord/shenheBatch",
+                            contentType: "application/json",
+                            data: JSON.stringify(ids),
+                            success: function(r){
+                                if(r.code == 0){
+                                    layer.msg("操作成功", {icon: 1});
+                                    $("#jqGrid").trigger("reloadGrid");
+                                }else{
+                                    layer.alert(r.msg);
+                                }
+                            }
+                        });
+                    }
+                }, function(){
+                });
+                vm.getInfo(id)
+        },
+		//成功处理
         updatepass : function (id) {
 			// var id = getSelectedRow();
 			if(id == null){
@@ -170,6 +204,7 @@ var vm = new Vue({
             });
             vm.getInfo(id)
 		},
+		//失败处理
         updateUnpass : function (id) {
             if(id == null){
                 return ;

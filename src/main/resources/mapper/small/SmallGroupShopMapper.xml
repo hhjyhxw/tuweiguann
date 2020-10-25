@@ -71,12 +71,6 @@
             <if test="status != null">
                 and t.status = #{status}
             </if>
-            <if test="createTime != null">
-                and t.create_time = #{createTime}
-            </if>
-            <if test="modifyTime != null">
-                and t.modify_time = #{modifyTime}
-            </if>
             <if test="shopId != null">
                 and t.shop_id = #{shopId}
             </if>
@@ -94,6 +88,12 @@
             </if>
             <if test="categoryTitle != null and categoryTitle!=''">
                 and c.title LIKE CONCAT('%', '${categoryTitle}', '%')
+            </if>
+            <if test="startTime != null" >
+                <![CDATA[ and t.create_time  >=  #{startTime}  ]]>
+            </if>
+            <if test="endTime != null" >
+                <![CDATA[ and t.create_time  <=  #{endTime}  ]]>
             </if>
             <if test="sql_filter != null and sql_filter!=''">
                 and ${sql_filter}

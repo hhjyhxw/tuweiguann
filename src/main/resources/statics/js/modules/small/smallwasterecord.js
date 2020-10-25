@@ -2,59 +2,37 @@ $(function () {
     $("#jqGrid").jqGrid({
         url: baseURL + 'small/smallwasterecord/list',
         datatype: "json",
-        colModel: [			
+        colModel: [
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
 			{ label: '店铺', name: 'shop.shopName', index: 'shop_id', width: 80 },
-            { label: '支付方式', name: 'payType', width: 60, formatter: function(value, options, row){
-                    return value === '1' ?
-                        '<span class="label label-danger">微信</span>' :
-                        (value==='2'?'<span class="label label-success">支付宝</span>':'银行卡');
-                }},
-           /* { label: '操作类型', name: 'wasteFlag', width: 60, formatter: function(value, options, row){
-                return value === '1' ?
-                    '<span class="label label-danger">充值</span>' :
-                    (value==='2'?'<span class="label label-success">提现</span>':'未知');
-            }},*/
-			// { label: '操作类型1充值 2提现', name: 'wasteFlag', index: 'waste_flag', width: 80 },
-
+			{ label: '提现银行', name: 'bank.bankName', index: 'bank_id', width: 80 },
+			{ label: '账号', name: 'bank.cardNo', index: 'cardNo', width: 115 },
+			{ label: '姓名', name: 'bank.userName', index: 'userName', width: 50 },
+			{ label: '手机号', name: 'bank.mobile', index: 'mobile', width: 50 },
             { label: '金额', name: 'amount', index: 'amount', width: 80 },
 			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
-                if(value!=null){
-                    return getDateTime(value,"yyyyMMddHHmmss");
-                }else{
+              if(value!=null){
+                return getDateTime(value,"yyyyMMddHHmmss");
+              }else{
                     return "";
                 }
             }},
-            { label: '提现状态', name: 'approveFlag', width: 60, formatter: function(value, options, row){
-                    return value === '0' ? '<span class="label label-danger">提现申请</span>' :
-                        (value==='1'?'<span class="label label-success">提现处理</span>':
-                        (value==='2'?'<span class="label label-success">提现成功</span>':
-                        (value==='3'?'<span class="label label-success">提现失败</span>':'未知操作')));
-                }},
-          /*  { label: '支付状态', name: 'wasteState', width: 60, formatter: function(value, options, row){
-                    return value === '0' ?
-                        '<span class="label label-danger">未支付</span>' :
-                        (value==='1'?'<span class="label label-success">已支付</span>':'关闭');
-                }},*/
-			{ label: '本地订单号', name: 'orderNo', index: 'order_no', width: 80 },
-			{ label: '第三方交易号', name: 'transactionId', index: 'transaction_id', width: 80 },
-			{ label: '审核描述', name: 'msg', index: 'msg', width: 80 }, 			
+			{ label: '申请人', name: 'createBy', index: 'create_by', width: 50 },
+             { label: '状态', name: 'approveFlag', width: 60, formatter: function(value, options, row){
+                return value === '0' ? '<span class="label label-danger">提现申请</span>' :
+                    (value==='1'?'<span class="label label-success">提现处理</span>':
+                    (value==='2'?'<span class="label label-success">提现成功</span>':
+                    (value==='3'?'<span class="label label-success">提现失败</span>':'未知操作')));
+            }},
 			{ label: '审核时间', name: 'approveTime', index: "approve_time", width: 85, formatter: function(value, options, row){
-                      if(value!=null){
-                        return getDateTime(value,"yyyyMMddHHmmss");
-                      }else{
-                            return "";
-                        }
+              if(value!=null){
+                return getDateTime(value,"yyyyMMddHHmmss");
+              }else{
+                    return "";
+                }
             }},
-			{ label: '更新时间', name: 'modifyTime', index: "modify_time", width: 85, formatter: function(value, options, row){
-                      if(value!=null){
-                        return getDateTime(value,"yyyyMMddHHmmss");
-                      }else{
-                            return "";
-                        }
-            }},
-			{ label: '审核人', name: 'approveBy', index: 'approve_by', width: 80 }, 			
-			{ label: '申请人', name: 'createBy', index: 'create_by', width: 80 },
+            { label: '审核人', name: 'approveBy', index: 'approve_by', width: 50 },
+
         ],
 		viewrecords: true,
         height: 385,
@@ -90,8 +68,16 @@ var vm = new Vue({
 		title: null,
 		smallWasteRecord: {},
 		q:{
-
-		}
+            shopName:'',
+            bankName:'',
+            subBranch:'',
+            userName:'',
+            mobile:'',
+            cardNo:'',
+            approveFlag:'',
+            startTime:null,
+            endTime:null,
+         }
 	},
 	methods: {
 		query: function () {
@@ -173,7 +159,8 @@ var vm = new Vue({
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
-                page:page
+                postData:vm.q,
+                page: 1
             }).trigger("reloadGrid");
 		}
 	}

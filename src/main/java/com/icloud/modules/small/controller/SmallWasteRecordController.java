@@ -52,8 +52,11 @@ public class SmallWasteRecordController extends AbstractController{
     @RequiresPermissions("small:smallwasterecord:list")
     @DataFilter
     public R list(@RequestParam Map<String, Object> params){
+//        Query query = new Query(params);
+//        PageUtils page = smallWasteRecordService.findByPage(query.getPageNum(),query.getPageSize(), query);
         Query query = new Query(params);
-        PageUtils page = smallWasteRecordService.findByPage(query.getPageNum(),query.getPageSize(), query);
+        query.put("wasteFlag","2");//提现类型
+        PageUtils page = smallWasteRecordService.queryShenhelistMixList(query.getPageNum(),query.getPageSize(), query);
 
         return R.ok().put("page", page);
     }
@@ -91,6 +94,19 @@ public class SmallWasteRecordController extends AbstractController{
         SmallWasteRecord smallWasteRecord = (SmallWasteRecord)smallWasteRecordService.getById(id);
 
         return R.ok().put("smallWasteRecord", smallWasteRecord);
+    }
+
+
+    /**
+     *
+     * 所有选中的,z状态未 approveFlag=0的记录 状态修改成1
+     */
+    @SysLog("批量处理")
+    @RequestMapping("/shenheBatch")
+    @RequiresPermissions("small:smallwasterecord:shenhe")
+    public R shenheBatch(@RequestBody Long[] ids){
+        smallWasteRecordService.shenheBatch(ids,getUser().getUsername());
+        return R.ok();
     }
 
     /**

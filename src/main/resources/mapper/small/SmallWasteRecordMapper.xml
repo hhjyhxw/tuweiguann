@@ -98,10 +98,17 @@ id,shop_id,pay_type,waste_flag,amount,create_time,approve_flag,waste_state,trans
             <if test="mobile != null and mobile!=''">
                 and b.mobile like CONCAT('%', '${mobile}', '%')
             </if>
+            <if test="startTime != null" >
+                <![CDATA[ and t.create_time  >=  #{startTime}  ]]>
+            </if>
+            <if test="endTime != null" >
+                <![CDATA[ and t.create_time  <=  #{endTime}  ]]>
+            </if>
             <if test="sql_filter != null and sql_filter!=''">
                 and ${sql_filter}
             </if>
         </where>
+     order by t.create_time desc,approve_time desc
     </select>
 
 <select id="queryMixList" resultMap="BaseResultMap">
@@ -157,5 +164,6 @@ t.shop_id=s.id
         and ${sql_filter}
     </if>
 </where>
+    order by t.create_time desc,approve_time desc
 </select>
 </mapper>

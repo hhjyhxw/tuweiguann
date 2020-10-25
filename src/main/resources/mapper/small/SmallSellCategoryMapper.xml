@@ -57,6 +57,12 @@ select * from t_small_sell_category t
 <if test="sort_num != null">
     and t.sort_num = #{sort_num}
 </if>
+<if test="startTime != null" >
+    <![CDATA[ and t.create_time  >=  #{startTime}  ]]>
+</if>
+<if test="endTime != null" >
+    <![CDATA[ and t.create_time  <=  #{endTime}  ]]>
+</if>
 <if test="sql_filter != null and sql_filter!=''">
     and ${sql_filter}
 </if>

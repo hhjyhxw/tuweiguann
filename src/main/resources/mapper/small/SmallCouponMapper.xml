@@ -72,20 +72,12 @@ select t.*,s.shop_name as "shop.shopName",c.title as "smallCategory.title"from t
 <if test="days != null">
     and t.days = #{days}
 </if>
-<if test="startTime != null">
-    and t.start_time = #{startTime}
-</if>
 <!-- 查询有效结束时间大于 当前时间的优惠券 -->
 <!--<if test="endTime != null">
     <![CDATA[ and t.end_time  >  #{endTime}  ]]>
 </if>-->
     <!--and t.end_time >now()-->
-<if test="createTime != null">
-    and t.create_time = #{createTime}
-</if>
-<if test="modifyTime != null">
-    and t.modify_time = #{modifyTime}
-</if>
+
 <if test="shopId != null">
     and t.shop_id = #{shopId}
 </if>
@@ -98,6 +90,12 @@ select t.*,s.shop_name as "shop.shopName",c.title as "smallCategory.title"from t
 <if test="categoryTitle != null and categoryTitle!=''">
     and c.title LIKE CONCAT('%', '${categoryTitle}', '%')
 </if>
+    <if test="startTime != null" >
+        <![CDATA[ and t.create_time  >=  #{startTime}  ]]>
+    </if>
+    <if test="endTime != null" >
+        <![CDATA[ and t.create_time  <=  #{endTime}  ]]>
+    </if>
     <if test="sql_filter != null and sql_filter!=''">
         and ${sql_filter}
     </if>
