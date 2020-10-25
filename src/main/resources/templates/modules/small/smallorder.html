@@ -4,7 +4,7 @@
     <title>订单表</title>
 		<#include "/header.html">
     <!-- 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
@@ -16,14 +16,14 @@
             width: 122% !important;
         }
         .ui-jqgrid {
-            margin-top: 4rem !important;
+            margin-top: 4.5rem !important;
         }
         .jqGrid{
             margin-top: 0rem !important;
         }
         .row {
             border-top: 1px solid #ddd;
-            margin: 0.3rem !important;
+            margin: 0.3rem 0.3rem 0.3rem -0.2rem !important;
             padding: 10px 2px 0px 2px !important;
         }
     </style>
@@ -61,16 +61,10 @@
         </div>
         <div class="grid-btn">
             <div class="form-group col-sm-6">
-                <div class="col-sm-1 control-label" style="line-height: 3rem;color:#808080;width:15%;text-align:right;">查询时间段:</div>
-                <el-date-picker
-                        v-model="q.startTime"
-                        type="datetime"
-                        placeholder="选择开始日期" value-format="yyyy-MM-dd HH:mm:ss" >
+               <!-- <div class="col-sm-1 control-label" style="line-height: 3rem;color:#808080;width:15%;text-align:right;">查询时间段:</div>-->
+                <el-date-picker v-model="q.startTime" type="datetime" placeholder="选择开始日期">
                 </el-date-picker>
-                <el-date-picker
-                        v-model="q.endTime"
-                        type="datetime"
-                        placeholder="选择结束日期" value-format="yyyy-MM-dd HH:mm:ss" >
+                <el-date-picker v-model="q.endTime" type="datetime"  placeholder="选择结束日期" value-format="yyyy-MM-dd HH:mm:ss" >
                 </el-date-picker>
             </div>
         </div>

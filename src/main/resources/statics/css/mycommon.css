@@ -24,3 +24,18 @@
         -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
         transition: border-color ease-in-out .15s,box-shado;
     }
+
+.bootstrap-select{
+            width: 122% !important;
+}
+.ui-jqgrid {
+    margin-top: 4.5rem !important;
+}
+.jqGrid{
+    margin-top: 0rem !important;
+}
+.row {
+    border-top: 1px solid #ddd;
+    margin: 0.3rem !important;
+    padding: 10px 2px 0px 2px !important;
+}
