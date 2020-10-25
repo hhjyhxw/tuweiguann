@@ -8,19 +8,26 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
     <style>
        .bootstrap-select{
             width: 122% !important;
         }
-
+        .ui-jqgrid {
+            margin-top: 4rem !important;
+        }
+        .jqGrid{
+            margin-top: 0rem !important;
+        }
         .row {
             border-top: 1px solid #ddd;
             margin: 0.3rem !important;
             padding: 10px 2px 0px 2px !important;
         }
-        </style>
+    </style>
 </head>
 <body>
 <div id="icloudapp" v-cloak>
@@ -63,7 +70,21 @@
             <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
             </#if>-->
     </div>
-
+    <div class="grid-btn">
+        <div class="form-group col-sm-6">
+            <div class="col-sm-1 control-label" style="line-height: 3rem;color:#808080;width:15%;text-align:right;">查询时间段:</div>
+            <el-date-picker
+                    v-model="q.startTime"
+                    type="datetime"
+                    placeholder="选择开始日期" value-format="yyyy-MM-dd HH:mm:ss" >
+            </el-date-picker>
+            <el-date-picker
+                    v-model="q.endTime"
+                    type="datetime"
+                    placeholder="选择结束日期" value-format="yyyy-MM-dd HH:mm:ss" >
+            </el-date-picker>
+        </div>
+    </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
     </div>

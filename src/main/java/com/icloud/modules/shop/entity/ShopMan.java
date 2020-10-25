@@ -46,7 +46,7 @@ public class ShopMan implements Serializable {
        @NotBlank(message = "密码不能为空")
        @TableField("pwd")
        private String pwd;
-   	   	   /* 角色 0:管理员 1店员*/
+   	   	   /* 角色 1:管理员 0店员*/
        @TableField("role")
        private Integer role;
    	   	   /* 状态 0：关闭，1：开启 */

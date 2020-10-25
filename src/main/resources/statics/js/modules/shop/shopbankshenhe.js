@@ -24,7 +24,7 @@ $(function () {
                 }},
             { label: '审核不通过原因', name: 'msg', index: 'msg', width: 80 },
             { label: '创建人', name: 'createdBy', index: 'created_by', width: 80 },
-			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+			{ label: '创建时间', name: 'createdTime', index: "created_time", width: 85, formatter: function(value, options, row){
                 if(value!=null){
                     return getDateTime(value,"yyyyMMddHHmmss");
                 }else{
@@ -87,13 +87,15 @@ var vm = new Vue({
 		shopBank: {},
         shopList:[],
         shopName:'',
-        q:{
+         q:{
             bankName:'',
             shopName:'',
             subBranch:'',
             cardNo:'',
             userName:'',
             mobile:'',
+            status:'',
+            approveFlag:''
         },
 
 	},

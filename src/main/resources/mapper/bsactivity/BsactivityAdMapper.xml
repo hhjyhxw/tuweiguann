@@ -49,9 +49,16 @@ id,ad_name,ad_imgurl,add_jumpurl,status,create_time,create_operator,modify_time,
             <if test="shopName != null and shopName!=''">
                 and s.shop_name LIKE CONCAT('%', '${shopName}', '%')
             </if>
+            <if test="startTime != null" >
+                <![CDATA[ and t.create_time  >=  #{startTime}  ]]>
+            </if>
+            <if test="endTime != null" >
+                <![CDATA[ and t.create_time  <=  #{endTime}  ]]>
+            </if>
             <if test="sql_filter != null and sql_filter!=''">
                 and ${sql_filter}
             </if>
              </where>
+            order by create_time desc,modify_time desc
         </select>
 </mapper>

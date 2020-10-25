@@ -98,6 +98,7 @@ var vm = new Vue({
             categoryTitle:'',
             startTime:null,
             endTime:null,
+            status:null,
         }
 	},
     created: function(){

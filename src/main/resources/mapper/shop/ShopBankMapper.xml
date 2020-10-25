@@ -40,7 +40,10 @@ t.shop_id = s.id
     and t.bank_name like CONCAT('%', '${bankName}', '%')
 </if>
 <if test="subBranch != null">
-    and t.sub_branch = #{subBranch}
+    and t.sub_branch like CONCAT('%', '${subBranch}', '%')
+</if>
+<if test="approveFlag != null">
+    and t.approve_flag = #{approveFlag}
 </if>
 <if test="cardNo != null">
     and t.card_no like CONCAT('%', '${cardNo}', '%')

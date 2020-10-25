@@ -10,7 +10,7 @@ $(function () {
 			{ label: '手机号', name: 'mobile', index: 'mobile', width: 80 }, 			
 			{ label: '登录密码', name: 'pwd', index: 'pwd', width: 80 }, 			
             { label: '角色', name: 'role', width: 60, formatter: function(value, options, row){
-                    return value === 0 ?
+                    return value === 1 ?
                         '<span class="label label-danger">管理员</span>' :
                         '<span class="label label-success">店员</span>';
                 }},
@@ -20,7 +20,7 @@ $(function () {
                         '<span class="label label-success">启用</span>';
                 }},
             { label: '创建人', name: 'createdBy', index: 'created_by', width: 80 },
-			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+			{ label: '创建时间', name: 'createdTime', index: "created_time", width: 85, formatter: function(value, options, row){
                 if(value!=null){
                     return getDateTime(value,"yyyyMMddHHmmss");
                 }else{
@@ -81,6 +81,9 @@ var vm = new Vue({
             name:'',
             shopName:'',
             accountNo:'',
+            mobile:'',
+            status:'',
+            role:null
         },
 
 	},

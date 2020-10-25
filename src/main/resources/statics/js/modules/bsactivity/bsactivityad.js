@@ -127,7 +127,9 @@ var vm = new Vue({
             adName:'',
             shopName:'',
             status:null,
-            posittionId:null
+            posittionId:null,
+            startTime:null,
+            endTime:null,
         }
 	},
     created: function(){
