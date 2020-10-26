@@ -144,8 +144,8 @@ var vm = new Vue({
 			vm.title = "新增";
 			vm.bsactivityAd = {};
 			vm.goodsimgshow = '';
-            vm.deptName = '',
-            vm.shopName = ''
+            vm.shopName = '',
+            vm.getShopList('');
 		},
 		update: function (id) {
 //			var id = getSelectedRow();
@@ -229,10 +229,15 @@ var vm = new Vue({
 		},
         //加载AttibutList
         getShopList:function(id){
-            $.get(baseURL + "shop/shop/selectlist", function(r){
+            $.get(baseURL + "shop/shop/selfshoplist", function(r){
                 vm.shopList = r.list;
                 if(id!=null && id!=''){
                     vm.setShopName(vm.bsactivityAd.shopId);
+                }else{
+                    if(r.list!=null && r.list.length>0){
+                        vm.bsactivityAd.shopId = r.list[0].id;
+                        vm.shopName = r.list[0].shopName;
+                    }
                 }
             });
         },
@@ -258,4 +263,4 @@ var vm = new Vue({
         },
 	}
 });
-vm.getShopList();
+vm.getShopList('');

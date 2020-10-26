@@ -68,6 +68,9 @@
             <div class="col-lg-1">
                 <a class="btn btn-default" @click="query">查询</a>
             </div>
+            <#if shiro.hasPermission("shop:shopbank:save")>
+            <a class="btn btn-primary" @click="add"  style="float: right; padding: 3px 8px;margin-right:7rem"><i class="fa fa-plus"></i>&nbsp;新增</a>
+        </#if>
         </div>
         <div class="grid-btn">
             <div class="form-group col-sm-6">

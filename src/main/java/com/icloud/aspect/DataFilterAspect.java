@@ -94,18 +94,18 @@ public class DataFilterAspect {
         shopIdList.add(user.getShopId());
 
         //用户拥有角色
-        List<Long> roleIdList = sysUserRoleService.queryRoleIdList(user.getUserId());
-        if(roleIdList.size() > 0){
-            //用户角色对应的店铺ID列表
-            List<Long> userShopIdList = sysRoleShopService.queryShopIdList(roleIdList.toArray(new Long[roleIdList.size()]));
-            shopIdList.addAll(userShopIdList);
-        }
+//        List<Long> roleIdList = sysUserRoleService.queryRoleIdList(user.getUserId());
+//        if(roleIdList.size() > 0){
+//            //用户角色对应的店铺ID列表
+//            List<Long> userShopIdList = sysRoleShopService.queryShopIdList(roleIdList.toArray(new Long[roleIdList.size()]));
+//            shopIdList.addAll(userShopIdList);
+//        }
 
         //用户子店铺ID列表
-        if(dataFilter.subDept()){
+    /*    if(dataFilter.subDept()){
             List<Long> subShopIdList = shopService.getSubShopIdList(user.getShopId());
             shopIdList.addAll(subShopIdList);
-        }
+        }*/
 
         StringBuilder sqlFilter = new StringBuilder();
         sqlFilter.append(" (");
@@ -115,12 +115,12 @@ public class DataFilterAspect {
         }
 
         //没有本部门数据权限，也能查询本人所在数据
-        if(dataFilter.user()){
-            if(shopIdList.size() > 0){
-                sqlFilter.append(" or ");
-            }
-            sqlFilter.append(tableAlias).append(dataFilter.userId()).append("=").append(user.getUserId());
-        }
+//        if(dataFilter.user()){
+//            if(shopIdList.size() > 0){
+//                sqlFilter.append(" or ");
+//            }
+//            sqlFilter.append(tableAlias).append(dataFilter.userId()).append("=").append(user.getUserId());
+//        }
 
         sqlFilter.append(")");
 

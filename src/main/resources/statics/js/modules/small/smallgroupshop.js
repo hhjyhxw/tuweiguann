@@ -201,7 +201,7 @@ var vm = new Vue({
 		},
         //加载AttibutList
         getShopList:function(id){
-            $.get(baseURL + "shop/shop/selectlist", function(r){
+            $.get(baseURL + "shop/shop/selfshoplist", function(r){
                 vm.shopList = r.list;
 
                 if(id!=null && id!=''){

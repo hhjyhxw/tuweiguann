@@ -3,8 +3,6 @@ package com.icloud.config;
 import com.alibaba.fastjson.JSON;
 import com.icloud.modules.shop.service.ShopService;
 import com.icloud.modules.sys.entity.SysUserEntity;
-import com.icloud.modules.sys.service.SysDeptService;
-import com.icloud.modules.sys.service.SysRoleDeptService;
 import com.icloud.modules.sys.service.SysRoleShopService;
 import com.icloud.modules.sys.service.SysUserRoleService;
 import com.icloud.modules.sys.shiro.ShiroUtils;
@@ -20,7 +18,7 @@ import java.util.Set;
 
 @Slf4j
 @Component
-public class ShopFilterUtils {
+public class ShopFilterUtils_bak {
 
     @Autowired
     private ShopService shopService;
@@ -30,12 +28,20 @@ public class ShopFilterUtils {
     private SysRoleShopService sysRoleShopService;
 
     /**
-     * 用户所在店铺 的子店铺 过滤 sql
+     * 获取部门（企业）数据过滤的SQL(店铺本身数据过滤需要)
      */
     public String getSQLFilterForshopsell(){
         SysUserEntity user = ShiroUtils.getUserEntity();
         //部门ID列表
         Set<Long> shopIdList = new HashSet<>();
+
+        //用户拥有角色
+        List<Long> roleIdList = sysUserRoleService.queryRoleIdList(user.getUserId());
+        if(roleIdList.size() > 0){
+            //用户角色对应的店铺ID列表
+            List<Long> userShopIdList = sysRoleShopService.queryShopIdList(roleIdList.toArray(new Long[roleIdList.size()]));
+            shopIdList.addAll(userShopIdList);
+        }
 
         //用户子店铺ID列表
         List<Long> subShopIdList = shopService.getSubShopIdList(user.getShopId());
@@ -64,6 +70,14 @@ public class ShopFilterUtils {
         //部门ID列表
         Set<Long> shopIdList = new HashSet<>();
 
+        //用户拥有角色
+        List<Long> roleIdList = sysUserRoleService.queryRoleIdList(user.getUserId());
+        if(roleIdList.size() > 0){
+            //用户角色对应的店铺ID列表
+            List<Long> userShopIdList = sysRoleShopService.queryShopIdList(roleIdList.toArray(new Long[roleIdList.size()]));
+            shopIdList.addAll(userShopIdList);
+        }
+
         //用户子店铺ID列表
         List<Long> subShopIdList = shopService.getSubShopIdList(user.getShopId());
         shopIdList.addAll(subShopIdList);
@@ -84,7 +98,7 @@ public class ShopFilterUtils {
     }
 
     /**
-     * 获取登录用户所在店铺 和子店铺id
+     * 获取用户包含角色所在店铺id集合(包含子店铺)
      */
     public List<Long> getShopIdAndSubList(){
         SysUserEntity user = ShiroUtils.getUserEntity();
@@ -92,6 +106,17 @@ public class ShopFilterUtils {
         //部门ID列表,方便去重
         Set<Long> shopIdList = new HashSet<>();
         shopIdList.add(user.getShopId());
+        //用户拥有角色
+//        List<Long> roleIdList = sysUserRoleService.queryRoleIdList(user.getUserId());
+//        if(roleIdList.size() > 0){
+//            //用户角色对应的部门ID列表
+//            List<Long> userShopIdList = sysRoleShopService.queryShopIdList(roleIdList.toArray(new Long[roleIdList.size()]));
+//            if(userShopIdList!=null && userShopIdList.size()>0){
+//                userShopIdList.forEach(p->{
+//                    shopIdList.add(p);
+//                });
+//            }
+//        }
 
         //用户子店铺ID列表
         List<Long> subShopIdList = shopService.getSubShopIdList(user.getShopId());

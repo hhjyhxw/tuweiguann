@@ -184,7 +184,7 @@ var vm = new Vue({
         getShopList:function(id){
 		    console.log("id======"+id)
             $.ajaxSettings.async = false;
-            $.get(baseURL + "shop/shop/selectlist", function(r){
+            $.get(baseURL + "shop/shop/selfshoplist", function(r){
                 vm.shopList = r.list;
                 if(id!=null && id!=''){
                     vm.setShopName(vm.shopMan.shopId);

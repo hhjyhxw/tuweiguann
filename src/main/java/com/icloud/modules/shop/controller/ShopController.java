@@ -75,27 +75,8 @@ public class ShopController extends AbstractController {
      */
     @RequestMapping("/list")
     @RequiresPermissions("shop:shop:list")
-//    @DataFilter
     public List<Shop> list(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
-//        if(getUserId()!= Constant.SUPER_ADMIN) {
-//            query.put(Constant.SQL_FILTER, shopFilterUtils.getSQLFilterForshopsell());
-//        }
-//        PageUtils page = shopService.findByPage(query.getPageNum(),query.getPageSize(), query);
-//        List<Shop> list = page.getList();
-//        if(list!=null && list.size()>0){
-//            list.forEach(p->{
-//                if(p.getParentId()!=null){
-//                    Object parent = shopService.getById(p.getId());
-//                    if(parent!=null){
-//                        p.setParentName((((Shop)parent).getShopName()));
-//                    }
-//                }
-//            });
-//        }
-//        page.setList(list);
-//        return R.ok().put("page", page);
-
         List<Shop> list =shopService.queryShopTree(query);
         return list;
     }
@@ -106,7 +87,6 @@ public class ShopController extends AbstractController {
      */
     @RequestMapping("/queryList")
     @RequiresPermissions("shop:shop:list")
-//    @DataFilter
     public R queryList(@RequestParam Map<String, Object> params){
 //        if(getUserId() == Constant.SUPER_ADMIN) {
 //            params.put(Constant.SQL_FILTER, shopFilterUtils.getSQLFilterForshopsell());
@@ -184,15 +164,13 @@ public class ShopController extends AbstractController {
      * 店铺树
      */
     @RequestMapping("/select")
-    @RequiresPermissions("small:smallcategory:update")
-//    @DataFilter//超级管理员需要在页面传入企业id,非超级管理员根据当前登陆用户所在企业过滤获取对应企业数据
     public R select(@RequestParam Map<String, Object> params){
         List<Shop> list = null;
-        if(Constant.SUPER_ADMIN==getUserId()){//超级管理员选择的
+//        if(Constant.SUPER_ADMIN==getUserId()){//超级管理员选择的
             list = shopService.list(new QueryWrapper<Shop>());//当前登陆用户的
-        }else{
-            list = shopService.list(new QueryWrapper<Shop>().in("id", shopFilterUtils.getShopIdAndSubList()));//当前登陆用户的
-        }
+//        }else{
+//            list = shopService.list(new QueryWrapper<Shop>().in("id", shopFilterUtils.getShopIdAndSubList()));//当前登陆用户的
+//        }
         List<ShopTreeVo> shopTreeVolist = new ArrayList<ShopTreeVo>();
         if(list!=null && list.size()>0){
             ShopTreeVo shopvo = null;
@@ -220,17 +198,28 @@ public class ShopController extends AbstractController {
         }
         return R.ok().put("list", shopTreeVolist);
     }
+
+    /**
+     * 用户关联的店铺
+     */
+    @RequestMapping("/selfshoplist")
+    public R selfshoplist(@RequestParam Map<String, Object> params){
+        List<Shop> list =  shopService.list(new QueryWrapper<Shop>().eq("id",getUser().getShopId()));//当前登陆用户的
+        return R.ok().put("list", list);
+    }
+
     /**
      * 列表
+     * 拥有
      */
     @RequestMapping("/selectlist")
     public R selectlist(@RequestParam Map<String, Object> params){
         List<Shop> list = null;
-        if(Constant.SUPER_ADMIN==getUserId()){//超级管理员选择的
+//        if(Constant.SUPER_ADMIN==getUserId()){//超级管理员选择的
             list = shopService.list(new QueryWrapper<Shop>());//当前登陆用户的
-        }else{
-            list = shopService.list(new QueryWrapper<Shop>().in("id", shopFilterUtils.getShopIdAndSubList()));//当前登陆用户的
-        }
+//        }else{
+//            list = shopService.list(new QueryWrapper<Shop>().in("id", shopFilterUtils.getShopIdAndSubList()));//当前登陆用户的
+//        }
         return R.ok().put("list", list);
     }
 

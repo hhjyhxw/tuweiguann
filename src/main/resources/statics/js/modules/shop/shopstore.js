@@ -240,7 +240,7 @@ var vm = new Vue({
 		},
         //加载getShopList
         getShopList:function(id){
-            $.get(baseURL + "shop/shop/selectlist", function(r){
+            $.get(baseURL + "shop/shop/selfshoplist", function(r){
                 vm.shopList = r.list;
                 if(id!=null && id!=''){
                     vm.setShopName(vm.shopStore.shopId);

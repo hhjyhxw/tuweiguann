@@ -182,11 +182,11 @@ var vm = new Vue({
 
                 //勾选角色所拥有的部门数据权限
                 // var deptIds = vm.role.deptIdList;
-//                var shopIds = vm.role.shopIdList;
-//                for(var i=0; i<shopIds.length; i++) {
-//                    var node = data_ztree.getNodeByParam("id", shopIds[i]);
-//                    data_ztree.checkNode(node, true, false);
-//                }
+                var shopIds = vm.role.shopIdList;
+                for(var i=0; i<shopIds.length; i++) {
+                    var node = data_ztree.getNodeByParam("id", shopIds[i]);
+                    data_ztree.checkNode(node, true, false);
+                }
 
                 vm.shoplist();
             });
@@ -201,12 +201,12 @@ var vm = new Vue({
             vm.role.menuIdList = menuIdList;
 
             //获取选择的数据
-//            var nodes = data_ztree.getCheckedNodes(true);
+            var nodes = data_ztree.getCheckedNodes(true);
             // var deptIdList = new Array();
             var shopIdList = new Array();
-//            for(var i=0; i<nodes.length; i++) {
-//                shopIdList.push(nodes[i].id);
-//            }
+            for(var i=0; i<nodes.length; i++) {
+                shopIdList.push(nodes[i].id);
+            }
             vm.role.shopIdList = shopIdList;
 
             var url = vm.role.roleId == null ? "sys/role/save" : "sys/role/update";

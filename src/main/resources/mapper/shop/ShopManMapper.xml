@@ -29,6 +29,7 @@
     <select id="queryMixList" resultMap="BaseResultMap">
         select t.*,s.shop_name as "shop.shopName" from shop_man t,shop s
         <where>
+            t.shop_id = s.id
             <if test="id != null">
                 and t.id = #{id}
             </if>

@@ -230,9 +230,9 @@ var vm = new Vue({
         //加载getShopList
         getShopList:function(id){
             $.ajaxSettings.async = false;
-            $.get(baseURL + "shop/shop/selectlist", function(r){
+            $.get(baseURL + "shop/shop/selfshoplist", function(r){
                 vm.shopList = r.list;
-                console.log("r======"+JSON.stringify(r.list))
+                console.log("getShopList_r======"+JSON.stringify(r.list))
                 if(id!=null && id!=''){
                     console.log("id======"+JSON.stringify(id))
                     vm.setShopName(vm.shopBank.shopId);
