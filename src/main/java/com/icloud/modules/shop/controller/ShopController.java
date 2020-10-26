@@ -7,8 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.DataFilter;
 import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
-import com.icloud.common.Constant;
-import com.icloud.common.SnowflakeUtils;
+import com.icloud.common.*;
 import com.icloud.common.util.StringUtil;
 import com.icloud.config.DeptUtils;
 import com.icloud.config.ServerConfig;
@@ -24,6 +23,9 @@ import com.icloud.modules.small.entity.*;
 import com.icloud.modules.small.service.*;
 import com.icloud.modules.small.vo.ShopTreeVo;
 import com.icloud.modules.sys.controller.AbstractController;
+import com.icloud.modules.sys.entity.SysUserEntity;
+import com.icloud.modules.sys.service.SysUserRoleService;
+import com.icloud.modules.sys.service.SysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,8 +35,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.icloud.modules.shop.entity.Shop;
 import com.icloud.modules.shop.service.ShopService;
-import com.icloud.common.PageUtils;
-import com.icloud.common.R;
 import com.icloud.common.validator.ValidatorUtils;
 
 
@@ -69,7 +69,8 @@ public class ShopController extends AbstractController {
     private BsactivityAdService bsactivityAdService;
     @Autowired
     private SmallCouponService smallCouponService;
-
+    @Autowired
+    private SysUserService sysUserService;
     /**
      * 列表
      */
@@ -274,7 +275,17 @@ public class ShopController extends AbstractController {
             shop.setCommissionRate(new BigDecimal(0));
         }
         shopService.save(shop);
-
+        SysUserEntity user = new SysUserEntity();
+        user.setShopId(shop.getId());
+        List<Long> roleIdList =  new ArrayList<>();
+        roleIdList.add(2L);
+        user.setRoleIdList(roleIdList );
+        user.setUsername(new ChineseCharToEn().getAllFirstLetter(shop.getShopName()));
+        user.setPassword("123456");
+        user.setEmail("123456@qq.com");
+        user.setMobile("01234567891");
+        user.setStatus(1);
+        sysUserService. saveUser(user);
         return R.ok();
     }
 
