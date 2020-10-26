@@ -110,9 +110,9 @@ public class ShopController extends AbstractController {
      */
     @RequestMapping("/withdrawlist")
     @RequiresPermissions("shop:shop:withdrawlist")
-    @DataFilter
     public R withdrawlist(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
+        query.put("id",getUser().getShopId());
         PageUtils page = shopService.findByPage(query.getPageNum(),query.getPageSize(), query);
         return R.ok().put("page", page);
     }
@@ -166,11 +166,7 @@ public class ShopController extends AbstractController {
     @RequestMapping("/select")
     public R select(@RequestParam Map<String, Object> params){
         List<Shop> list = null;
-//        if(Constant.SUPER_ADMIN==getUserId()){//超级管理员选择的
             list = shopService.list(new QueryWrapper<Shop>());//当前登陆用户的
-//        }else{
-//            list = shopService.list(new QueryWrapper<Shop>().in("id", shopFilterUtils.getShopIdAndSubList()));//当前登陆用户的
-//        }
         List<ShopTreeVo> shopTreeVolist = new ArrayList<ShopTreeVo>();
         if(list!=null && list.size()>0){
             ShopTreeVo shopvo = null;
