@@ -185,14 +185,14 @@ public class ShopController extends AbstractController {
                 shopTreeVolist.add(shopvo);
             }
         }
-        if(getUserId() == Constant.SUPER_ADMIN) {
+//        if(getUserId() == Constant.SUPER_ADMIN) {
             ShopTreeVo root = new ShopTreeVo();
             root.setOpen(true);
             root.setId(0L);
             root.setName("一级店铺");
             root.setParentId(-1L);
             shopTreeVolist.add(root);
-        }
+//        }
         return R.ok().put("list", shopTreeVolist);
     }
 
