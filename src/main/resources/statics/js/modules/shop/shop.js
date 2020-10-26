@@ -228,6 +228,12 @@ var vm = new Vue({
             review:0,
             shopName:'',
             commissionRate:0,
+            user:{
+                username:'',
+                password:'',
+                email:'',
+                mobile:'',
+            }
         },
         nickname:'',
         user: {
@@ -254,6 +260,26 @@ var vm = new Vue({
         this.getUser();
     },
 	methods: {
+	    inputUserFunction: function(){
+	        if(vm.shop.user!=null && vm.shop.user.userId!=null){
+                return;
+	        }
+	        $.ajax({
+                type: "POST",
+                url: baseURL + "shop/shop/getUsernameByShopname",
+                contentType: "application/json",
+                 data: JSON.stringify(vm.shop),
+                success: function(r){
+                    if(r.code == 0){
+                        layer.msg("操作成功", {icon: 1});
+                        //$("#jqGrid").trigger("reloadGrid");
+                       vm.shop.user.username= r.username;
+                    }else{
+                       // layer.alert(r.msg);
+                    }
+                }
+             });
+	    },
 		query: function () {
 			vm.reload();
 		},
@@ -273,6 +299,12 @@ var vm = new Vue({
                 county:'',
                 address:'',
                 commissionRate:0,
+                user:{
+                    username:'',
+                    password:'',
+                    email:'',
+                    mobile:'',
+                }
             };
             vm.getShopTree();
 		},

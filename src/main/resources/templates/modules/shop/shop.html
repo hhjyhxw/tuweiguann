@@ -49,7 +49,7 @@
         color: rgb(0, 0, 0);
         text-align: left;
         top: 39rem;
-        right: 60.5rem;
+        right: 40.5rem;
         height: 3rem;
 
     }
@@ -67,7 +67,46 @@
         color: rgb(0, 0, 0);
         text-align: left;
         top: 42rem;
-        right:26rem;
+        right:1rem;
+    }
+    .userinfo{
+         width: 650px;
+        height: 491px;
+        overflow: hidden;
+        margin-top: 25px;
+        margin-left: auto;
+        margin-right: auto;
+        position: absolute;
+        z-index: 0;
+        color: rgb(0, 0, 0);
+        text-align: left;
+        right:1rem;
+    }
+    .form-group-user{
+
+    }
+    .inputtest{
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-color: #fff;
+        border: none;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        /* background-image: none; */
+        /* border: 1px solid #ccc; */
+        /* border-radius: 4px; */
+        /* -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
+        /* box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
+        /* -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s; */
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        /* transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s; */
     }
 </style>
 </head>
@@ -172,6 +211,37 @@
 
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
+        <div class="userinfo">
+
+            <div class="form-group-user">
+                <div style="margin-top: 0.7rem;padding-left: 11rem;padding-bottom: 1rem;font-weight: bold;">管理员信息</div>
+            </div>
+            <div class="form-group-user">
+                <div class="col-sm-2 control-label" style="text-align:right;margin-top: 0.7rem;">账号</div>
+                <div class="col-sm-10">
+                    <input v-if="shop.user==null || shop.user.userId==null" type="text" class="inputtest" v-model="shop.user.username" placeholder="账号"/>
+                    <input v-if="shop.user!=null && shop.user.userId!=null" type="text" class="inputtest" v-model="shop.user.username" placeholder="账号" readonly />
+                </div>
+            </div>
+            <div class="form-group-user">
+                <div class="col-sm-2 control-label" style="text-align:right;margin-top: 0.7rem;">密码</div>
+                <div class="col-sm-10">
+                    <input type="password" class="inputtest" v-model="shop.user.password" placeholder="请输入密码" />
+                </div>
+            </div>
+            <div class="form-group-user">
+                <div class="col-sm-2 control-label" style="text-align:right;margin-top: 0.7rem;">邮箱</div>
+                <div class="col-sm-10">
+                    <input type="text" class="inputtest"  v-model="shop.user.email" placeholder="请输入邮箱" />
+                </div>
+            </div>
+            <div class="form-group-user">
+                <div class="col-sm-2 control-label" style="text-align:right;;margin-top: 0.7rem;">手机</div>
+                <div class="col-sm-10">
+                    <input type="text" class="inputtest" v-model="shop.user.mobile" placeholder="请输入手机" />
+                </div>
+            </div>
+        </div>
         <form class="form-horizontal">
                     <div class="form-group">
                         <div class="col-sm-2 control-label">上级店铺</div>
@@ -182,7 +252,7 @@
 					<div class="form-group">
                         <div class="col-sm-2 control-label">名称</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="shop.shopName" placeholder="名称"/>
+                            <input type="text" class="form-control" v-model="shop.shopName" placeholder="名称" @input="inputUserFunction"/>
                         </div>
                     </div>
                     <div v-show="user.userId===1" class="form-group">
@@ -303,7 +373,6 @@
                               </ul>-->
                         </div>
                     </div>
-
 
             <div class="sright">
                 <div class="searchs"  style="display: flex;justify-content: space-around;">

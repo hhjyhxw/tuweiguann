@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.icloud.modules.sys.entity.SysUserEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -117,5 +118,8 @@ public class Shop implements Serializable {
          */
         @TableField(exist=false)
         private boolean active;
+
+        @TableField(exist=false)
+        private SysUserEntity user;
    	
 }

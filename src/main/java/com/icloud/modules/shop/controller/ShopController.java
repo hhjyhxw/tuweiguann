@@ -249,10 +249,26 @@ public class ShopController extends AbstractController {
     @RequiresPermissions("shop:shop:info")
     public R info(@PathVariable("id") Long id){
         Shop shop = (Shop)shopService.getById(id);
-
+        List<SysUserEntity> usrlist = sysUserService.list(new QueryWrapper<SysUserEntity>().eq("shop_id",id));
+        SysUserEntity user = new SysUserEntity();
+        if(usrlist!=null && usrlist.size()>0){
+            user = usrlist.get(0);
+        }
+        shop.setUser(user);
         return R.ok().put("shop", shop);
     }
 
+
+    /**
+     * 根据店铺名称获取 管理员登录账号
+     */
+    @RequestMapping("/getUsernameByShopname")
+    public R getUsernameByShopname(@RequestBody Shop shop){
+       if(shop!=null && shop.getShopName()!=null){
+           return R.ok().put("username",new ChineseCharToEn().getAllFirstLetter(shop.getShopName()));
+       }
+        return R.error();
+    }
     /**
      * 保存
      */
@@ -260,6 +276,7 @@ public class ShopController extends AbstractController {
     @RequestMapping("/save")
     @RequiresPermissions("shop:shop:save")
     public R save(@RequestBody Shop shop){
+        SysUserEntity user = shop.getUser();
         ValidatorUtils.validateEntity(shop);
         shop.setCreatedTime(new Date());
         shop.setCreatedBy(getUser().getUsername());
@@ -275,17 +292,36 @@ public class ShopController extends AbstractController {
             shop.setCommissionRate(new BigDecimal(0));
         }
         shopService.save(shop);
-        SysUserEntity user = new SysUserEntity();
-        user.setShopId(shop.getId());
-        List<Long> roleIdList =  new ArrayList<>();
-        roleIdList.add(2L);
-        user.setRoleIdList(roleIdList );
-        user.setUsername(new ChineseCharToEn().getAllFirstLetter(shop.getShopName()));
-        user.setPassword("123456");
-        user.setEmail("123456@qq.com");
-        user.setMobile("01234567891");
-        user.setStatus(1);
-        sysUserService. saveUser(user);
+
+        //保存系统用户
+        if(user==null){
+            user = new SysUserEntity();
+            user.setShopId(shop.getId());
+            List<Long> roleIdList =  new ArrayList<>();
+            roleIdList.add(2L);
+            user.setRoleIdList(roleIdList );
+            user.setUsername(new ChineseCharToEn().getAllFirstLetter(shop.getShopName()));
+            user.setPassword("123456");
+            user.setEmail("123456@qq.com");
+            user.setMobile("01234567891");
+            user.setStatus(1);
+            sysUserService. saveUser(user);
+        }else {
+            user.setShopId(shop.getId());
+            List<Long> roleIdList =  new ArrayList<>();
+            roleIdList.add(2L);
+            user.setRoleIdList(roleIdList );
+
+            user.setUsername(StringUtil.checkStr(user.getUsername())?user.getUsername():new ChineseCharToEn().getAllFirstLetter(shop.getShopName()));
+            user.setPassword(StringUtil.checkStr(user.getPassword())?user.getPassword():"123456");
+            user.setEmail(StringUtil.checkStr(user.getEmail())?user.getEmail():"123456@qq.com");
+            user.setMobile(StringUtil.checkStr(user.getMobile())?user.getMobile():"01234567891");
+            user.setStatus(1);
+            sysUserService. saveUser(user);
+        }
+
+
+
         return R.ok();
     }
 
@@ -296,11 +332,51 @@ public class ShopController extends AbstractController {
     @RequestMapping("/update")
     @RequiresPermissions("shop:shop:update")
     public R update(@RequestBody Shop shop){
+        SysUserEntity user = shop.getUser();
         ValidatorUtils.validateEntity(shop);
         shop.setUpdatedTime(new Date());
         shop.setUpdatedBy(getUser().getUsername());
         shopService.updateById(shop);
-        
+        //保存系统用户
+        if(user==null){
+            user = new SysUserEntity();
+            user.setShopId(shop.getId());
+            List<Long> roleIdList =  new ArrayList<>();
+            roleIdList.add(2L);
+            user.setRoleIdList(roleIdList );
+            user.setUsername(new ChineseCharToEn().getAllFirstLetter(shop.getShopName()));
+            user.setPassword("123456");
+            user.setEmail("123456@qq.com");
+            user.setMobile("01234567891");
+            user.setStatus(1);
+            sysUserService. saveUser(user);
+        }else {
+            if(user.getUserId()==null){
+                user.setShopId(shop.getId());
+                List<Long> roleIdList =  new ArrayList<>();
+                roleIdList.add(2L);
+                user.setRoleIdList(roleIdList );
+
+                user.setUsername(StringUtil.checkStr(user.getUsername())?user.getUsername():new ChineseCharToEn().getAllFirstLetter(shop.getShopName()));
+                user.setPassword(StringUtil.checkStr(user.getPassword())?user.getPassword():"123456");
+                user.setEmail(StringUtil.checkStr(user.getEmail())?user.getEmail():"123456@qq.com");
+                user.setMobile(StringUtil.checkStr(user.getMobile())?user.getMobile():"01234567891");
+                user.setStatus(1);
+                sysUserService. saveUser(user);
+            }else{
+                user.setShopId(shop.getId());
+                List<Long> roleIdList =  new ArrayList<>();
+                roleIdList.add(2L);
+                user.setRoleIdList(roleIdList );
+//                user.setUsername(StringUtil.checkStr(user.getUsername())?user.getUsername():new ChineseCharToEn().getAllFirstLetter(shop.getShopName()));
+                user.setPassword(StringUtil.checkStr(user.getPassword())?user.getPassword():null);
+                user.setEmail(StringUtil.checkStr(user.getEmail())?user.getEmail():null);
+                user.setMobile(StringUtil.checkStr(user.getMobile())?user.getMobile():null);
+                user.setStatus(1);
+                sysUserService.update(user);
+            }
+
+        }
         return R.ok();
     }
 
