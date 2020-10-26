@@ -3,16 +3,57 @@
 <head>
 <title>系统日志</title>
 <#include "/header.html">
+	<!-- 引入样式 -->
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+	<!-- 引入组件库 -->
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+	<style>
+     .bootstrap-select{
+            width: 122% !important;
+        }
+        .ui-jqgrid {
+            margin-top: 4.5rem !important;
+        }
+        .jqGrid{
+            margin-top: 0rem !important;
+        }
+        .row {
+            border-top: 1px solid #ddd;
+            margin: 0.3rem !important;
+            padding: 10px 2px 0px 2px !important;
+        }
+        </style>
 </head>
 <body>
 <div id="rrapp" v-cloak>
 	<div>
-		<div class="grid-btn">
-			<div class="form-group col-sm-2">
-				<input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="用户名、用户操作">
+		<div class="row">
+			<div class="col-lg-1">
+				<input type="text" class="form-control" v-model="q.username" @keyup.enter="query" placeholder="用户账号">
 			</div>
-			<a class="btn btn-default" @click="query">查询</a>
+			<div class="col-lg-1">
+				<a class="btn btn-default" @click="query">查询</a>
+			</div>
+	</div>
+	<div class="grid-btn">
+		<div class="form-group col-sm-6">
+			<el-date-picker
+					v-model="q.startTime"
+					type="datetime"
+					placeholder="选择开始日期" value-format="yyyy-MM-dd HH:mm:ss" >
+			</el-date-picker>
+			<el-date-picker
+					v-model="q.endTime"
+					type="datetime"
+					placeholder="选择结束日期" value-format="yyyy-MM-dd HH:mm:ss" >
+			</el-date-picker>
 		</div>
+	</div>
+
 	    <table id="jqGrid"></table>
 	    <div id="jqGridPager"></div>
     </div>

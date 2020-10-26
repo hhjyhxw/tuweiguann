@@ -43,7 +43,10 @@ var vm = new Vue({
 	el:'#rrapp',
 	data:{
 		q:{
-			key: null
+			key: null,
+			username:'',
+			startTime:null,
+            endTime:null,
 		},
 	},
 	methods: {
@@ -53,8 +56,8 @@ var vm = new Vue({
 		reload: function (event) {
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
-				postData:{'key': vm.q.key},
-                page:page
+				 postData:vm.q,
+                 page: 1
             }).trigger("reloadGrid");
 		}
 	}

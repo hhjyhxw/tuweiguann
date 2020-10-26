@@ -86,7 +86,7 @@ public class ShopController extends AbstractController {
      * 角色数据权限列表
      */
     @RequestMapping("/queryList")
-    @RequiresPermissions("shop:shop:list")
+//    @RequiresPermissions("shop:shop:list")
     public R queryList(@RequestParam Map<String, Object> params){
 //        if(getUserId() == Constant.SUPER_ADMIN) {
 //            params.put(Constant.SQL_FILTER, shopFilterUtils.getSQLFilterForshopsell());

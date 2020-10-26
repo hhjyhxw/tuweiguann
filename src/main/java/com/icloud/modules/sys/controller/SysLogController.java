@@ -1,5 +1,6 @@
 package com.icloud.modules.sys.controller;
 
+import com.icloud.basecommon.model.Query;
 import com.icloud.common.PageUtils;
 import com.icloud.common.R;
 import com.icloud.modules.sys.service.SysLogService;
@@ -30,8 +31,10 @@ public class SysLogController {
 	@RequestMapping("/list")
 	@RequiresPermissions("sys:log:list")
 	public R list(@RequestParam Map<String, Object> params){
-		PageUtils page = sysLogService.queryPage(params);
-
+//		PageUtils page = sysLogService.queryPage(params);
+//		return R.ok().put("page", page);
+		Query query = new Query(params);
+		PageUtils page = sysLogService.findByPage(query.getPageNum(),query.getPageSize(), query);
 		return R.ok().put("page", page);
 	}
 	

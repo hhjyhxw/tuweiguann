@@ -64,6 +64,7 @@ public class SysLoginController {
 		}catch (LockedAccountException e) {
 			return R.error("账号已被锁定,请联系管理员");
 		}catch (AuthenticationException e) {
+			e.printStackTrace();
 			return R.error("账户验证失败");
 		}
 	    

@@ -127,7 +127,7 @@ var vm = new Vue({
             vm.role = {shopName:null, shopId:null};
             vm.getMenuTree(null);
             //加载店铺
-            vm.shoplist();
+//            vm.shoplist();
 
             //vm.getDataTree();
         },
@@ -188,7 +188,7 @@ var vm = new Vue({
 //                    data_ztree.checkNode(node, true, false);
 //                }
 
-                vm.shoplist();
+//                vm.shoplist();
             });
         },
         saveOrUpdate: function () {

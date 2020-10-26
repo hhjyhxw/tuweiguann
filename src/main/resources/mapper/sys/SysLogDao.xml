@@ -3,4 +3,20 @@
 
 <mapper namespace="com.icloud.modules.sys.dao.SysLogDao">
 
+
+    <select id="queryMixList"  resultType="com.icloud.modules.sys.entity.SysLogEntity">
+        select * from sys_log t
+        <where>
+            <if test="username != null">
+                and t.username  like CONCAT('%', '${username}', '%')
+            </if>
+            <if test="startTime != null" >
+                <![CDATA[ and t.create_date  >=  #{startTime}  ]]>
+            </if>
+            <if test="endTime != null" >
+                <![CDATA[ and t.create_date  <=  #{endTime}  ]]>
+            </if>
+        </where>
+        order by t.create_date desc
+    </select>
 </mapper>

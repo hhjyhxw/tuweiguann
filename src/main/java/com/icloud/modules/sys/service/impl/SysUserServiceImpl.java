@@ -47,13 +47,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	}
 
 	@Override
-	@DataFilter(subDept = true, user = false)
+//	@DataFilter(subDept = true, user = false)
 	public PageUtils queryPage(Map<String, Object> params) {
 		String username = (String)params.get("username");
 
 		IPage<SysUserEntity> page = this.page(
 			new Query<SysUserEntity>().getPage(params),
-			new QueryWrapper<SysUserEntity>()
+			new QueryWrapper<SysUserEntity>().ne("user_id",1)//超级管理员不读取
 				.like(StringUtils.isNotBlank(username),"username", username)
 				.apply(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
 		);

@@ -7,11 +7,11 @@ $(function () {
 			{ label: '订单总数', name: 'orderCount', index: 'orderCount', width: 80 },
 			{ label: '金额', name: 'orderAmout', index: 'orderAmout', width: 80 },
             { label: '店铺名称', name: 'shopName', index: 'shopName', width: 80 },
-            {header:'操作', name:'操作', width:50, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+           /* {header:'操作', name:'操作', width:50, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                     var actions = [];
                     actions.push('<a title="查询明细" onclick="vm.update('+row.id+')"><i class="fa fa-pencil">查询明细</i></a>&nbsp;');
                     return actions.join('');
-                }}
+                }}*/
         ],
 		viewrecords: true,
         height: 385,
