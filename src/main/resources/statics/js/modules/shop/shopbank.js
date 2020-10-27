@@ -41,7 +41,7 @@ $(function () {
                             return "";
                         }
             }},*/
-            {header:'操作', name:'操作', width:115, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+            {header:'操作', name:'操作', width:122, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                 var actions = [];
                  if(shop_shopbank_update===1){
                     actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');

@@ -23,6 +23,7 @@
 		var shop_shop_update = '';
 		var shop_shop_info = '';
 		var shop_shop_delete = '';
+		var shop_shop_subtoShenhe = '';
 		<#if shiro.hasPermission("shop:shop:update")>
 			shop_shop_update = 1;
 		</#if>
@@ -32,6 +33,10 @@
 		<#if shiro.hasPermission("shop:shop:delete")>
 			shop_shop_delete = 1;
 		</#if>
+		<#if shiro.hasPermission("shop:shop:subtoShenhe")>
+			shop_shop_subtoShenhe = 1;
+		</#if>
+
 	</script>
     <style>
      .bootstrap-select{
@@ -226,10 +231,18 @@
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
         <div class="userinfo">
-
+            <div class="form-group-user">
+                <div class="col-sm-2 control-label" style="text-align:right;margin-top: 0.7rem;">店铺图标</div>
+                <img  :src="shop.shopImg" style="width:300px;height:150px;"  placeholder="店铺图标"/>
+                <div class="col-sm-10">
+                    <a class="btn btn-primary" id="upload" style="margin-left:15rem;"><i class="fa fa-plus"></i>&nbsp;图片url</a>
+                </div>
+            </div>
+            <!--
             <div class="form-group-user">
                 <div style="margin-top: 0.7rem;padding-left: 11rem;padding-bottom: 1rem;font-weight: bold;">管理员信息</div>
             </div>
+
             <div class="form-group-user">
                 <div class="col-sm-2 control-label" style="text-align:right;margin-top: 0.7rem;">账号</div>
                 <div class="col-sm-10">
@@ -243,7 +256,7 @@
                     <input type="password" class="inputtest" v-model="shop.user.password" placeholder="请输入密码" />
                 </div>
             </div>
-            <div class="form-group-user">
+          <div class="form-group-user">
                 <div class="col-sm-2 control-label" style="text-align:right;margin-top: 0.7rem;">邮箱</div>
                 <div class="col-sm-10">
                     <input type="text" class="inputtest"  v-model="shop.user.email" placeholder="请输入邮箱" />
@@ -254,7 +267,7 @@
                 <div class="col-sm-10">
                     <input type="text" class="inputtest" v-model="shop.user.mobile" placeholder="请输入手机" />
                 </div>
-            </div>
+            </div>-->
         </div>
         <form class="form-horizontal">
                     <div class="form-group">
@@ -269,19 +282,24 @@
                             <input type="text" class="form-control" v-model="shop.shopName" placeholder="名称" @input="inputUserFunction"/>
                         </div>
                     </div>
-                    <div v-show="user.userId===1" class="form-group">
-                        <div class="col-sm-2 control-label">系统店铺标志</div>
-                        <label class="radio-inline">
-                            <input type="radio" name="sysFlag" value="1" v-model="shop.sysFlag"/> 是
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="sysFlag" value="0" v-model="shop.sysFlag" checked="checked"/> 否
-                        </label>
-                    </div>
-					 <div class="form-group">
-                        <div class="col-sm-2 control-label">级别</div>
+
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">管理员账号</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="shop.shopLevel" placeholder="级别" readonly/>
+                            <input v-if="shop.user==null || shop.user.userId==null" type="text" class="form-control" v-model="shop.user.username" placeholder="账号"/>
+                            <input v-if="shop.user!=null && shop.user.userId!=null" type="text" class="form-control" v-model="shop.user.username" placeholder="账号" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">密码</div>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" v-model="shop.user.password" placeholder="请输入密码" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">邮箱</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="shop.user.email" placeholder="邮箱"/>
                         </div>
                     </div>
 					<div class="form-group">
@@ -290,12 +308,15 @@
                             <input type="text" class="form-control" v-model="shop.shopTel" placeholder="电话"/>
                         </div>
                     </div>
+
                     <div class="form-group">
-                        <div class="col-sm-2 control-label">店铺图标</div>
-                        <img  :src="shop.shopImg" style="width:300px;height:150px;"  placeholder="店铺图标"/>
-                        <div class="col-sm-10">
-                            <a class="btn btn-primary" id="upload" style="margin-left:11rem;"><i class="fa fa-plus"></i>&nbsp;图片url</a>
-                        </div>
+                        <div class="col-sm-2 control-label">系统店铺标志</div>
+                        <label class="radio-inline">
+                            <input type="radio" name="sysFlag" value="1" v-model="shop.sysFlag"/> 是
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="sysFlag" value="0" v-model="shop.sysFlag" checked="checked"/> 否
+                        </label>
                     </div>
 					<div class="form-group">
                         <div class="col-sm-2 control-label">简介</div>

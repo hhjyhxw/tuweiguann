@@ -115,7 +115,7 @@ public class ShopController extends AbstractController {
      */
     @SysLog("提交审核")
     @RequestMapping("/subtoShenhe")
-    @RequiresPermissions("shop:shop:shenhe")
+    @RequiresPermissions("shop:shop:subtoShenhe")
     public R subtoShenhe(@RequestBody Shop shop){
         shop.setUpdatedTime(new Date());
         shop.setUpdatedBy(getUser().getUsername());

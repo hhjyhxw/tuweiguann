@@ -616,13 +616,16 @@ Dept.initColumn = function () {
                                  if(item.status=='1'){
                                      actions.push('<a class="btn btn-primary" onclick="vm.updateStatus('+item.id+',0)" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;关闭</a>&nbsp;');
                                 }
-                                if(item.review=='0' || item.review=='3' || item.review==null){//待审核 和审核失败的可以重新提交审核
-                                     actions.push('<a class="btn btn-primary" onclick="vm.subtoShenhe('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;提交审核</a>&nbsp;');
-                                 }
                           }
                           if(shop_shop_delete===1){
                                 actions.push('<a class="btn btn-primary" onclick="vm.del('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
                            }
+                          if(shop_shop_subtoShenhe===1){
+                              if(item.review=='0' || item.review=='3' || item.review==null){//待审核 和审核失败的可以重新提交审核
+                                   actions.push('<a class="btn btn-primary" onclick="vm.subtoShenhe('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;提交审核</a>&nbsp;');
+                               }
+                           }
+
                         return actions.join('');
                     }}
         ]

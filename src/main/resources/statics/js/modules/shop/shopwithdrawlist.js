@@ -1,6 +1,7 @@
 
 
 
+console.log("shop_shop_withdraw====="+shop_shop_withdraw);
 $(function () {
     $("#jqGrid").jqGrid({
         url: baseURL + 'shop/shop/withdrawlist',
@@ -11,7 +12,7 @@ $(function () {
 			{ label: '店铺余额', name: 'balance', index: 'balance', width: 80 },
             {header:'操作', name:'操作', width:50, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                     var actions = [];
-                    if(shop_shop_withdraw===1 && shop_shop_withdrawinfo===1){
+                    if(shop_shop_withdraw===1){
                         if(row.balance>0){
                              actions.push('<a title="提现" onclick="vm.update('+row.id+')"><i class="fa fa-pencil">提现</i></a>&nbsp;');
                         }

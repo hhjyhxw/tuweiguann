@@ -189,18 +189,18 @@ var vm = new Vue({
                 layer.msg("优惠金额不能为空,且为正整数", {icon: 2});
                 return;
             }
-            if(vm.smallCoupon.surplus==0 && (vm.smallCoupon.startTime==null ||  vm.smallCoupon.startTime=='')){
+            if(vm.smallCoupon.startTime==null ||  vm.smallCoupon.startTime==''){
                 layer.msg("有效开始时间不能为空", {icon: 2});
                 return;
             }
-            if(vm.smallCoupon.surplus==0 && (vm.smallCoupon.endTime==null ||  vm.smallCoupon.endTime=='')){
+            if(vm.smallCoupon.endTime==null ||  vm.smallCoupon.endTime==''){
                 layer.msg("有效结束时间不能为空", {icon: 2});
                 return;
             }
-            if(vm.smallCoupon.surplus==1 && (vm.smallCoupon.days==null ||  vm.smallCoupon.days=='' || vm.smallCoupon.days<=0)){
+           /* if(vm.smallCoupon.surplus==1 && (vm.smallCoupon.days==null ||  vm.smallCoupon.days=='' || vm.smallCoupon.days<=0)){
                 layer.msg("有效天天数不能空，且大于0", {icon: 2});
                 return;
-            }
+            }*/
             vm.smallCoupon.description=editor1.html();
 		    $('#btnSaveOrUpdate').button('loading').delay(1000).queue(function() {
                 var url = vm.smallCoupon.id == null ? "small/smallcoupon/save" : "small/smallcoupon/update";
