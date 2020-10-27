@@ -18,7 +18,21 @@ public interface SmallOrderMapper extends BaseMapper<SmallOrder> {
 
 	List<SmallOrder> queryMixList(Map<String,Object> map);
 
+    /**
+     * 订单日报
+     * @param query
+     * @return
+     */
     List<OrderReportVo> queryReportList(Query query);
 
+    /**
+     * 订单月报
+     * @param query
+     * @return
+     */
     List<OrderReportVo> queryReportMonthList(Query query);
+
+    /*订单月报明细*/
+    List<SmallOrder> queryReportMonthDetailList(Map<String,Object> map);
+
 }

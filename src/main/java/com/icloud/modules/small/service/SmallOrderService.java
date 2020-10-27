@@ -476,7 +476,7 @@ public class SmallOrderService extends BaseServiceImpl<SmallOrderMapper,SmallOrd
     }
 
     /**
-     * 订单日报、订单月报
+     * 订单日报
      * @param pageNo
      * @param pageSize
      * @param query
@@ -491,7 +491,7 @@ public class SmallOrderService extends BaseServiceImpl<SmallOrderMapper,SmallOrd
     }
 
     /**
-     * 订单日报、订单月报
+     * 订单月报
      * @param pageNo
      * @param pageSize
      * @param query
@@ -502,6 +502,15 @@ public class SmallOrderService extends BaseServiceImpl<SmallOrderMapper,SmallOrd
         List<OrderReportVo> list = smallOrderMapper.queryReportMonthList(query);
         PageInfo<OrderReportVo> pageInfo = new PageInfo<OrderReportVo>(list);
         PageUtils<OrderReportVo> page = new PageUtils<OrderReportVo>(list,(int)pageInfo.getTotal(),pageSize,pageNo);
+        return page;
+    }
+
+    /**/
+    public PageUtils queryReportMonthDetailList(int pageNo, int pageSize, Query query){
+        PageHelper.startPage(pageNo, pageSize);
+        List<SmallOrder> list = smallOrderMapper.queryReportMonthDetailList(query);
+        PageInfo<SmallOrder> pageInfo = new PageInfo<SmallOrder>(list);
+        PageUtils<SmallOrder> page = new PageUtils<SmallOrder>(list,(int)pageInfo.getTotal(),pageSize,pageNo);
         return page;
     }
 

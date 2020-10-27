@@ -46,6 +46,7 @@ public class OrderReportController {
 
     /**
      * 列表
+     * 订单日报
      */
     @RequestMapping("/list")
     @RequiresPermissions("small:orderreport:list")
@@ -67,10 +68,11 @@ public class OrderReportController {
 
     /**
      * 列表
+     * 订单月报
      */
     @RequestMapping("/monthlist")
     @RequiresPermissions("small:orderreport:monthlist")
-    @DataFilter
+//    @DataFilter
     public R monthlist(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
         String year = StringUtil.checkObj(params.get("year"))?params.get("year").toString():null;
@@ -96,6 +98,26 @@ public class OrderReportController {
 
         return R.ok().put("page", page);
     }
+
+
+    /**
+     * 列表
+     * 订单月报明细
+     */
+    @RequestMapping("/monthDetailList")
+    @RequiresPermissions("small:orderreport:monthlist")
+//    @DataFilter
+    public R monthDetailList(@RequestParam Map<String, Object> params){
+        Query query = new Query(params);
+        String querydate = StringUtil.checkObj(params.get("querydate"))?params.get("querydate").toString():null;
+       if(!StringUtil.checkObj(params.get("querydate"))){
+           return R.ok().put("page", null);
+       }
+        PageUtils page = smallOrderService.queryReportMonthDetailList(query.getPageNum(),query.getPageSize(), query);
+        return R.ok().put("page", page);
+    }
+
+
 
 
 }

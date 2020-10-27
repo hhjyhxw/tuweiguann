@@ -5,13 +5,15 @@ $(function () {
         colModel: [
             { label: '日期', name: 'createTime', index: 'createTime', width: 80 },
 			{ label: '订单总数', name: 'orderCount', index: 'orderCount', width: 80 },
-			{ label: '金额', name: 'orderAmout', index: 'orderAmout', width: 80 },
+			{ label: '订单总金额', name: 'orderAmout', index: 'orderAmout', width: 80 },
+			{ label: '优惠金额', name: 'couponPrice', index: 'couponPrice', width: 80 },
+			{ label: '实付金额', name: 'payPrice', index: 'payPrice', width: 80 },
             { label: '店铺名称', name: 'shopName', index: 'shopName', width: 80 },
-           /* {header:'操作', name:'操作', width:50, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+            {header:'操作', name:'操作', width:50, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                     var actions = [];
-                    actions.push('<a title="查询明细" onclick="vm.update('+row.id+')"><i class="fa fa-pencil">查询明细</i></a>&nbsp;');
+                    actions.push('<a title="查询明细" onclick="vm.querydetail('+row.querydate+','+row.shopId+')"><i class="fa fa-pencil">查询明细</i></a>&nbsp;');
                     return actions.join('');
-                }}*/
+                }}
         ],
 		viewrecords: true,
         height: 385,
@@ -141,7 +143,29 @@ var vm = new Vue({
                 postData:vm.q,
                 page: 1
             }).trigger("reloadGrid");
-		}
+		},
+		//查看明细
+        querydetail: function (querydate,shopId) {
+            console.log("shopId==="+shopId);
+            console.log("querydate==="+querydate);
+            this.querydetailWinIndex = layer.open({
+                title: querydate+'订单明细',
+                type: 2,
+                maxmin: true,
+                move:true,
+                shadeClose: true,
+                area: ['98%', '98%'],
+                btn: ['<i class="fa fa-close"></i> 关闭'],
+                content: baseURL + "modules/small/smallorderMothreportDetailWin.html?shopId="+shopId+"&querydate="+querydate,
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    layer.close(index);
+                },
+                success: function (layero, index) {
+
+                }
+            });
+        },
 	}
 });
 vm.getyearlist();

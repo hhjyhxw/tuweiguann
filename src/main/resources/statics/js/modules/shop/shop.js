@@ -271,11 +271,9 @@ var vm = new Vue({
                  data: JSON.stringify(vm.shop),
                 success: function(r){
                     if(r.code == 0){
-                        layer.msg("操作成功", {icon: 1});
-                        //$("#jqGrid").trigger("reloadGrid");
                        vm.shop.user.username= r.username;
                     }else{
-                       // layer.alert(r.msg);
+
                     }
                 }
              });

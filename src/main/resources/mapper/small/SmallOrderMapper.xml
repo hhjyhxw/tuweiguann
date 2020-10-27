@@ -194,7 +194,7 @@ t.shop_id = s.id and t.user_id = u.id
 
     <!--订单月报-->
     <select id="queryReportMonthList" resultType="com.icloud.modules.small.vo.OrderReportVo">
-        select DATE_FORMAT(t.create_time, '%Y-%m') AS createTime,count(*) orderCount,sum(t.actual_price) orderAmout,s.shop_name shopName  from t_small_order t,shop s
+        select DATE_FORMAT(t.create_time, '%Y-%m') AS createTime,DATE_FORMAT(t.create_time, '%Y-%m-%d') AS querydate,count(*) orderCount,sum(t.sku_total_price) orderAmout,sum(t.coupon_price) couponPrice,sum(t.actual_price) actualPrice,s.shop_name shopName,t.shop_id shopId  from t_small_order t,shop s
         <where>
             t.shop_id = s.id and t.pay_status=2
             <if test="shopId != null">
@@ -213,7 +213,85 @@ t.shop_id = s.id and t.user_id = u.id
                 and ${sql_filter}
             </if>
         </where>
-        group by createTime,t.shop_id,s.shop_name
+        group by createTime,t.shop_id,s.shop_name,t.shop_id,querydate
         order by orderCount desc,orderAmout desc
+    </select>
+    <!--订单月报明细-->
+    <select id="queryReportMonthDetailList" resultMap="BaseResultMap">
+        select t.*,s.shop_name as "shop.shopName",u.nickname as "user.nickname" from t_small_order t,shop s,t_wx_user u
+        <where>
+            t.shop_id = s.id and t.user_id = u.id
+            <if test="id != null">
+                and t.id = #{id}
+            </if>
+            <if test="channel != null">
+                and t.channel = #{channel}
+            </if>
+            <if test="orderNo != null and orderNo!=''">
+                and t.order_no like CONCAT('%', '${orderNo}', '%')
+            </if>
+            <if test="userId != null">
+                and t.user_id = #{userId}
+            </if>
+            <if test="shopId != null">
+                and t.shop_id = #{shopId}
+            </if>
+            <if test="orderStatus != null">
+                and t.order_status = #{orderStatus}
+            </if>
+            and t.pay_status = 2
+            <if test="refundStatus != null">
+                and t.refund_status = #{refundStatus}
+            </if>
+            <if test="shipStatus != null">
+                and t.ship_status = #{shipStatus}
+            </if>
+            <if test="shipCode != null">
+                and t.ship_code = #{shipCode}
+            </if>
+            <if test="shipNo != null">
+                and t.ship_no = #{shipNo}
+            </if>
+            <if test="paySn != null">
+                and t.pay_sn = #{paySn}
+            </if>
+            <if test="province != null">
+                and t.province = #{province}
+            </if>
+            <if test="city != null">
+                and t.city = #{city}
+            </if>
+            <if test="county != null">
+                and t.county = #{county}
+            </if>
+            <if test="address != null">
+                and t.address = #{address}
+            </if>
+            <if test="memo != null">
+                and t.memo = #{memo}
+            </if>
+            <if test="refundReason != null">
+                and t.refund_reason = #{refundReason}
+            </if>
+            <if test="consignee != null">
+                and t.consignee = #{consignee}
+            </if>
+            <if test="phone != null">
+                and t.phone like CONCAT('%', '${phone}', '%')
+            </if>
+            <if test="querydate != null and querydate !=''" >
+                and DATE_FORMAT(t.create_time,'%Y-%m-%d') = #{querydate}
+            </if>
+            <if test="nickname != null and nickname!=''">
+                and u.nickname like CONCAT('%', '${nickname}', '%')
+            </if>
+            <if test="shopName != null and shopName!=''">
+                and s.shop_name like CONCAT('%', '${shopName}', '%')
+            </if>
+            <if test="sql_filter != null and sql_filter!=''">
+                and ${sql_filter}
+            </if>
+        </where>
+        order by t.create_time desc
     </select>
 </mapper>
