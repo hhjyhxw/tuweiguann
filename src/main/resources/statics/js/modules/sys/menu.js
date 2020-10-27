@@ -177,8 +177,12 @@ Menu.initColumn = function () {
         {title:'操作', field:'操作', width:90, sortable:false, title:"操作", align:'center', formatter: function(item, index){
                         var actions = [];
                           /*  actions.push('<a class="btn btn-primary" onclick="vm.add()" style="padding: 3px 8px;"><i class="fa fa-plus"></i>&nbsp;新增</a>&nbsp;');*/
+                         if(sys_menu_update===1){
                             actions.push('<a class="btn btn-primary" onclick="vm.update('+item.menuId+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
-                            actions.push('<a class="btn btn-primary" onclick="vm.del('+item.menuId+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                         }
+                         if(sys_menu_delete===1){
+                             actions.push('<a class="btn btn-primary" onclick="vm.del('+item.menuId+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                         }
                         return actions.join('');
                   }}
         ]

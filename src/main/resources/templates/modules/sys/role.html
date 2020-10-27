@@ -3,6 +3,20 @@
 <head>
 <title>角色管理</title>
 <#include "/header.html">
+	<script>
+		var sys_role_update = '';
+		var sys_role_info = '';
+		var sys_role_delete = '';
+		<#if shiro.hasPermission("sys:role:update")>
+			sys_role_update = 1;
+		</#if>
+		<#if shiro.hasPermission("sys:role:delete")>
+			sys_role_info = 1;
+		</#if>
+		<#if shiro.hasPermission("sys:role:info")>
+			sys_role_delete = 1;
+		</#if>
+	</script>
 </head>
 <body>
 <div id="rrapp" v-cloak>

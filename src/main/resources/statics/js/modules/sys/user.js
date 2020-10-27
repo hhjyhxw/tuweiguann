@@ -1,3 +1,5 @@
+console.log("sys_user_update==="+sys_user_update);
+console.log("sys_user_info==="+sys_user_info);
 $(function () {
 
     $("#jqGrid").jqGrid({
@@ -21,9 +23,13 @@ $(function () {
 
 			{header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                                 var actions = [];
-//                                    actions.push('<a class="btn btn-primary" onclick="vm.add()" style="padding: 3px 8px;"><i class="fa fa-plus"></i>&nbsp;新增</a>&nbsp;');
-                                    actions.push('<a class="btn btn-primary" onclick="vm.update('+row.userId+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                                if(sys_user_update===1){
+                                     actions.push('<a class="btn btn-primary" onclick="vm.update('+row.userId+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                                }
+                                if(sys_user_delete===1){
                                     actions.push('<a class="btn btn-primary" onclick="vm.del('+row.userId+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                                }
+//                               actions.push('<a class="btn btn-primary" onclick="vm.add()" style="padding: 3px 8px;"><i class="fa fa-plus"></i>&nbsp;新增</a>&nbsp;');
                                 return actions.join('');
                             }}
         ],

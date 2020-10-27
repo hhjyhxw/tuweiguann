@@ -3,6 +3,20 @@
 <head>
 <title>管理员列表</title>
 <#include "/header.html">
+	<script>
+		var sys_user_update = '';
+		var sys_user_info = '';
+		var sys_user_delete = '';
+		<#if shiro.hasPermission("sys:user:update")>
+			sys_user_update = 1;
+		</#if>
+		<#if shiro.hasPermission("sys:user:info")>
+			sys_user_info = 1;
+		</#if>
+		<#if shiro.hasPermission("sys:user:delete")>
+			sys_user_delete = 1;
+		</#if>
+	</script>
 </head>
 <body>
 <div id="zhmapp" v-cloak>
@@ -13,7 +27,7 @@
 			</div>
 			<a class="btn btn-default" @click="query">查询</a>
 			<#if shiro.hasPermission("sys:user:save")>
-			<a class="btn btn-primary" @click="add"  style="float: right; padding: 3px 8px;margin-right:7rem"><i class="fa fa-plus"></i>&nbsp;新增</a>
+				<a class="btn btn-primary" @click="add"  style="float: right; padding: 3px 8px;margin-right:7rem"><i class="fa fa-plus"></i>&nbsp;新增</a>
 			</#if>
 			<#if shiro.hasPermission("sys:user:update")>
 			<!--<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>-->

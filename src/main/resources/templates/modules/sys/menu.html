@@ -10,6 +10,20 @@
 <script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.bootstrap3.js"></script>
 <script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.extension.js"></script>
 <script src="${request.contextPath}/statics/plugins/treegrid/tree.table.js"></script>
+	<script>
+		var sys_menu_update = '';
+		var sys_menu_info = '';
+		var sys_menu_delete = '';
+		<#if shiro.hasPermission("sys:menu:update")>
+			sys_menu_update = 1;
+		</#if>
+		<#if shiro.hasPermission("sys:menu:delete")>
+			sys_menu_info = 1;
+		</#if>
+		<#if shiro.hasPermission("sys:menu:info")>
+			sys_menu_delete = 1;
+		</#if>
+	</script>
 </head>
 <body>
 <div id="rrapp" v-cloak>
