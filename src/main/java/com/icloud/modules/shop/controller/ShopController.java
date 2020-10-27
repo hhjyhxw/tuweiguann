@@ -76,9 +76,9 @@ public class ShopController extends AbstractController {
      */
     @RequestMapping("/list")
     @RequiresPermissions("shop:shop:list")
-    @DataFilter
     public List<Shop> list(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
+        query.put("id",getUser().getShopId());
         List<Shop> list =shopService.queryShopTree(query);
         return list;
     }
