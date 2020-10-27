@@ -167,7 +167,6 @@ $(function () {
                     console.log("rs=="+JSON.stringify(rs))
                     var addComp = rs.addressComponents;
                     var addressBaiDu =  addComp.city+ addComp.district+ addComp.street+ addComp.streetNumber;
-                    <!--var addressBaiDu = addComp.province + addComp.city+ addComp.district+ addComp.street+ addComp.streetNumber;-->
                     vm.shop.province = addComp.province;
                     vm.shop.city = addComp.city;
                     vm.shop.county = addComp.district;
@@ -227,7 +226,9 @@ var vm = new Vue({
             sysFlag:0,
             review:0,
             shopName:'',
+            shopImg:'',
             commissionRate:0,
+
             user:{
                 username:'',
                 password:'',
@@ -297,6 +298,7 @@ var vm = new Vue({
                 county:'',
                 address:'',
                 commissionRate:0,
+                shopImg:'',
                 user:{
                     username:'',
                     password:'',
@@ -351,6 +353,41 @@ var vm = new Vue({
             }, function(){
             });
 		},
+		 subtoShenhe : function (id) {
+            console.log("id==="+id);
+            if(id == null){
+                return ;
+            }
+                 //vm.getInfo(id);
+                 var shop = {
+                    review:1,
+                    id:id
+                 };
+               // vm.shop.review=1;//待审核
+                var lock = false;
+                layer.confirm('确定提交审核？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    if(!lock) {
+                        lock = true;
+                        $.ajax({
+                            type: "POST",
+                            url: baseURL + "shop/shop/subtoShenhe",
+                            contentType: "application/json",
+                            data: JSON.stringify(shop),
+                            success: function(r){
+                                if(r.code == 0){
+                                    layer.msg("操作成功", {icon: 1});
+                                    vm.reload();
+                                }else{
+                                    layer.alert(r.msg);
+                                }
+                            }
+                        });
+                    }
+                }, function(){
+                });
+        },
 		saveOrUpdate: function (event) {
             if(!priceCheck(vm.shop.commissionRate)){
                 layer.msg("佣金率不能为空,且为数字,最多保留两位小数", {icon: 2});
@@ -428,6 +465,7 @@ var vm = new Vue({
 //            }).trigger("reloadGrid");
             vm.getData();
 		},
+
         //加载店铺树
         getShopTree: function(){
             //加载分类树
@@ -561,13 +599,14 @@ Dept.initColumn = function () {
                     '<span class="label label-danger">启用</span>' :
                     '<span class="label label-success">停用</span>';
          }},
-        { label: '审核状态', name: 'review', width: '60px', formatter: function(item, index){
-             return item.review == '0' ?
-                 '<span class="label label-danger">未审核</span>' :
-                 (item.review=='1'?'<span class="label label-success">审核通过</span>':
-                  (item.review=='2'?'<span class="label label-success">审核失败</span>':'<span class="label label-success">未审核</span>'));
-         }},
-        {title:'操作', field:'操作', width: '80px', sortable:false, title:"操作", align:'center', formatter: function(item, index){
+         { label: '审核状态', name: 'review', width: '60px', formatter: function(item, index){
+                             return item.review === '0' ?
+                                 '<span class="label label-danger">未审核</span>' :
+                                 (item.review==='1'?'<span class="label label-success">审核中</span>':
+                                 (item.review==='2'?'<span class="label label-success">审核通过</span>':
+                                 (item.review==='3'?'<span class="label label-success">审核失败</span>':'')));
+                         }},
+        {title:'操作', field:'操作', width: '123px', sortable:false, title:"操作", align:'center', formatter: function(item, index){
                         var actions = [];
                         if(shop_shop_update===1){
                                 actions.push('<a class="btn btn-primary" onclick="vm.update('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
@@ -577,6 +616,9 @@ Dept.initColumn = function () {
                                  if(item.status=='1'){
                                      actions.push('<a class="btn btn-primary" onclick="vm.updateStatus('+item.id+',0)" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;关闭</a>&nbsp;');
                                 }
+                                if(item.review=='0' || item.review=='3' || item.review==null){//待审核 和审核失败的可以重新提交审核
+                                     actions.push('<a class="btn btn-primary" onclick="vm.subtoShenhe('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;提交审核</a>&nbsp;');
+                                 }
                           }
                           if(shop_shop_delete===1){
                                 actions.push('<a class="btn btn-primary" onclick="vm.del('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');

@@ -88,7 +88,10 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		shopBank: {},
+		shopBank: {
+		    status:0,
+		    approveFlag:0,
+		},
         shopList:[],
         shopName:'',
         q:{
@@ -113,7 +116,10 @@ var vm = new Vue({
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
-			vm.shopBank = {};
+			vm.shopBank = {
+			    status:0,
+                approveFlag:0,
+			};
 
             vm.shopName = null;
             vm.getShopList('');

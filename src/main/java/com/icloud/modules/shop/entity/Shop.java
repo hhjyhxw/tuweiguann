@@ -86,9 +86,11 @@ public class Shop implements Serializable {
    	   	   /* 状态 0：关闭，1：开启 */
        @TableField("status")
        private String status;
-   	   	   /* 审核 0：未审核，1：审核通过，2：审核失败 */
+           /* 审核状态0未审核 1提交审核 2审核通过 3审核不通过 */
        @TableField("review")
        private String review;
+        @TableField("msg")
+        private String msg;
    	   	   /* 创建人 */
        @TableField("created_by")
        private String createdBy;

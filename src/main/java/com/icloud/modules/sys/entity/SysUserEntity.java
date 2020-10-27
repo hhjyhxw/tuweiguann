@@ -84,7 +84,7 @@ public class SysUserEntity implements Serializable {
 	private Long deptId;
 
 	/*店铺id*/
-	@NotNull(message="店铺不能为空", groups = {AddGroup.class, UpdateGroup.class})
+//	@NotNull(message="店铺不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Long shopId;
 
 	/**

@@ -163,7 +163,7 @@ var vm = new Vue({
             vm.showList = false;
             vm.title = "审核不通过";
             vm.shopBank.status = '0';
-            vm.approveFlag='3',
+            vm.shopBank.approveFlag='3',
             vm.msg='',
             vm.shopBank.id = id;
             // vm.getInfo(id)

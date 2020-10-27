@@ -71,7 +71,7 @@ public class ShopBankController  extends AbstractController {
 
 
     /**
-     * 审核通过的银行卡列表（拥有提交提现申请）
+     * 审核通过的银行卡列表（用于提交提现申请）
      * @param shopId
      * @return
      */

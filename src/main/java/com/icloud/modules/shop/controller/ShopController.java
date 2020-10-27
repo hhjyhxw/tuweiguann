@@ -82,6 +82,57 @@ public class ShopController extends AbstractController {
         return list;
     }
 
+    /**
+     * 店铺列表（用于审核）
+     * @param params
+     * @return
+     */
+    @RequestMapping("/shenhelist")
+    @RequiresPermissions("shop:shop:shenhelist")
+    public R shenhelist(@RequestParam Map<String, Object> params){
+        Query query = new Query(params);
+        PageUtils page = shopService.findByPage(query.getPageNum(),query.getPageSize(), query);
+
+        return R.ok().put("page", page);
+    }
+
+    /**
+     * 修改
+     */
+    @SysLog("店铺审核")
+    @RequestMapping("/shenhe")
+    @RequiresPermissions("shop:shop:shenhe")
+    public R shenhe(@RequestBody Shop shop){
+//        ValidatorUtils.validateEntity(shopBank);
+        shop.setUpdatedTime(new Date());
+        shop.setUpdatedBy(getUser().getUsername());
+        shopService.updateById(shop);
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @SysLog("提交审核")
+    @RequestMapping("/subtoShenhe")
+    @RequiresPermissions("shop:shop:shenhe")
+    public R subtoShenhe(@RequestBody Shop shop){
+        shop.setUpdatedTime(new Date());
+        shop.setUpdatedBy(getUser().getUsername());
+        shopService.updateById(shop);
+        return R.ok();
+    }
+
+
+    /**
+     * 店铺信息
+     */
+    @RequestMapping("/shenheinfo/{id}")
+    @RequiresPermissions("shop:shop:shenhe")
+    public R shenheinfo(@PathVariable("id") Long id){
+        Shop shop = (Shop)shopService.getById(id);
+        return R.ok().put("shop", shop);
+    }
 
     /**
      * 角色数据权限列表
@@ -219,28 +270,6 @@ public class ShopController extends AbstractController {
 //        }
         return R.ok().put("list", list);
     }
-
-//    /**
-//     * 选择所属店铺
-//     */
-//    @RequestMapping("/select")
-//    @RequiresPermissions("shop:shop:update")
-//    public R select(){
-//        List<Shop> retailList = shopService.list();
-//        List<ShopTreeVo> list =  new ArrayList<ShopTreeVo>();
-//        ShopTreeVo vo = null;
-//        if(list!=null){
-//            for (Shop shop : retailList) {
-//                vo =  new ShopTreeVo();
-//                vo.setId(shop.getId());
-//                vo.setName(shop.getShopName());
-//                vo.setParentId(null);
-//                vo.setParentName(null);
-//                list.add(vo);
-//            }
-//        }
-//        return R.ok().put("retailList", list);
-//    }
 
     /**
      * 信息
