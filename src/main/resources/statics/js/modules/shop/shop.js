@@ -587,7 +587,7 @@ Dept.initColumn = function () {
            return '<img style="height: 3rem;width: 3rem;" src="'+item.shopImg+'"/>';
          }},
          { title: '系统标志', field: 'sysFlag', width: '60px', formatter: function(item, index){
-             return item.status == '1' ? '<span class="label label-danger">是</span>' :
+             return item.sysFlag == '1' ? '<span class="label label-danger">是</span>' :
                  '<span class="label label-success">否</span>';
          }},
          {title: '省份', field: 'province', align: 'center', valign: 'middle', sortable: true, width: '80px'},
