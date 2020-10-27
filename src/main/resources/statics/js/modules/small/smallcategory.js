@@ -305,8 +305,12 @@ Dept.initColumn = function () {
         {title: '排序号', field: 'sortNum', align: 'center', valign: 'middle', sortable: false, width: '50px'},
         {title:'操作', field:'操作', width: '80px', sortable:false, title:"操作", align:'center', formatter: function(item, index){
                         var actions = [];
-                            actions.push('<a class="btn btn-primary" onclick="vm.update('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
-                            actions.push('<a class="btn btn-primary" onclick="vm.del('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                        if(small_smallcategory_update===1){
+                             actions.push('<a class="btn btn-primary" onclick="vm.update('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                         }
+                        if(small_smallcategory_delete===1){
+                              actions.push('<a class="btn btn-primary" onclick="vm.del('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                         }
                         return actions.join('');
                     }}
         ]

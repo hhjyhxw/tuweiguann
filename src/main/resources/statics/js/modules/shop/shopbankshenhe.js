@@ -41,7 +41,7 @@ $(function () {
             }},
             {header:'操作', name:'操作', width:139, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                     var actions = [];
-                    if(row.approveFlag=='1'){
+                    if(shop_shopbank_shenhe===1 && shop_shopbank_shenheinfo===1 && row.approveFlag=='1'){
                         actions.push('<a class="btn btn-primary" onclick="vm.updatepass('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;审核通过</a>&nbsp;');
                          actions.push('<a class="btn btn-primary" onclick="vm.updateUnpass('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;审核不通过</a>&nbsp;');
 //                        actions.push('<a title="审核通过" onclick="vm.updatepass('+row.id+')"><i class="fa fa-pencil">审核通过</i></a>&nbsp;');

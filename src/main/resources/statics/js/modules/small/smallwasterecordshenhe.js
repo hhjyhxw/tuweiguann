@@ -35,12 +35,14 @@ $(function () {
 
             {header:'操作', name:'操作', width:139, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                 var actions = [];
-                if(row.approveFlag=='0'){
-                    actions.push('<a class="btn btn-primary" onclick="vm.updatedeal('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;处理</a>&nbsp;');
-                }
-                if(row.approveFlag=='1'){
-                    actions.push('<a class="btn btn-primary" onclick="vm.updatepass('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;成功</a>&nbsp;');
-                     actions.push('<a class="btn btn-primary" onclick="vm.updateUnpass('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;失败</a>&nbsp;');
+                if(small_smallwasterecord_shenhe===1){
+                    if(row.approveFlag=='0'){
+                        actions.push('<a class="btn btn-primary" onclick="vm.updatedeal('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;处理</a>&nbsp;');
+                    }
+                    if(row.approveFlag=='1'){
+                        actions.push('<a class="btn btn-primary" onclick="vm.updatepass('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;成功</a>&nbsp;');
+                         actions.push('<a class="btn btn-primary" onclick="vm.updateUnpass('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;失败</a>&nbsp;');
+                    }
                 }
                 return actions.join('');
             }}

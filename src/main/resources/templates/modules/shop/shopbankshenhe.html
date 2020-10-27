@@ -10,7 +10,16 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
-
+    <script>
+		var shop_shopbank_shenhe = '';
+		var shop_shopbank_shenheinfo = '';
+		<#if shiro.hasPermission("shop:shopbank:shenhe")>
+			shop_shopbank_shenhe = 1;
+		</#if>
+		<#if shiro.hasPermission("shop:shopbank:shenheinfo")>
+			shop_shopbank_shenheinfo = 1;
+		</#if>
+	</script>
     <style>
        .bootstrap-select{
             width: 122% !important;

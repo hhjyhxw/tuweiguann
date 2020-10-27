@@ -43,12 +43,15 @@ $(function () {
             }},*/
             {header:'操作', name:'操作', width:115, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                 var actions = [];
+                 if(shop_shopbank_update===1){
                     actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
-                    actions.push('<a class="btn btn-primary" onclick="vm.del('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
-                    if(row.approveFlag=='0' || row.approveFlag=='3'){//待审核 和审核失败的可以重新提交审核
+                     if(row.approveFlag=='0' || row.approveFlag=='3'){//待审核 和审核失败的可以重新提交审核
                          actions.push('<a class="btn btn-primary" onclick="vm.subtoShenhe('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;提交审核</a>&nbsp;');
-//                        actions.push('<a class="btn btn-primary" onclick="vm.subtoShenhe('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o">提交审核</i></a>&nbsp;');
-                    }
+                     }
+                 }
+                 if(shop_shopbank_delete===1){
+                    actions.push('<a class="btn btn-primary" onclick="vm.del('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                  }
                 return actions.join('');
             }}
 

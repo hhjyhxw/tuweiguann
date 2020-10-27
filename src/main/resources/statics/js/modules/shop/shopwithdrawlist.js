@@ -11,9 +11,11 @@ $(function () {
 			{ label: '店铺余额', name: 'balance', index: 'balance', width: 80 },
             {header:'操作', name:'操作', width:50, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                     var actions = [];
+                    if(shop_shop_withdraw===1 && shop_shop_withdrawinfo===1){
                         if(row.balance>0){
                              actions.push('<a title="提现" onclick="vm.update('+row.id+')"><i class="fa fa-pencil">提现</i></a>&nbsp;');
                         }
+                     }
                       /*  actions.push('<a title="提现记录" onclick="vm.update('+row.id+',0)"><i class="fa fa-trash-o">提现记录</i></a>&nbsp;');*/
                     return actions.join('');
                 }}

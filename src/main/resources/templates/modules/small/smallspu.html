@@ -31,7 +31,20 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
-
+    <script>
+		var small_smallspu_update = '';
+		var small_smallspu_info = '';
+		var small_smallspu_delete = '';
+		<#if shiro.hasPermission("small:smallspu:update")>
+			small_smallspu_update = 1;
+		</#if>
+		<#if shiro.hasPermission("small:smallspu:info")>
+			small_smallspu_info = 1;
+		</#if>
+		<#if shiro.hasPermission("small:smallspu:delete")>
+			small_smallspu_delete = 1;
+		</#if>
+	</script>
     <style>
       .bootstrap-select{
             width: 122% !important;

@@ -569,31 +569,20 @@ Dept.initColumn = function () {
                  (item.review=='1'?'<span class="label label-success">审核通过</span>':
                   (item.review=='2'?'<span class="label label-success">审核失败</span>':'<span class="label label-success">未审核</span>'));
          }},
-      /*   { title: '创建时间', field: 'createTime', align: 'center',  valign: 'middle', false: true, width: '80px', formatter: function(item, index){
-        	if(item.createTime!=null){
-                return getDateTime(item.createTime,"yyyyMMddHHmmss");
-            }else{
-                return "";
-            }
-        }},
-         { title: '修改时间', field: 'modifyTime',align: 'center', width: '80px', valign: 'middle', false: true, formatter: function(item, index){
-             if(item.createTime!=null){
-                return getDateTime(item.createTime,"yyyyMMddHHmmss");
-            }else{
-                return "";
-            }
-        }},
-        {title: '排序号', field: 'sortNum', align: 'center', valign: 'middle', sortable: false, width: '50px'},*/
         {title:'操作', field:'操作', width: '80px', sortable:false, title:"操作", align:'center', formatter: function(item, index){
                         var actions = [];
-                            actions.push('<a class="btn btn-primary" onclick="vm.update('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
-                            if(item.status=='0'){
-                                 actions.push('<a class="btn btn-primary" onclick="vm.updateStatus('+item.id+',1)" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;开启</a>&nbsp;');
-                            }
-                             if(item.status=='1'){
-                                 actions.push('<a class="btn btn-primary" onclick="vm.updateStatus('+item.id+',0)" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;关闭</a>&nbsp;');
-                            }
-                            actions.push('<a class="btn btn-primary" onclick="vm.del('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                        if(shop_shop_update===1){
+                                actions.push('<a class="btn btn-primary" onclick="vm.update('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
+                                if(item.status=='0'){
+                                     actions.push('<a class="btn btn-primary" onclick="vm.updateStatus('+item.id+',1)" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;开启</a>&nbsp;');
+                                }
+                                 if(item.status=='1'){
+                                     actions.push('<a class="btn btn-primary" onclick="vm.updateStatus('+item.id+',0)" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;关闭</a>&nbsp;');
+                                }
+                          }
+                          if(shop_shop_delete===1){
+                                actions.push('<a class="btn btn-primary" onclick="vm.del('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
+                           }
                         return actions.join('');
                     }}
         ]
