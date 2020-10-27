@@ -75,10 +75,8 @@ public class SmallCategoryController extends AbstractController {
      * 选择部门(添加、修改菜单)
      */
     @RequestMapping("/select")
-    @RequiresPermissions("small:smallcategory:update")
     public R select(@RequestParam Map<String, Object> params){
         List<SmallCategory> categoryList = smallCategoryService.queryList(params);
-        if(getUserId() == Constant.SUPER_ADMIN) {
             SmallCategory root = new SmallCategory();
             root.setId(0L);
             root.setTitle("一级分类");
@@ -86,7 +84,6 @@ public class SmallCategoryController extends AbstractController {
             root.setParentId(-1L);
             root.setOpen(true);
             categoryList.add(root);
-        }
         return R.ok().put("categoryList", categoryList);
     }
 

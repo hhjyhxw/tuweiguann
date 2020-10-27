@@ -347,3 +347,4 @@ var vm = new Vue({
 
 	}
 });
+vm.getCategory();

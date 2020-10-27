@@ -203,7 +203,7 @@
                             <input type="text" class="form-control" v-model="smallCategoryName" placeholder="可用分类(可为空)" @click="categroyTree" readonly="readonly"/>
                         </div>
                     </div>
-                     <div class="form-group">
+                    <!-- <div class="form-group">
                          <div class="col-sm-2 control-label">优惠券类型</div>
                          <label class="radio-inline">
                              <input type="radio" name="validateType" value="0" v-model="smallCoupon.validateType"/> 领取后计算有效期
@@ -211,7 +211,7 @@
                          <label class="radio-inline">
                              <input type="radio" name="validateType" value="1" v-model="smallCoupon.validateType" checked="checked"/> 固定有效期
                          </label>
-                     </div>
+                     </div>-->
 					<div class="form-group" v-show="smallCoupon.validateType==0">
                         <div class="col-sm-2 control-label">过期天数</div>
                         <div class="col-sm-10">
