@@ -5,10 +5,16 @@ $(function () {
         postData: {"sysFlag":T.p('sysFlag'),"shopId":T.p('shopId')},
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '商品spuid', name: 'spuId', index: 'spu_id', width: 80 },
 			/*{ label: 'sku条码', name: 'barCode', index: 'bar_code', width: 80 }, */
+			{ label: '商品spuid', name: 'spuId', index: 'spu_id', width: 80 },
 			{ label: 'sku名称', name: 'title', index: 'title', width: 80 }, 			
-			{ label: '图片', name: 'img', index: 'img', width: 80 }, 			
+			{ label: '图片', name: 'img', index: 'img', width: 80 },
+			{ label: '状态', name: 'upstatus', width: 60, formatter: function(value, options, row){
+                return value === 0 ?
+                    '<span class="label label-danger">未上架</span>' :
+                    (value===1?'<span class="label label-success">已上架</span>':'');
+
+            }},
 			{ label: '原始价', name: 'originalPrice', index: 'original_price', width: 80 }, 			
 			{ label: '现价', name: 'price', index: 'price', width: 80 }, 			
 			/*{ label: 'vip价', name: 'vipPrice', index: 'vip_price', width: 80 }, 			*/
@@ -95,6 +101,7 @@ var vm = new Vue({
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
+
 		    $('#btnSaveOrUpdate').button('loading').delay(1000).queue(function() {
                 var url = vm.smallSku.id == null ? "small/smallsku/save" : "small/smallsku/update";
                 $.ajax({

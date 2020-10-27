@@ -11,7 +11,9 @@ import com.icloud.basecommon.model.Query;
 import com.icloud.common.util.StringUtil;
 import com.icloud.modules.shop.entity.Shop;
 import com.icloud.modules.shop.service.ShopService;
+import com.icloud.modules.small.entity.SmallGroupShop;
 import com.icloud.modules.small.entity.SmallSpu;
+import com.icloud.modules.small.service.SmallGroupShopService;
 import com.icloud.modules.small.service.SmallSpuService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -47,6 +49,8 @@ public class SmallSkuController {
     private SmallSpuService smallSpuService;
     @Autowired
     private ShopService shopService;
+    @Autowired
+    private SmallGroupShopService smallGroupShopService;
     /**
      * 列表
      */
@@ -97,6 +101,21 @@ public class SmallSkuController {
         query.put("title",title);
         query.put("spuIds",spuIds);
         PageUtils page = smallSkuService.listForgroupPage(query.getPageNum(),query.getPageSize(), query);
+        List<SmallSku> list = page.getList();
+        if(list!=null && list.size()>0){
+            list.forEach(p->{
+                List<SmallGroupShop> groupList =  smallGroupShopService.list(new QueryWrapper<SmallGroupShop>()
+                        .eq("shop_id",shopId)
+                        .eq("spu_id",p.getSpuId())
+                        .eq("sku_id",p.getId()));
+                if(groupList!=null && groupList.size()>0){
+                    p.setUpstatus(1);//已上架
+                }else {
+                    p.setUpstatus(0);//未上架
+                }
+            });
+        }
+        page.setList(list);
         return R.ok().put("page", page);
     }
 
@@ -156,6 +175,7 @@ public class SmallSkuController {
             Integer remainStock = (p.getStock()!=null?p.getStock().intValue():0) - (p.getFreezeStock()!=null?p.getFreezeStock().intValue():0);
             p.setRemainStock(remainStock>0?remainStock:0);
         });
+
         return R.ok().put("list", list);
     }
 

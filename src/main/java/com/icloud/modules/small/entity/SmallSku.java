@@ -77,5 +77,8 @@ public class SmallSku implements Serializable {
         /**/
         @TableField(exist = false)
         private Shop shop;
+        /*是否上架到售卖商品中*/
+        @TableField(exist = false)
+        private Integer upstatus;
    	
 }
