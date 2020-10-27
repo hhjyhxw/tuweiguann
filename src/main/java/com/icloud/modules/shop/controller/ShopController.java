@@ -76,6 +76,7 @@ public class ShopController extends AbstractController {
      */
     @RequestMapping("/list")
     @RequiresPermissions("shop:shop:list")
+    @DataFilter
     public List<Shop> list(@RequestParam Map<String, Object> params){
         Query query = new Query(params);
         List<Shop> list =shopService.queryShopTree(query);
@@ -103,7 +104,6 @@ public class ShopController extends AbstractController {
     @RequestMapping("/shenhe")
     @RequiresPermissions("shop:shop:shenhe")
     public R shenhe(@RequestBody Shop shop){
-//        ValidatorUtils.validateEntity(shopBank);
         shop.setUpdatedTime(new Date());
         shop.setUpdatedBy(getUser().getUsername());
         shopService.updateById(shop);
@@ -264,7 +264,7 @@ public class ShopController extends AbstractController {
     public R selectlist(@RequestParam Map<String, Object> params){
         List<Shop> list = null;
 //        if(Constant.SUPER_ADMIN==getUserId()){//超级管理员选择的
-            list = shopService.list(new QueryWrapper<Shop>());//当前登陆用户的
+            list = shopService.list(new QueryWrapper<Shop>());
 //        }else{
 //            list = shopService.list(new QueryWrapper<Shop>().in("id", shopFilterUtils.getShopIdAndSubList()));//当前登陆用户的
 //        }
