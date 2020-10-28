@@ -24,6 +24,7 @@ import com.icloud.modules.small.service.*;
 import com.icloud.modules.small.vo.ShopTreeVo;
 import com.icloud.modules.sys.controller.AbstractController;
 import com.icloud.modules.sys.entity.SysUserEntity;
+import com.icloud.modules.sys.service.SysConfigService;
 import com.icloud.modules.sys.service.SysUserRoleService;
 import com.icloud.modules.sys.service.SysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -71,6 +72,8 @@ public class ShopController extends AbstractController {
     private SmallCouponService smallCouponService;
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private SysConfigService sysConfigService;
     /**
      * 列表
      */
@@ -138,11 +141,7 @@ public class ShopController extends AbstractController {
      * 角色数据权限列表
      */
     @RequestMapping("/queryList")
-//    @RequiresPermissions("shop:shop:list")
     public R queryList(@RequestParam Map<String, Object> params){
-//        if(getUserId() == Constant.SUPER_ADMIN) {
-//            params.put(Constant.SQL_FILTER, shopFilterUtils.getSQLFilterForshopsell());
-//        }
         List<Shop> list = shopService.queryList(params);
         List<ShopTreeVo> shopTreeVolist = new ArrayList<ShopTreeVo>();
 
@@ -175,7 +174,20 @@ public class ShopController extends AbstractController {
     @RequiresPermissions("shop:shop:withdrawinfo")
     public R withdrawinfo(@PathVariable("id") Long id){
         Shop shop = (Shop)shopService.getById(id);
-        return R.ok().put("shop", shop);
+        //计算可提现金额
+        String withdrawFee = sysConfigService.getValue("withdrawFee");//手续费率
+        BigDecimal fee = null;//手续费
+        BigDecimal ableAmount = null;//可提现金额
+        if(StringUtil.checkStr(withdrawFee)){
+            fee =  new BigDecimal(withdrawFee);
+        }
+        if(fee==null || fee.compareTo(new BigDecimal(0))<0){
+            //不收手续费
+            ableAmount = shop.getBalance();
+        }else{
+            ableAmount = shop.getBalance().subtract(shop.getBalance().multiply(fee));
+        }
+        return R.ok().put("shop", shop).put("ableAmount",ableAmount).put("withdrawFee",fee!=null?fee:new BigDecimal(0));
     }
     /**
      * 查询处需要提现的店铺名称 和店铺余额列表，方便店铺管理员提交提现
@@ -189,13 +201,13 @@ public class ShopController extends AbstractController {
         smallWasteRecord.setCreateTime(new Date());
         ValidatorUtils.validateEntity(smallWasteRecord);
         //判断是否存在提现申请未处理
-        List<SmallWasteRecord> list = smallWasteRecordService.list(new QueryWrapper<SmallWasteRecord>()
-                .eq("shop_id",smallWasteRecord.getShopId())//店铺id
-                .eq("waste_flag","2")//提现类型
-                .eq("approve_flag","0"));//未审核
-        if(list!=null && list.size()>0){
-            throw new BaseException("您有提现记录正在审核中，不能再次提交");
-        }
+//        List<SmallWasteRecord> list = smallWasteRecordService.list(new QueryWrapper<SmallWasteRecord>()
+//                .eq("shop_id",smallWasteRecord.getShopId())//店铺id
+//                .eq("waste_flag","2")//提现类型
+//                .eq("approve_flag","0"));//未审核
+//        if(list!=null && list.size()>0){
+//            throw new BaseException("您有提现记录正在审核中，不能再次提交");
+//        }
         if(smallWasteRecord.getAmount().compareTo(new BigDecimal(0))<=0){
             throw new BaseException("提现金额不能小于0");
         }
@@ -205,9 +217,8 @@ public class ShopController extends AbstractController {
         if(shop.getBalance().compareTo(smallWasteRecord.getAmount())<0){
             throw new BaseException("提现金额不能大于店铺余额，不能提现");
         }
-        smallWasteRecord.setOrderNo("T" + SnowflakeUtils.getOrderNoByWordId(serverConfig.getServerPort() % 31L));
-//        smallWasteRecordService.createWaste(smallWasteRecord);
-        smallWasteRecordService.save(smallWasteRecord);
+        //发起提现申请
+        smallWasteRecordService.createWaste(smallWasteRecord);
         return R.ok();
     }
 

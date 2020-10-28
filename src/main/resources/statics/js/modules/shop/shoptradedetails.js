@@ -3,7 +3,7 @@ $(function () {
         url: baseURL + 'shop/shoptradedetails/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
+			{ label: 'id', name: 'id', index: 'id', width: 50,sortable:true, key: true },
             { label: '所属店铺', name: 'shop.shopName', index: 'shop_id', width: 80 },
 			{ label: '交易单号', name: 'tradeNo', index: 'trade_no', width: 80 }, 			
 			{ label: '对应单号', name: 'orderNo', index: 'order_no', width: 80 }, 			
@@ -13,10 +13,12 @@ $(function () {
                         (value===11?'<span class="label label-success">账号充值</span>':
                         (value===20?'<span class="label label-success">账号提现</span>':
                         (value===21?'<span class="label label-success">扣除订单手续费</span>':
+                        (value===22?'<span class="label label-success">提现失败回退</span>':
                         (value===7?'<span class="label label-success">公共商品订单收入</span>':
                         (value===8?'<span class="label label-success">佣金收入</span>':
                         (value===9?'<span class="label label-success">公共订单(自营部分商品收入)</span>':
                         (value===10?'<span class="label label-success">自营订单收入</span>': '未知类型')
+                        )
                         )
                         )
                         )

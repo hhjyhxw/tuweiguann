@@ -14,6 +14,7 @@ import com.icloud.common.MapEntryUtils;
 import com.icloud.common.PageUtils;
 import com.icloud.common.PayUtil;
 import com.icloud.common.SnowflakeUtils;
+import com.icloud.common.util.StringUtil;
 import com.icloud.config.ServerConfig;
 import com.icloud.exceptions.ApiException;
 import com.icloud.exceptions.BaseException;
@@ -25,6 +26,8 @@ import com.icloud.modules.shop.service.ShopTradeDetailsService;
 import com.icloud.modules.small.entity.SmallOrder;
 import com.icloud.modules.small.entity.SmallWasteRecord;
 import com.icloud.modules.small.vo.CreateTradeDetailsVo;
+import com.icloud.modules.sys.service.SysConfigService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.icloud.basecommon.service.BaseServiceImpl;
@@ -41,6 +44,7 @@ import java.util.Map;
  * @email yyyyyy@cm.com
  * @date 2020-10-07 20:18:12
  */
+@Slf4j
 @Service
 @Transactional
 public class SmallWasteRecordService extends BaseServiceImpl<SmallWasteRecordMapper,SmallWasteRecord> {
@@ -59,6 +63,8 @@ public class SmallWasteRecordService extends BaseServiceImpl<SmallWasteRecordMap
     private ServerConfig serverConfig;
     @Autowired
     private ShopTradeDetailsService shopTradeDetailsService;
+    @Autowired
+    private SysConfigService sysConfigService;
 
     //提现锁
     private static final String WASTE_DRAW_LOCK = "WASTE_DRAW_LOCK_LOCK";
@@ -79,72 +85,151 @@ public class SmallWasteRecordService extends BaseServiceImpl<SmallWasteRecordMap
         return page;
     }
     /**
-     * 生成资金流失记录
+     * 提现审核成功
+     * 1、发起企业付款到银行卡
+     *      成功：
+     *      1、更新提现申请记录
+     *      失败：
+     *      1、更新提现申请记录
+     *      2、回退店铺余额
+     *      3、生产资金流水
      */
     public void payWasteRecord(SmallWasteRecord smallWasteRecord) {
-        try {
             SmallWasteRecord smallWasteRecordold = smallWasteRecordMapper.selectById(smallWasteRecord.getId());
-            Shop shop = (Shop) shopService.getById(smallWasteRecordold.getShopId());
-//            //提现收款账户
-//            ShopBank shopBank = null;
-//            List<ShopBank> shopBanklist = shopBankService.list(new QueryWrapper<ShopBank>().eq("shop_id",shop.getId()).eq("status","1"));
-//            if(shopBanklist==null || shopBanklist.size()==0){
-//                throw new BaseException("收款账号不存在,提现失败");
-//            }
+            smallWasteRecordold.setApproveTime(new Date());
+            smallWasteRecordold.setApproveBy(smallWasteRecord.getApproveBy());
             ShopBank shopBank = (ShopBank) shopBankService.getById(smallWasteRecordold.getBankId());
-            //本地账户余额
-            BigDecimal shopbanlance = shop.getBalance()!=null?shop.getBalance():new BigDecimal(0);
-            if(smallWasteRecordold.getAmount().compareTo(shopbanlance)>0){
-                smallWasteRecord.setApproveBy("3");
-                smallWasteRecord.setMsg("账号余额不足,提现失败");
-                smallWasteRecordMapper.updateById(smallWasteRecordold);
-                return;
-//                throw new BaseException("账号余额不足,提现失败");
-            }
+             EntPayBankResult result = null;
+             try {
+                 result = wxPayService.getEntPayService().payBank(EntPayBankRequest.builder()
+                         .bankCode(shopBank.getBankCode())//银行卡所在开户行编号,详见银行编号列表
+                         .amount(PayUtil.getFinalmoneyInt(String.valueOf(smallWasteRecordold.getAmount()))) //付款金额：RMB分（支付总额，不含手续费） 注：大于0的整数
+                         .encBankNo(shopBank.getCardNo())
+                         .encTrueName(shopBank.getUserName())
+                         .partnerTradeNo(smallWasteRecordold.getOrderNo())//商户订单号，需保持唯一（只允许数字[0~9]或字母[A~Z]和[a~z]，最短8位，最长32位）
+                         .description(smallWasteRecordold.getOrderNo())//企业付款到银行卡付款说明,即订单备注（UTF8编码，允许100个字符以内）
+                         .build());
+             }catch (Exception e){
+                 e.printStackTrace();
+             }
+            log.info(smallWasteRecordold.getOrderNo()+"_提现结果====="+result);
 
-            CreateTradeDetailsVo tradeDetailsVo = new CreateTradeDetailsVo();
-            tradeDetailsVo.setAmount(smallWasteRecordold.getAmount());
-            tradeDetailsVo.setShopId(shop.getId());
-            tradeDetailsVo.setBizType(20);
-            tradeDetailsVo.setInOrOut(2);
-            tradeDetailsVo.setOrderNo(smallWasteRecordold.getOrderNo());
-            tradeDetailsVo.setUpdateBy(smallWasteRecord.getApproveBy());
-            //锁定30秒
-            if (lockComponent.tryLock(WASTE_DRAW_LOCK + smallWasteRecord.getId().toString(), 30)) {
-                //1、记录账号变动流水
-                //2、更新店铺余额
-                shopTradeDetailsService.createShopTradeDetails(tradeDetailsVo);
-                //3、发起提现
-                EntPayBankResult result = wxPayService.getEntPayService().payBank(EntPayBankRequest.builder()
-                        .bankCode(shopBank.getBankCode())//银行卡所在开户行编号,详见银行编号列表
-                        .amount(PayUtil.getFinalmoneyInt(String.valueOf(smallWasteRecordold.getAmount()))) //付款金额：RMB分（支付总额，不含手续费） 注：大于0的整数
-                        .encBankNo(shopBank.getCardNo())
-                        .encTrueName(shopBank.getUserName())
-                        .partnerTradeNo(smallWasteRecordold.getOrderNo())//商户订单号，需保持唯一（只允许数字[0~9]或字母[A~Z]和[a~z]，最短8位，最长32位）
-                        .description(smallWasteRecordold.getOrderNo())//企业付款到银行卡付款说明,即订单备注（UTF8编码，允许100个字符以内）
-                        .build());
-                if(result==null){
-                    throw new BaseException("企业付款失败");
-                }
-                if(!"SUCCESS".equals(result.getReturnCode()) || !"SUCCESS".equals(result.getResultCode())){
-                    throw new BaseException("企业付款失败,"+result.getErrCodeDes());
-                }
-                smallWasteRecord.setTransactionId(result.getPaymentNo());
-                smallWasteRecord.setWasteState("1");//付款成功
-                smallWasteRecord.setModifyTime(new Date());
-                smallWasteRecordMapper.updateById(smallWasteRecord);
-            } else {
-                throw new BaseException("获取锁失败，请稍后");
+             if(result==null || !"SUCCESS".equals(result.getReturnCode())){
+                 smallWasteRecordold.setMsg(result==null?"微信企业付款失败":result.getReturnMsg()+"_"+result.getReturnMsg());
+                 wasteFaire(smallWasteRecordold);
+                 return;
+             }
+            if(!"SUCCESS".equals(result.getResultCode())){
+                //1、更新失败流水
+                //2、回退店铺余额
+                //3、生成资金流水
+                smallWasteRecordold.setMsg(result.getErrCode()+"_"+result.getErrCodeDes());
+                wasteFaire(smallWasteRecordold);
+                return;
             }
-        } catch (BaseException e) {
-            throw e;
-        } catch (Exception e) {
-            log.error("[提现审核] 异常", e);
-            throw new BaseException("[提现审核] 异常");
-        } finally {
-            lockComponent.release(WASTE_DRAW_LOCK + smallWasteRecord.getId().toString());
-        }
+            //企业付款成功
+            smallWasteRecordold.setTransactionId(result.getPaymentNo());
+            smallWasteRecordold.setWasteState("1");//付款成功
+            smallWasteRecordold.setApproveFlag("2");//审核成功，付款成功
+            smallWasteRecordold.setModifyTime(new Date());
+            smallWasteRecordMapper.updateById(smallWasteRecordold);
+
     }
+
+    /**
+     * 发起提现
+     * 1、生产体验申请记录
+     *     体现资金记录: 1、冻结店铺余额
+     *                 2、生产资金流水
+     *     提现手续费:  1、冻结店铺余额
+     *                 2、生产资金流水
+     *
+     * @param smallWasteRecord
+     */
+    public void createWaste(SmallWasteRecord smallWasteRecord) {
+        //
+        smallWasteRecord.setOrderNo("T" + SnowflakeUtils.getOrderNoByWordId(serverConfig.getServerPort() % 31L));
+        smallWasteRecord.setApproveFlag("0");//提现申请
+        smallWasteRecordMapper.insert(smallWasteRecord);
+
+        //1、
+        CreateTradeDetailsVo tradeDetailsVo = new CreateTradeDetailsVo();
+        tradeDetailsVo.setAmount(smallWasteRecord.getAmount());
+        tradeDetailsVo.setShopId(smallWasteRecord.getShopId());
+        tradeDetailsVo.setBizType(20);
+        tradeDetailsVo.setInOrOut(2);//账号支出
+        tradeDetailsVo.setOrderNo(smallWasteRecord.getOrderNo());
+        tradeDetailsVo.setUpdateBy(smallWasteRecord.getCreateBy());
+        shopTradeDetailsService.createShopTradeDetails(tradeDetailsVo);
+
+        //2、
+        CreateTradeDetailsVo tradeDetailsVo2 = new CreateTradeDetailsVo();
+        String withdrawFee = sysConfigService.getValue("withdrawFee");
+        BigDecimal fee = null;
+        if(StringUtil.checkStr(withdrawFee)){
+            fee =  new BigDecimal(withdrawFee);
+        }
+        if(fee==null || fee.compareTo(new BigDecimal(0))<0){
+            //不收手续费
+            tradeDetailsVo2.setAmount(new BigDecimal(0));
+        }else{
+            tradeDetailsVo2.setAmount(smallWasteRecord.getAmount().multiply(fee));
+        }
+        tradeDetailsVo2.setShopId(smallWasteRecord.getShopId());
+        tradeDetailsVo2.setBizType(21);
+        tradeDetailsVo2.setInOrOut(2);//账号支出
+        tradeDetailsVo2.setOrderNo(smallWasteRecord.getOrderNo());
+        tradeDetailsVo2.setUpdateBy(smallWasteRecord.getCreateBy());
+        shopTradeDetailsService.createShopTradeDetails(tradeDetailsVo2);
+
+    }
+
+
+    /**
+     * 提现失败处理
+     *1、更新提现申请记录
+     *2、回退店铺余额
+     *3、生产资金流水
+     * @param smallWasteRecord
+     */
+    public void wasteFaire(SmallWasteRecord smallWasteRecord) {
+        //
+        smallWasteRecord.setApproveFlag("3");//提现失败
+        smallWasteRecordMapper.updateById(smallWasteRecord);
+
+        //体现额回退
+        CreateTradeDetailsVo tradeDetailsVo = new CreateTradeDetailsVo();
+        tradeDetailsVo.setAmount(smallWasteRecord.getAmount());
+        tradeDetailsVo.setShopId(smallWasteRecord.getShopId());
+        tradeDetailsVo.setBizType(22);//提现失败回退余额
+        tradeDetailsVo.setInOrOut(1);//账号收入
+        tradeDetailsVo.setOrderNo(smallWasteRecord.getOrderNo());
+        tradeDetailsVo.setUpdateBy(smallWasteRecord.getApproveBy());
+        shopTradeDetailsService.createShopTradeDetails(tradeDetailsVo);
+
+        //手续费回退
+        CreateTradeDetailsVo tradeDetailsVo2 = new CreateTradeDetailsVo();
+        String withdrawFee = sysConfigService.getValue("withdrawFee");
+        BigDecimal fee = null;
+        if(StringUtil.checkStr(withdrawFee)){
+            fee =  new BigDecimal(withdrawFee);
+        }
+        if(fee==null || fee.compareTo(new BigDecimal(0))<0){
+            //不收手续费
+            tradeDetailsVo2.setAmount(new BigDecimal(0));
+        }else{
+            tradeDetailsVo2.setAmount(smallWasteRecord.getAmount().multiply(fee));
+        }
+        tradeDetailsVo2.setShopId(smallWasteRecord.getShopId());
+        tradeDetailsVo2.setBizType(22);//提现失败回退余额
+        tradeDetailsVo2.setInOrOut(1);//账号收入
+        tradeDetailsVo2.setOrderNo(smallWasteRecord.getOrderNo());
+        tradeDetailsVo2.setUpdateBy(smallWasteRecord.getApproveBy());
+        shopTradeDetailsService.createShopTradeDetails(tradeDetailsVo2);
+
+
+    }
+
 
     /**
      * 所有选中的,状态未 approveFlag=0的记录 状态修改成1
@@ -167,5 +252,6 @@ public class SmallWasteRecordService extends BaseServiceImpl<SmallWasteRecordMap
             }
         }
     }
+
 }
 

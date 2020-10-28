@@ -77,6 +77,12 @@ id,shop_id,trade_no,order_no,biz_type,in_or_out,before_blance,amount,after_blanc
     and ${sql_filter}
 </if>
 </where>
-    order by created_time desc
+    <if test="sidx != null and sidx!=''">
+        order by ${sidx} ${order},created_time desc
+    </if>
+    <if test="sidx == null || sidx==''">
+        order by created_time desc
+    </if>
+
 </select>
 </mapper>

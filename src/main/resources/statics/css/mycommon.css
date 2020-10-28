@@ -39,8 +39,15 @@
     margin: 0.3rem !important;
     padding: 10px 2px 0px 2px !important;
 }
+/*按钮变成蓝色*/
 .btn-primary{
     color: #fff !important;
     background-color: #409eff !important;
     border-color: #409eff !important;
+}
+
+/*标题居中*/
+.ui-th-div{
+    margin-top:0px !important;
+    text-align:center !important;
 }

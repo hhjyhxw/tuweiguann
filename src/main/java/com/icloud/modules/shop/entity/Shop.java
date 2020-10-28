@@ -123,5 +123,5 @@ public class Shop implements Serializable {
 
         @TableField(exist=false)
         private SysUserEntity user;
-   	
+
 }
