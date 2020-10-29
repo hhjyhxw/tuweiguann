@@ -69,6 +69,13 @@
                      }
                      return myDate.getFullYear()+""+m+""+d+" "+h+""+ms+""+s;
              }
+             if(fomat=='yyyy-MM'){
+                 var m = myDate.getMonth()+1;
+                  if(m<10){
+                      m='0'+m;
+                  }
+                 return myDate.getFullYear()+"-"+m+"";
+             }
 			 if(fomat=='yyyy-MM-dd HH:mm'){
 				 return myDate.getFullYear()+"-"+ (myDate.getMonth()+1)+"-"+myDate.getDate()+" "
 				 +myDate.getHours()+":"+ myDate.getMinutes();

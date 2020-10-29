@@ -19,21 +19,21 @@ $(function () {
         url: baseURL + 'shop/shop/shenhelist',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '名称', name: 'shopName', index: 'shop_name', width: 80 },
-            { label: '系统店铺', name: 'sysFlag', width: 60, formatter: function(value, options, row){
+			{ label: 'id', name: 'id', index: 'id', width: 50, key: true,align:"center" },
+			{ label: '名称', name: 'shopName', index: 'shop_name', width: 130 },
+            { label: '系统店铺', name: 'sysFlag', width: 100, formatter: function(value, options, row){
                     return value ==='0' ?
                         '<span class="label label-danger">不是</span>' :
                         '<span class="label label-success">是</span>';
                 }},
-			{ label: '级别', name: 'shopLevel', index: 'shop_level', width: 80 }, 			
-			{ label: '覆盖范围(米)', name: 'coverScope', index: 'cover_scope', width: 80 },
-			{ label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
+			{ label: '级别', name: 'shopLevel', index: 'shop_level', width: 60 },
+			{ label: '覆盖范围(米)', name: 'coverScope', index: 'cover_scope', width: 100 },
+			{ label: '状态', name: 'status', width: 100, formatter: function(value, options, row){
 					return value === '0' ?
 						'<span class="label label-danger">关闭</span>' :
 						'<span class="label label-success">开启</span>';
 				}},
-			 { label: '审核状态', name: 'review', width: 60, formatter: function(value, options, row){
+			 { label: '审核状态', name: 'review', width: 100, formatter: function(value, options, row){
                 return value === '0' ?
                     '<span class="label label-danger">未审核</span>' :
                     (value==='1'?'<span class="label label-success">审核中</span>':
@@ -41,7 +41,7 @@ $(function () {
                     (value==='3'?'<span class="label label-success">审核失败</span>':'未审核')));
             }},
 			{ label: '创建人', name: 'createdBy', index: 'created_by', width: 80 }, 			
-			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+			{ label: '创建时间', name: 'createTime', index: "create_time", width: 130, formatter: function(value, options, row){
 			    if(value!=null){
 			        return getDateTime(value,"yyyyMMddHHmmss");
 			    }else{
@@ -49,14 +49,14 @@ $(function () {
 			    }
             }},
 			{ label: '更新人', name: 'updatedBy', index: 'updated_by', width: 80 }, 			
-            { label: '更新时间', name: 'updatedTime', index: "updated_time", width: 85, formatter: function(value, options, row){
+            { label: '更新时间', name: 'updatedTime', index: "updated_time", width: 130, formatter: function(value, options, row){
                       if(value!=null){
                         return getDateTime(value,"yyyyMMddHHmmss");
                       }else{
                             return "";
                         }
             }},
-            {header:'操作', name:'操作', width:139, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+            {header:'操作', name:'操作', width:200, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
            var actions = [];
                     if(shop_shop_shenhe===1 && row.review=='1'){
                         actions.push('<a class="btn btn-primary" onclick="vm.updatepass('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;审核通过</a>&nbsp;');
@@ -73,6 +73,8 @@ $(function () {
         rownumWidth: 25, 
         autowidth:true,
         multiselect: true,
+        shrinkToFit:false,
+        autoScroll: true,
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
@@ -87,7 +89,8 @@ $(function () {
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        	//$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+        	 $("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "scroll" });
         }
     });
  });

@@ -33,10 +33,10 @@
             <div class="col-lg-2">
                 <input type="text" class="form-control" v-model="q.orderNo" @keyup.enter="query" placeholder="关联单号">
             </div>
-            <div class="col-lg-1">
+            <div class="col-lg-2">
                 <input type="text" class="form-control" v-model="q.shopName" @keyup.enter="query" placeholder="店铺名称">
             </div>
-            <div class="col-lg-1">
+            <div class="col-lg-2">
                 <select class="selectpicker" title="交易类型" v-model="q.bizType" style="width: 103px;">
                     <option value="">全部</option>
                     <option value="7">公共商品订单收入</option>
@@ -53,7 +53,7 @@
             </div>
         </div>
         <div class="grid-btn">
-            <div class="form-group col-sm-6">
+            <div class="col-sm-6">
                 <!--<div class="col-sm-1 control-label" style="line-height: 3rem;color:#808080;width:15%;text-align:right;">查询时间段:</div>-->
                 <el-date-picker
                         v-model="q.startTime"

@@ -4,10 +4,10 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50,sortable:true, key: true },
-            { label: '所属店铺', name: 'shop.shopName', index: 'shop_id', width: 80 },
-			{ label: '交易单号', name: 'tradeNo', index: 'trade_no', width: 80 }, 			
-			{ label: '对应单号', name: 'orderNo', index: 'order_no', width: 80 }, 			
-            { label: '交易类型', name: 'bizType', width: 60, formatter: function(value, options, row){
+            { label: '所属店铺', name: 'shop.shopName', index: 'shop_id', width: 125 },
+			{ label: '交易单号', name: 'tradeNo', index: 'trade_no', width: 135 },
+			{ label: '对应单号', name: 'orderNo', index: 'order_no', width: 135 },
+            { label: '交易类型', name: 'bizType', width: 125, formatter: function(value, options, row){
                     return value === 10 ?
                         '<span class="label label-success">订单收入</span>' :
                         (value===11?'<span class="label label-success">账号充值</span>':
@@ -26,16 +26,16 @@ $(function () {
                         )
                         );
                 }},
-            { label: '收支方向', name: 'inOrOut', width: 60, formatter: function(value, options, row){
+            { label: '收支方向', name: 'inOrOut', width: 120, formatter: function(value, options, row){
                     return value === 1 ?
                         '<span class="label label-danger">收入</span>' :
                         (value===2?'<span class="label label-success">支出</span>':'未写来源');
                 }},
-			{ label: '变更前余额', name: 'beforeBlance', index: 'before_blance', width: 80 },
-			{ label: '变更金额', name: 'amount', index: 'amount', width: 80 }, 			
-			{ label: '变更后余额', name: 'afterBlance', index: 'after_blance', width: 80 }, 			
-			{ label: '创建人', name: 'createdBy', index: 'created_by', width: 80 }, 			
-			{ label: '创建时间', name: 'createdTime', index: "created_time", width: 85, formatter: function(value, options, row){
+			{ label: '变更前余额', name: 'beforeBlance', index: 'before_blance', width: 118 },
+			{ label: '变更金额', name: 'amount', index: 'amount', width: 118 },
+			{ label: '变更后余额', name: 'afterBlance', index: 'after_blance', width: 118 },
+			{ label: '创建人', name: 'createdBy', index: 'created_by', width: 118 },
+			{ label: '创建时间', name: 'createdTime', index: "created_time", width: 130, formatter: function(value, options, row){
               if(value!=null){
                 return getDateTime(value,"yyyyMMddHHmmss");
               }else{
@@ -53,6 +53,8 @@ $(function () {
         rownumWidth: 25, 
         autowidth:true,
         multiselect: true,
+        shrinkToFit:false,
+        autoScroll: true,
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
@@ -67,7 +69,8 @@ $(function () {
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+//        	 $("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+        	 $("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "scroll" });
         }
     });
 });

@@ -48,29 +48,29 @@ $(function () {
         url: baseURL + 'small/smallcoupon/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id',align:"center", width: 50,frozen: true, key: true },
-			{ label: '优惠券名称', name: 'title', index: 'title',align:"center", width: 110 },
+			{ label: 'id', name: 'id', index: 'id',align:"center", width: 50, key: true,sortable:true },
+			{ label: '优惠券名称', name: 'title', index: 'title',align:"center", width: 110,sortable:true },
 			/*{ label: '使用类型，如满减', name: 'coupType', index: 'coup_type', width: 80 }, 	*/
 			/*{ label: '描述', name: 'description', index: 'description', width: 80 },*/
-			{ label: '发行总数', name: 'total', index: 'total', width: 100 },
-            { label: '已领取数', name: 'freezeStore', index: 'freezeStore', width: 100 },
+			{ label: '发行总数', name: 'total', index: 'total', width: 100 ,sortable:true},
+            { label: '已领取数', name: 'freezeStore', index: 'freezeStore', width: 100 ,sortable:true},
             { label: '优惠券类型', name: 'surplus', width: 100, formatter: function(value, options, row){
                     return value === 0 ?
                         '<span class="label label-danger">默认类型</span>' :
                         (value===1?'<span class="label label-success">新用户专用</span>':
                             '其他');
-                }},
-			{ label: '每人限领', name: 'limits', index: 'limits', width: 100 },
-			{ label: '满多少（元）', name: 'min', index: 'min', width: 100 },
-            { label: '减多少（元）', name: 'discount', index: 'discount', width: 100 },
+                },sortable:true},
+			{ label: '每人限领', name: 'limits', index: 'limits', width: 100 ,sortable:true},
+			{ label: '满多少（元）', name: 'min', index: 'min', width: 100 ,sortable:true},
+            { label: '减多少（元）', name: 'discount', index: 'discount', width: 100 ,sortable:true},
 			{ label: '状态', name: 'status', width: 100, formatter: function(value, options, row){
                 return value === 0 ?
                     '<span class="label label-danger">停用</span>' :
                     (value===1?'<span class="label label-success">启用</span>':
                         '不可用');
-            }},
-			{ label: '可用分类', name: 'smallCategory.title', index: 'category_id', width: 150 },
-			{ label: '所属店铺', name: 'shop.shopName', index: 'shop_id',align:'center', width: 150 },
+            },sortable:true},
+			{ label: '可用分类', name: 'smallCategory.title', index: 'category_id', width: 150 ,sortable:true},
+			{ label: '所属店铺', name: 'shop.shopName', index: 'shop_id',align:'center', width: 150 ,sortable:true},
 		/*	{ label: '过期天数', name: 'days', index: 'days', width: 80 },
 			{ label: '领取开始时间', name: 'startTime', index: 'start_time', width: 80 }, 			
 			{ label: '领取/使用结束时间', name: 'endTime', index: 'end_time', width: 80 }, 	*/
@@ -80,15 +80,15 @@ $(function () {
                 }else{
                     return "";
                 }
-            }},
+            },sortable:true},
             { label: '更新时间', name: 'modifyTime', index: "modify_time", align:'center',width: 150, formatter: function(value, options, row){
                       if(value!=null){
                         return getDateTime(value,"yyyyMMddHHmmss");
                       }else{
                             return "";
                         }
-            }},
-            {header:'操作', name:'操作', width:200, sortable:false, title:false, align:'center', frozen:true,formatter: function(val, obj, row, act){
+            },sortable:true},
+            {label:'操作', name:'操作', width:200, sortable:false, title:false, align:'center',formatter: function(val, obj, row, act){
                 var actions = [];
                    if(small_smallcoupon_update===1){
                          actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
@@ -97,7 +97,7 @@ $(function () {
                           actions.push('<a class="btn btn-primary" onclick="vm.del('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;');
                      }
                 return actions.join('');
-            }}
+            },frozen:true}
         ],
         viewrecords: true,
         height: 385,
@@ -128,7 +128,10 @@ $(function () {
 //        loadComplete: function(data){
 //          $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x":"scroll"});
 //        }
-    }).jqGrid('setFrozenColumns');
+    }).jqGrid('setTableFrozenColumns');
+
+//    setTableFrozenColumns
+//      setFrozenColumns
 });
 
 var vm = new Vue({

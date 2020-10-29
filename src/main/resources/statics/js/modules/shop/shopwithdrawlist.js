@@ -7,14 +7,14 @@ $(function () {
         url: baseURL + 'shop/shop/withdrawlist',
         datatype: "json",
         colModel: [
-			{ label: 'id', name: 'id', index: 'id', width: 50,frozen: true, key: true },
-			{ label: '名称', name: 'shopName', index: 'shop_name', width: 80 },
-			{ label: '店铺余额', name: 'balance', index: 'balance', width: 80 },
+			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
+			{ label: '名称', name: 'shopName', index: 'shop_name', width: 115 },
+			{ label: '店铺余额', name: 'balance', index: 'balance', width: 180 },
             {label:'操作', name:'操作', width:200, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                 var actions = [];
                 if(shop_shop_withdraw===1){
                     if(row.balance>0){
-                         actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>提现申请</i></a>&nbsp;');
+//                         actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>提现申请</i></a>&nbsp;');
                     }
                  }
                   /*  actions.push('<a title="提现记录" onclick="vm.update('+row.id+',0)"><i class="fa fa-trash-o">提现记录</i></a>&nbsp;');*/
@@ -29,7 +29,7 @@ $(function () {
         rownumWidth: 25,
         autowidth:true,
         multiselect: true,
-        autoScroll: false,//当autoScroll和shrinkToFit均为false时，会出现行滚动条
+        autoScroll: true,//当autoScroll和shrinkToFit均为false时，会出现行滚动条
         shrinkToFit: false,//是否列宽度自适应。true=适应 false=不适应
         pager: "#jqGridPager",
         jsonReader : {
@@ -48,7 +48,7 @@ $(function () {
         	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "scroll" });
         },
 
-    }).jqGrid('setFrozenColumns');
+    });
 
 
 

@@ -6,43 +6,43 @@ $(function () {
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
 			/*{ label: 'spuId', name: 'spuId', index: 'spu_id', width: 80 },
             { label: 'skuId', name: 'skuId', index: 'spu_id', width: 80 },*/
-            { label: '商品图片', name: 'sku.img', width: 60, formatter: function(value, options, row){
+            { label: '商品图片', name: 'sku.img', width: 90, formatter: function(value, options, row){
                     return '<img style="height: 3rem;width: 3rem;" src="'+value+'"/>';
                 }},
-            { label: '商品名称', name: 'sku.title', index: 'title', width: 80 },
-            { label: '商品类型', name: 'commonFlag', width: 50, formatter: function(value, options, row){
+            { label: '商品名称', name: 'sku.title', index: 'title', width: 130 },
+            { label: '商品类型', name: 'commonFlag', width: 115, formatter: function(value, options, row){
                     return value == '0' ?
                         '<span class="label label-danger">自营商品</span>' :
                         (value=='1'?'<span class="label label-success">公共商品</span>':'其他');
 
                 }},
-            { label: '现价(元)', name: 'minPrice', index: 'minPrice', width: 50 },
-			{ label: '原价(元)', name: 'maxPrice', index: 'maxPrice', width: 50 },
-			{ label: '剩余库存', name: 'sku.remainStock', index: 'remainStock', width: 50 },
-            { label: '店铺名称', name: 'shop.shopName', index: 'shopName', width: 80 },
-            { label: '所属分类', name: 'smallCategory.title', index: 'category_id', width: 80 },
-            { label: '公共商品所在店铺', name: 'sysShop.shopName', index: 'shopName', width: 80 },
-            { label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
+            { label: '现价(元)', name: 'minPrice', index: 'minPrice', width: 115 },
+			{ label: '原价(元)', name: 'maxPrice', index: 'maxPrice', width: 115 },
+			{ label: '剩余库存', name: 'sku.remainStock', index: 'remainStock', width: 115 },
+            { label: '店铺名称', name: 'shop.shopName', index: 'shopName', width: 135 },
+            { label: '所属分类', name: 'smallCategory.title', index: 'category_id', width: 135 },
+            { label: '公共商品所在店铺', name: 'sysShop.shopName', index: 'shopName', width: 135 },
+            { label: '状态', name: 'status', width: 110, formatter: function(value, options, row){
                     return value === 0 ?
                         '<span class="label label-danger">下架</span>' :
                         '<span class="label label-success">上架</span>';
                 }},
           /*  { label: '所属零售户', name: 'shop.shopName', index: 'shop_id', width: 80 },*/
-            { label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+            { label: '创建时间', name: 'createTime', index: "create_time", width: 135, formatter: function(value, options, row){
                 if(value!=null){
                     return getDateTime(value,"yyyyMMddHHmmss");
                 }else{
                     return "";
                 }
             }},
-            { label: '更新时间', name: 'modifyTime', index: "modify_time", width: 85, formatter: function(value, options, row){
+            { label: '更新时间', name: 'modifyTime', index: "modify_time", width: 135, formatter: function(value, options, row){
                       if(value!=null){
                         return getDateTime(value,"yyyyMMddHHmmss");
                       }else{
                             return "";
                         }
             }},
-            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+            {header:'操作', name:'操作', width:189  , sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                 var actions = [];
                    if(small_smallgroupshop_update===1){
                          actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
@@ -62,6 +62,8 @@ $(function () {
         rownumWidth: 25, 
         autowidth:true,
         multiselect: true,
+        shrinkToFit:false,
+        autoScroll: true,
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
@@ -76,7 +78,8 @@ $(function () {
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+//        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "scroll" });
         }
     });
 });

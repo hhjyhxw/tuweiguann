@@ -5,17 +5,17 @@ $(function () {
         colModel: [			
 			/*{ label: 'id', name: 'id', index: 'id', width: 50, key: true },*/
 			/*{ label: '下单渠道', name: 'channel', index: 'channel', width: 80 }, 			*/
-			{ label: '订单号', name: 'orderNo', index: 'order_no', width: 80 },
-			{ label: '用户id', name: 'userId', index: 'user_id', width: 80 },
-			{ label: '用户昵称', name: 'user.nickname', index: 'nickname', width: 80 },
-			{ label: '店铺名称', name: 'shop.shopName', index: 'supplier_id', width: 80 },
-            { label: '订单状态', name: 'orderStatus', width: 60, formatter: function(value, options, row){
+			{ label: '订单号', name: 'orderNo', index: 'order_no', width: 159 },
+			{ label: '用户id', name: 'userId', index: 'user_id', width: 100 },
+			{ label: '用户昵称', name: 'user.nickname', index: 'nickname', width: 110 },
+			{ label: '店铺名称', name: 'shop.shopName', index: 'supplier_id', width: 115 },
+            { label: '订单状态', name: 'orderStatus', width: 115, formatter: function(value, options, row){
                     return value === 0 ?
                         '<span class="label label-danger">未处理</span>' :
                         (value===1?'<span class="label label-success">处理中</span>':
                          (value===2?'<span class="label label-success">已完成</span>':'<span class="label label-success">已关闭</span>'));
                 }},
-            { label: '支付状态', name: 'payStatus', width: 60, formatter: function(value, options, row){
+            { label: '支付状态', name: 'payStatus', width: 115, formatter: function(value, options, row){
                     return value === 0 ?
                         '<span class="label label-danger">未支付</span>' :
                         (value===1?'<span class="label label-success">支付中</span>':'<span class="label label-success">已支付</span>');
@@ -25,24 +25,30 @@ $(function () {
                         '<span class="label label-danger">未退款</span>' :
                         (value===1?'<span class="label label-success">退款中</span>':'<span class="label label-success">已退款</span>');
                 }},*/
-            { label: '发货状态', name: 'shipStatus', width: 60, formatter: function(value, options, row){
+            { label: '发货状态', name: 'shipStatus', width: 115, formatter: function(value, options, row){
                     return value === 0 ?
                         '<span class="label label-danger">未发货</span>' :
                         (value===1?'<span class="label label-success">发货中</span>':'<span class="label label-success">已配送</span>');
                 }},
 			/*{ label: '运费(元)', name: 'freightPrice', index: 'freight_price', width: 80 },
 			{ label: '代金券优惠价(元)', name: 'couponPrice', index: 'coupon_price', width: 80 },*/
-			{ label: '订单金额(元)', name: 'actualPrice', index: 'actual_price', width: 80 , formatter: function(value, options, row){
+			{ label: '订单金额(元)', name: 'actualPrice', index: 'actual_price', width: 115 , formatter: function(value, options, row){
 			       return '￥'+value;
             }},
 		/*	{ label: '支付金额(元)', name: 'payPrice', index: 'pay_price', width: 80 },
 			{ label: '支付流水', name: 'payId', index: 'pay_id', width: 80 },*/
-			{ label: '支付渠道名', name: 'payChannel', index: 'pay_channel', width: 80 },
-			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 },
+			{ label: '支付渠道名', name: 'payChannel', index: 'pay_channel', width: 115 },
+			{ label: '创建时间', name: 'createTime', index: "create_time",align:'center', width: 123, formatter: function(value, options, row){
+                            if(value!=null){
+                                return getDateTime(value,"yyyyMMddHHmmss");
+                            }else{
+                                return "";
+                            }
+                        },sortable:true},
 			/*{ label: '支付时间', name: 'payTime', index: 'pay_time', width: 80 },
 			{ label: '发货时间', name: 'shipTime', index: 'ship_time', width: 80 },
 			{ label: '确认收货时间', name: 'confirmTime', index: 'confirm_time', width: 80 }*/
-              {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+              {header:'操作', name:'操作', width:130, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                     var actions = [];
                         actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;详情</a>&nbsp;');
                     return actions.join('');
@@ -56,6 +62,8 @@ $(function () {
         rownumWidth: 25, 
         autowidth:true,
         multiselect: true,
+        shrinkToFit:false,
+        autoScroll: true,
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
@@ -70,7 +78,8 @@ $(function () {
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+//        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "scroll" });
         }
     });
 });

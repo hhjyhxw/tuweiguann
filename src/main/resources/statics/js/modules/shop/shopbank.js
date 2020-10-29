@@ -4,27 +4,27 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 30, key: true },
-            { label: '所属店铺', name: 'shop.shopName', index: 'shop_id', width: 80 },
-			{ label: '银行名称', name: 'bankName', index: 'bank_name', width: 80 }, 			
-			{ label: '支行名称', name: 'subBranch', index: 'sub_branch', width: 80 },
-			{ label: '银行编号', name: 'bankCode', index: 'bank_code', width: 80 },
-			{ label: '银行卡号', name: 'cardNo', index: 'card_no', width: 80 },
-			{ label: '用户姓名', name: 'userName', index: 'user_name', width: 80 }, 			
-			{ label: '手机号', name: 'mobile', index: 'mobile', width: 80 }, 			
-            { label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
+            { label: '所属店铺', name: 'shop.shopName', index: 'shop_id', width: 123 },
+			{ label: '银行名称', name: 'bankName', index: 'bank_name', width: 135 },
+			{ label: '支行名称', name: 'subBranch', index: 'sub_branch', width: 135 },
+			{ label: '银行编号', name: 'bankCode', index: 'bank_code', width: 135 },
+			{ label: '银行卡号', name: 'cardNo', index: 'card_no', width: 160 },
+			{ label: '用户姓名', name: 'userName', index: 'user_name', width: 123 },
+			{ label: '手机号', name: 'mobile', index: 'mobile', width: 123 },
+            { label: '状态', name: 'status', width: 115, formatter: function(value, options, row){
                     return value === '0' ?
                         '<span class="label label-danger">禁用</span>' :
                         '<span class="label label-success">正常</span>';
                 }},
-            { label: '审核状态', name: 'approveFlag', width: 60, formatter: function(value, options, row){
+            { label: '审核状态', name: 'approveFlag', width: 115, formatter: function(value, options, row){
                     return value === '0' ?
                         '<span class="label label-danger">未审核</span>' :
                         (value==='1'?'<span class="label label-success">审核中</span>':
                         (value==='2'?'<span class="label label-success">审核通过</span>':
                         (value==='3'?'<span class="label label-success">审核失败</span>':'')));
                 }},
-            { label: '审核不通过原因', name: 'msg', index: 'msg', width: 80 },
-            { label: '创建时间', name: 'createdTime', index: "created_time", width: 85, formatter: function(value, options, row){
+            { label: '备注', name: 'msg', index: 'msg', width: 115 },
+            { label: '创建时间', name: 'createdTime', index: "created_time", width: 115, formatter: function(value, options, row){
                 if(value!=null){
                     return getDateTime(value,"yyyyMMddHHmmss");
                 }else{
@@ -41,7 +41,7 @@ $(function () {
                             return "";
                         }
             }},*/
-            {header:'操作', name:'操作', width:122, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+            {header:'操作', name:'操作', width:180, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                 var actions = [];
                  if(shop_shopbank_update===1){
                     actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
@@ -64,6 +64,8 @@ $(function () {
         rownumWidth: 25, 
         autowidth:true,
         multiselect: true,
+        shrinkToFit:false,
+        autoScroll: true,
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
@@ -78,7 +80,7 @@ $(function () {
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "scroll" });
         }
     });
 });

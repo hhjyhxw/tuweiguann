@@ -194,7 +194,7 @@ t.shop_id = s.id and t.user_id = u.id
 
     <!--订单月报-->
     <select id="queryReportMonthList" resultType="com.icloud.modules.small.vo.OrderReportVo">
-        select DATE_FORMAT(t.create_time, '%Y-%m') AS createTime,DATE_FORMAT(t.create_time, '%Y-%m-%d') AS querydate,count(*) orderCount,sum(t.sku_total_price) orderAmout,sum(t.coupon_price) couponPrice,sum(t.actual_price) actualPrice,s.shop_name shopName,t.shop_id shopId  from t_small_order t,shop s
+        select DATE_FORMAT(t.create_time, '%Y-%m') AS createTime,count(*) orderCount,sum(t.sku_total_price) orderAmout,sum(t.coupon_price) couponPrice,sum(t.actual_price) actualPrice,s.shop_name shopName,t.shop_id shopId  from t_small_order t,shop s
         <where>
             t.shop_id = s.id and t.pay_status=2
             <if test="shopId != null">
@@ -213,7 +213,7 @@ t.shop_id = s.id and t.user_id = u.id
                 and ${sql_filter}
             </if>
         </where>
-        group by createTime,t.shop_id,s.shop_name,t.shop_id,querydate
+        group by createTime,t.shop_id,s.shop_name,t.shop_id
         order by orderCount desc,orderAmout desc
     </select>
     <!--订单月报明细-->
@@ -280,7 +280,7 @@ t.shop_id = s.id and t.user_id = u.id
                 and t.phone like CONCAT('%', '${phone}', '%')
             </if>
             <if test="querydate != null and querydate !=''" >
-                and DATE_FORMAT(t.create_time,'%Y-%m-%d') = #{querydate}
+                and DATE_FORMAT(t.create_time,'%Y-%m') = #{querydate}
             </if>
             <if test="nickname != null and nickname!=''">
                 and u.nickname like CONCAT('%', '${nickname}', '%')

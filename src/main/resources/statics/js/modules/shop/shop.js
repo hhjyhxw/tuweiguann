@@ -606,7 +606,7 @@ Dept.initColumn = function () {
                                  (item.review==='2'?'<span class="label label-success">审核通过</span>':
                                  (item.review==='3'?'<span class="label label-success">审核失败</span>':'')));
                          }},
-        {title:'操作', field:'操作', width: '123px', sortable:false, title:"操作", align:'center', formatter: function(item, index){
+        {title:'操作', field:'操作', width: '150px', sortable:false, title:"操作", align:'center', formatter: function(item, index){
                         var actions = [];
                         if(shop_shop_update===1){
                                 actions.push('<a class="btn btn-primary" onclick="vm.update('+item.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');

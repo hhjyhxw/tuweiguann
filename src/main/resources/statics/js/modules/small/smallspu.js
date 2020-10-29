@@ -163,39 +163,39 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '商品名称', name: 'title', index: 'title', width: 115 },
-			{ label: '商品图片', name: 'img', width: 60, formatter: function(value, options, row){
+			{ label: '商品图片', name: 'img', width: 90, formatter: function(value, options, row){
                 return '<img style="height: 3rem;width: 3rem;" src="'+value+'" />';
             }},
-            { label: '原价(元)', name: 'price', index: 'price', width: 50 },
-            { label: '现价(元)', name: 'originalPrice', index: 'original_price', width: 50 },
-			{ label: '销量', name: 'sales', index: 'sales', width: 50 },
-            { label: '总库存', name: 'stock', index: 'stock', width: 50 },
-            { label: '剩余库存', name: 'remainStock', index: 'remainStock', width: 50 },
+            { label: '商品名称', name: 'title', index: 'title', width: 115 },
+            { label: '原价(元)', name: 'price', index: 'price', width: 115 },
+            { label: '现价(元)', name: 'originalPrice', index: 'original_price', width: 115 },
+			{ label: '销量', name: 'sales', index: 'sales', width: 115 },
+            { label: '总库存', name: 'stock', index: 'stock', width: 115 },
+            { label: '剩余库存', name: 'remainStock', index: 'remainStock', width: 115 },
             // { label: '分类id', name: 'categoryId', index: 'category_id', width: 80 },
-            { label: '所属分类', name: 'smallCategory.title', index: 'category_id', width: 80 },
+            { label: '所属分类', name: 'smallCategory.title', index: 'category_id', width: 135 },
           /*  { label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
                     return value === 0 ?
                         '<span class="label label-danger">下架</span>' :
                         '<span class="label label-success">上架</span>';
                 }},*/
 			// { label: '商户id', name: 'shopId', index: 'shop_id', width: 80 },
-            { label: '所属店铺', name: 'shop.shopName', index: 'shop_id', width: 80 },
-			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+            { label: '所属店铺', name: 'shop.shopName', index: 'shop_id', width: 135 },
+			{ label: '创建时间', name: 'createTime', index: "create_time", width: 135, formatter: function(value, options, row){
                 if(value!=null){
                     return getDateTime(value,"yyyyMMddHHmmss");
                 }else{
                     return "";
                 }
             }},
-            { label: '更新时间', name: 'modifyTime', index: "modify_time", width: 85, formatter: function(value, options, row){
+            { label: '更新时间', name: 'modifyTime', index: "modify_time", width: 135, formatter: function(value, options, row){
                       if(value!=null){
                         return getDateTime(value,"yyyyMMddHHmmss");
                       }else{
                             return "";
                         }
             }},
-            {header:'操作', name:'操作', width:90, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+            {header:'操作', name:'操作', width:189, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
                 var actions = [];
                     if(small_smallspu_update===1){
                          actions.push('<a class="btn btn-primary" onclick="vm.update('+row.id+')" style="padding: 3px 8px;"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>&nbsp;');
@@ -214,6 +214,8 @@ $(function () {
         rownumWidth: 25, 
         autowidth:true,
         multiselect: true,
+        shrinkToFit:false,
+        autoScroll: true,
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
@@ -228,7 +230,8 @@ $(function () {
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+//        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "scroll" });
         }
     });
 });

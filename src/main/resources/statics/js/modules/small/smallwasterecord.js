@@ -4,34 +4,34 @@ $(function () {
         datatype: "json",
         colModel: [
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '店铺', name: 'shop.shopName', index: 'shop_id', width: 80 },
-			{ label: '提现银行', name: 'bank.bankName', index: 'bank_id', width: 80 },
-			{ label: '账号', name: 'bank.cardNo', index: 'cardNo', width: 115 },
-			{ label: '姓名', name: 'bank.userName', index: 'userName', width: 50 },
-			{ label: '手机号', name: 'bank.mobile', index: 'mobile', width: 50 },
-            { label: '金额', name: 'amount', index: 'amount', width: 80 },
-			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85, formatter: function(value, options, row){
+			{ label: '店铺', name: 'shop.shopName', index: 'shop_id', width: 125 },
+			{ label: '提现银行', name: 'bank.bankName', index: 'bank_id', width: 125 },
+			{ label: '账号', name: 'bank.cardNo', index: 'cardNo', width: 125 },
+			{ label: '姓名', name: 'bank.userName', index: 'userName', width: 125 },
+			{ label: '手机号', name: 'bank.mobile', index: 'mobile', width: 125 },
+            { label: '金额', name: 'amount', index: 'amount', width: 125 },
+			{ label: '创建时间', name: 'createTime', index: "create_time", width: 125, formatter: function(value, options, row){
               if(value!=null){
                 return getDateTime(value,"yyyyMMddHHmmss");
               }else{
                     return "";
                 }
             }},
-			{ label: '申请人', name: 'createBy', index: 'create_by', width: 50 },
-             { label: '状态', name: 'approveFlag', width: 60, formatter: function(value, options, row){
+			{ label: '申请人', name: 'createBy', index: 'create_by', width: 125 },
+             { label: '状态', name: 'approveFlag', width: 115, formatter: function(value, options, row){
                 return value === '0' ? '<span class="label label-danger">提现申请</span>' :
                     (value==='1'?'<span class="label label-success">提现处理</span>':
                     (value==='2'?'<span class="label label-success">提现成功</span>':
                     (value==='3'?'<span class="label label-success">提现失败</span>':'未知操作')));
             }},
-			{ label: '审核时间', name: 'approveTime', index: "approve_time", width: 85, formatter: function(value, options, row){
+			{ label: '审核时间', name: 'approveTime', index: "approve_time", width: 125, formatter: function(value, options, row){
               if(value!=null){
                 return getDateTime(value,"yyyyMMddHHmmss");
               }else{
                     return "";
                 }
             }},
-            { label: '审核人', name: 'approveBy', index: 'approve_by', width: 50 },
+            { label: '审核人', name: 'approveBy', index: 'approve_by', width: 125 },
 
         ],
 		viewrecords: true,
@@ -42,6 +42,8 @@ $(function () {
         rownumWidth: 25, 
         autowidth:true,
         multiselect: true,
+        shrinkToFit:false,
+        autoScroll: true,
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
@@ -56,7 +58,7 @@ $(function () {
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "scroll" });
         }
     });
 });

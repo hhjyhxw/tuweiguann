@@ -10,8 +10,9 @@ $(function () {
 			{ label: '实付金额', name: 'payPrice', index: 'payPrice', width: 80 },
             { label: '店铺名称', name: 'shopName', index: 'shopName', width: 80 },
             {header:'操作', name:'操作', width:50, sortable:false, title:false, align:'center', formatter: function(val, obj, row, act){
+                   console.log("row=="+JSON.stringify(row));
                     var actions = [];
-                    actions.push('<a title="查询明细" onclick="vm.querydetail('+row.querydate+','+row.shopId+')"><i class="fa fa-pencil">查询明细</i></a>&nbsp;');
+                    actions.push('<a title="查询明细" onclick=vm.querydetail("'+row.createTime+'",'+row.shopId+')><i class="fa fa-pencil">查询明细</i></a>&nbsp;');
                     return actions.join('');
                 }}
         ],

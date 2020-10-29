@@ -6,7 +6,7 @@ $(function () {
         colModel: [			
 			/*{ label: 'id', name: 'id', index: 'id', width: 50, key: true },*/
 			/*{ label: '下单渠道', name: 'channel', index: 'channel', width: 80 }, 			*/
-			{ label: '订单号', name: 'orderNo', index: 'order_no', width: 80 },
+			{ label: '订单号', name: 'orderNo', index: 'order_no', width: 130 },
 			{ label: '用户id', name: 'userId', index: 'user_id', width: 80 },
 			{ label: '用户昵称', name: 'user.nickname', index: 'nickname', width: 80 },
 			{ label: '店铺名称', name: 'shop.shopName', index: 'supplier_id', width: 80 },
@@ -39,7 +39,13 @@ $(function () {
 		/*	{ label: '支付金额(元)', name: 'payPrice', index: 'pay_price', width: 80 },
 			{ label: '支付流水', name: 'payId', index: 'pay_id', width: 80 },*/
 			{ label: '支付渠道名', name: 'payChannel', index: 'pay_channel', width: 80 },
-			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 },
+			 { label: '创建时间', name: 'createTime', index: "create_time", width: 135, formatter: function(value, options, row){
+                            if(value!=null){
+                                return getDateTime(value,"yyyyMMddHHmmss");
+                            }else{
+                                return "";
+                            }
+                        }},
 			/*{ label: '支付时间', name: 'payTime', index: 'pay_time', width: 80 },
 			{ label: '发货时间', name: 'shipTime', index: 'ship_time', width: 80 },
 			{ label: '确认收货时间', name: 'confirmTime', index: 'confirm_time', width: 80 }*/
@@ -71,7 +77,7 @@ $(function () {
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "scroll" });
         }
     });
 });
