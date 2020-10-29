@@ -70,11 +70,12 @@ public class ShopApiController {
             shopId = Long.valueOf(shopIds);
         }
         //1、默认读取平台店铺
-        List<Shop> shoplist = new ArrayList<Shop>();
+        Set<Shop> shoplist = new HashSet<>();
         //系统店铺及系统店铺分店一定读取
         List<Shop> sysshoplist = shopService.list(new QueryWrapper<Shop>().eq("sys_flag","1").eq("status","1"));
         if(sysshoplist!=null && sysshoplist.size()>0){
-            shoplist = sysshoplist;
+//            shoplist = sysshoplist;
+            shoplist.addAll(sysshoplist);
             List<Shop> sonlist = shopService.list(new QueryWrapper<Shop>().eq("parent_id",sysshoplist.get(0).getId()).eq("status","1"));
             if(sonlist!=null && sonlist.size()>0){
                 shoplist.addAll(sonlist);
@@ -90,12 +91,8 @@ public class ShopApiController {
                 WxUser user = (WxUser)sessuser;
                 List<Shop> mylist = shopService.list(new QueryWrapper<Shop>().eq("user_id",user.getId()));
                 if(mylist!=null && mylist.size()>0){
-//                   if(mylist.get(0).getId().longValue()!=sysshoplist.get(0).getId().longValue()){
-                       shopId = mylist.get(0).getId();
-//                       shopMainId = shopId;
-//                       shopMainName = mylist.get(0).getShopName();
-//                       shopImg = mylist.get(0).getShopImg();
-//                   }
+                    shopId = mylist.get(0).getId();
+                    shoplist.addAll(mylist);
                 }
             }
         }
@@ -128,10 +125,10 @@ public class ShopApiController {
         }
         //用于分享
         if(shopMainId==null){
-            shopId = shoplist.get(0).getId();
+            shopId = sysshoplist.get(0).getId();
             shopMainId = shopId;
-            shopMainName = shoplist.get(0).getShopName();
-            shopImg = shoplist.get(0).getShopImg();
+            shopMainName = sysshoplist.get(0).getShopName();
+            shopImg = sysshoplist.get(0).getShopImg();
 
         }
         final long activeShop = shopMainId;
