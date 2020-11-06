@@ -99,4 +99,6 @@ public class WxUser implements Serializable {
     @TableField(exist = false)
     private String sessionKey;
 
+
+
 }

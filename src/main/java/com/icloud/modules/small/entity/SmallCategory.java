@@ -3,6 +3,7 @@ package com.icloud.modules.small.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +47,9 @@ public class SmallCategory implements Serializable {
         /* 排序*/
         @TableField("sort_num")
         private Integer sortNum;
-
+        /* 店铺id */
+        @TableField("shop_id")
+        private Long shopId;
         @TableField(exist=false)
         private String name;
         /**
