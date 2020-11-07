@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Api("银行卡")
 @RestController
 @RequestMapping("/api/shopBank")
-public class ShopBankController {
+public class ShopApiBankController {
 
     @Autowired
     private BsactivityAdService bsactivityAdService;
