@@ -43,6 +43,7 @@ public class FileUploadController implements InitializingBean {
     private String callbackUrl;
     @Value("${oss.aliyun.oss.basekUrl}")
     private String baseUrl;
+
     @Autowired
     private OSSClient ossClient;
 
