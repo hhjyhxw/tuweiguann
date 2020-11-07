@@ -4,10 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
-import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PolicyConditions;
-import com.aliyun.oss.model.PutObjectRequest;
-import org.apache.commons.io.FilenameUtils;
+import com.icloud.annotation.AuthIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -15,18 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by rize on 2019/2/13.
  */
 @Controller
 @RequestMapping("/api/upload")
@@ -69,6 +64,7 @@ public class FileUploadController implements InitializingBean {
      * @param response
      */
     @RequestMapping(method = RequestMethod.GET)
+    @AuthIgnore
     public void upload(HttpServletRequest request, HttpServletResponse response) {
         try {
             long expireTime = 30;
