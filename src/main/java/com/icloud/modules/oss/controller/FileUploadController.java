@@ -68,7 +68,7 @@ public class FileUploadController implements InitializingBean {
     @AuthIgnore
     public void upload(HttpServletRequest request, HttpServletResponse response) {
         try {
-            long expireTime = 30;
+            long expireTime = 60;
             long expireEndTime = System.currentTimeMillis() + expireTime * 1000;
             Date expiration = new Date(expireEndTime);
             PolicyConditions policyConds = new PolicyConditions();
