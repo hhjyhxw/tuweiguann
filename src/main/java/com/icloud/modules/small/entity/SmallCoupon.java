@@ -87,6 +87,9 @@ public class SmallCoupon implements Serializable {
        @NotNull(message = "店铺不能为空")
        @TableField("shop_id")
        private Long shopId;
+        /* 排序 */
+        @TableField("order_num")
+        private Integer orderNum;
 
     /* 是否已领取 */
     @TableField(exist = false)

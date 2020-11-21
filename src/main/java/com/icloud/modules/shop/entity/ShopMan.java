@@ -65,6 +65,9 @@ public class ShopMan implements Serializable {
    	   	   /* 更新时间 */
        @TableField("updated_time")
        private Date updatedTime;
+        /* 微信用户 */
+        @TableField("openid")
+        private String openid;
         /* 店铺 */
        @TableField(exist = false)
        private Shop shop;

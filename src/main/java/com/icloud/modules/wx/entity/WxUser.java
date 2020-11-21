@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.icloud.modules.shop.entity.ShopMan;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -99,6 +100,8 @@ public class WxUser implements Serializable {
     @TableField(exist = false)
     private String sessionKey;
 
-
+    /*绑定成为店铺的管理员*/
+    @TableField(exist = false)
+    private ShopMan shopMan;
 
 }

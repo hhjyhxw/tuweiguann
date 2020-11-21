@@ -6,6 +6,7 @@ import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import cn.hutool.captcha.generator.RandomGenerator;
 import cn.hutool.extra.emoji.EmojiUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.AuthIgnore;
 import com.icloud.annotation.LoginUser;
 import com.icloud.api.vo.MiniUserLoginVo;
@@ -18,6 +19,8 @@ import com.icloud.common.validator.ValidatorUtils;
 import com.icloud.config.global.mini.WxMaConfiguration;
 import com.icloud.config.global.wx.utils.JsonUtils;
 import com.icloud.exceptions.ApiException;
+import com.icloud.modules.shop.entity.ShopMan;
+import com.icloud.modules.shop.service.ShopManService;
 import com.icloud.modules.wx.entity.WxUser;
 import com.icloud.modules.wx.service.WxUserService;
 import com.icloud.modules.wx.vo.UserVo;
@@ -50,6 +53,8 @@ public class MiniUserLoginController {
     private HttpServletRequest httpServletRequest;
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private ShopManService shopManService;
 
 
     /**
@@ -110,6 +115,10 @@ public class MiniUserLoginController {
                     user.setStatus("1");
                     wxUserService.save(user);
                 }
+//                List<ShopMan> shopManlist = shopManService.list(new QueryWrapper<ShopMan>().eq("openid",user.getXcxopenid()));
+//                if(shopManlist!=null && shopManlist.size()>0){
+//                    user.setShopMan(shopManlist.get(0));
+//                }
                 String accessToken = new RandomGenerator(12).generate();
                 user.setToken(accessToken);
                 redisService.set(accessToken,user,3000L);//兼容h5、APP 前端服务 登陆
