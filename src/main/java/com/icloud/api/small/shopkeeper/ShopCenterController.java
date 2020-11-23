@@ -23,7 +23,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +46,7 @@ public class ShopCenterController {
     private ShopStoreService shopStoreService;
 
     /**
+     * 进入店铺中心是时候需要判断
      * 判断是否是店主
      * @return
      */
