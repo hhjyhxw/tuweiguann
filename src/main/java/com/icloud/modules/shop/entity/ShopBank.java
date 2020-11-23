@@ -28,9 +28,9 @@ public class ShopBank implements Serializable {
        @TableId(value="id", type= IdType.AUTO)
        private Long id;
    	   	   /* 所属店铺 */
-       @NotNull(message = "所属店铺不能为空")
+//       @NotNull(message = "所属店铺不能为空")
        @TableField("shop_id")
-       private String shopId;
+       private Long shopId;
    	   	   /* 银行名称 */
        @NotBlank(message = "银行名称不能为空")
        @TableField("bank_name")
