@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Api("店主商品分类")
+@Api("店铺商品分类")
 @RestController
 @RequestMapping("/api/shopCategory")
 public class ShopCategoryController {

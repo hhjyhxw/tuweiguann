@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
-@Api("店主中心")
+@Api("店铺中心")
 @RestController
 @RequestMapping("/api/shopcenter")
 public class ShopCenterController {

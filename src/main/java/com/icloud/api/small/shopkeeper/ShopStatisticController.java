@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api("订单报表统计")
+@Api("店铺订单报表统计")
 @RestController
 @RequestMapping("/api/shopStatistic")
 public class ShopStatisticController {

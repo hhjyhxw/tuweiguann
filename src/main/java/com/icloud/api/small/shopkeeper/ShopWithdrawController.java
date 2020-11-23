@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Api("提现管理")
+@Api("店铺提现管理")
 @RestController
 @RequestMapping("/api/shopWithdraw")
 public class ShopWithdrawController {

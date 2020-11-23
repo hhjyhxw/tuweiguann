@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@Api("店主商品")
+@Api("店铺商品")
 @RestController
 @RequestMapping("/api/shopgoods")
 public class ShopGoodsController {

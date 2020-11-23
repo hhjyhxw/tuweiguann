@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@Api("店主广告")
+@Api("店铺广告")
 @RestController
 @RequestMapping("/api/shopAds")
 public class ShopAdsController {
@@ -113,7 +113,7 @@ public class ShopAdsController {
      */
     @ApiOperation(value="删除广告", notes="")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "shopId", value = "广告id", required = true, paramType = "query", dataType = "Long")
+            @ApiImplicitParam(name = "id", value = "广告id", required = true, paramType = "query", dataType = "Long")
     })
     @RequestMapping(value = "/delAds",method = {RequestMethod.GET})
     @ResponseBody
