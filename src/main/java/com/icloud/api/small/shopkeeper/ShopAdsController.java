@@ -103,6 +103,11 @@ public class ShopAdsController {
     @RequestMapping(value = "/adsInfo",method = {RequestMethod.GET})
     @ResponseBody
     public R adsInfo(@LoginUser WxUser user,@RequestParam Long id) {
+        if(user.getShopMan()==null){
+            return R.error("不是店主");
+        }else if(user.getShopMan()!=null && "0".equals(user.getShopMan().getStatus())){
+            return R.error("店主账号已被禁用");
+        }
         BsactivityAd bsactivityAd = (BsactivityAd) bsactivityAdService.getById(id);
         return R.ok().put("bsactivityAd",bsactivityAd);
     }
@@ -118,6 +123,11 @@ public class ShopAdsController {
     @RequestMapping(value = "/delAds",method = {RequestMethod.GET})
     @ResponseBody
     public R delAds(@RequestParam Long id,@LoginUser WxUser user) {
+        if(user.getShopMan()==null){
+            return R.error("不是店主");
+        }else if(user.getShopMan()!=null && "0".equals(user.getShopMan().getStatus())){
+            return R.error("店主账号已被禁用");
+        }
         boolean result = bsactivityAdService.removeById(id);
         return result==true?R.ok():R.error("删除失败");
     }
