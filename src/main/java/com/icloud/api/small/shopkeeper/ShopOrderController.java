@@ -50,7 +50,6 @@ public class ShopOrderController {
             @ApiImplicitParam(name = "pageSize", value = "每页多少记录", required = false, paramType = "query", dataType = "String"),
     })
     @RequestMapping(value = "/todayOrderlist",method = {RequestMethod.GET})
-    @ResponseBody
     public R todayOrderlist(@LoginUser WxUser user,String pageNum,String pageSize) {
         if(user.getShopMan()==null){
             return R.error("不是店主");
@@ -95,7 +94,6 @@ public class ShopOrderController {
             @ApiImplicitParam(name = "pageSize", value = "每页多少记录", required = false, paramType = "query", dataType = "String"),
     })
     @RequestMapping(value = "/hisOrderlist",method = {RequestMethod.GET})
-    @ResponseBody
     public R hisOrderlist(@LoginUser WxUser user,String pageNum,String pageSize) {
         if(user.getShopMan()==null){
             return R.error("不是店主");
@@ -138,9 +136,12 @@ public class ShopOrderController {
             @ApiImplicitParam(name = "id", value = "订单id", required = true, paramType = "query", dataType = "Long")
     })
     @RequestMapping(value = "/orderdetail",method = {RequestMethod.GET})
-    @ResponseBody
     public R orderdetail(@RequestParam Long id,@LoginUser WxUser user) throws Exception {
-
+        if(user.getShopMan()==null){
+            return R.error("不是店主");
+        }else if(user.getShopMan()!=null && "0".equals(user.getShopMan().getStatus())){
+            return R.error("店主账号已被禁用");
+        }
         List<SmallOrder> orderlist = smallOrderService.list(new QueryWrapper<SmallOrder>().eq("id",id));
         if(orderlist==null || orderlist.size()<=0){
             return R.error();
