@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.icloud.modules.shop.entity.Shop;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
@@ -27,9 +28,11 @@ public class BsactivityAd implements Serializable {
        @TableId(value="id", type= IdType.AUTO)
        private Long id;
    	   	   /* 名称 */
+       @NotEmpty(message = "广告名称不能为空")
        @TableField("ad_name")
        private String adName;
    	   	   /* 图片url */
+       @NotEmpty(message = "广告图片不能为空")
        @TableField("ad_imgurl")
        private String adImgurl;
    	   	   /* 跳转url */

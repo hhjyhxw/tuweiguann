@@ -2,6 +2,7 @@ package com.icloud.api.small.shopkeeper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.LoginUser;
+import com.icloud.api.vo.shopkeeper.BatchStatusVo;
 import com.icloud.basecommon.model.Query;
 import com.icloud.common.PageUtils;
 import com.icloud.common.R;
@@ -10,7 +11,10 @@ import com.icloud.common.validator.ValidatorUtils;
 import com.icloud.modules.bsactivity.service.BsactivityAdService;
 import com.icloud.modules.shop.entity.Shop;
 import com.icloud.modules.shop.service.ShopService;
-import com.icloud.modules.small.entity.*;
+import com.icloud.modules.small.entity.SmallGroupShop;
+import com.icloud.modules.small.entity.SmallOrderDetail;
+import com.icloud.modules.small.entity.SmallSku;
+import com.icloud.modules.small.entity.SmallSpu;
 import com.icloud.modules.small.service.*;
 import com.icloud.modules.wx.entity.WxUser;
 import io.swagger.annotations.Api;
@@ -52,7 +56,6 @@ public class ShopGoodsController {
      */
     @ApiOperation(value="店主商品库商品列表", notes="")
     @RequestMapping(value = "/goodsSpuList",method = {RequestMethod.GET})
-    @ResponseBody
     public R goodsSpuList(@LoginUser WxUser user,@RequestBody Map<String,Object> params) {
         if(user.getShopMan()==null){
             return R.error("不是店主");
@@ -69,7 +72,6 @@ public class ShopGoodsController {
      */
     @ApiOperation(value="商品库商品添加", notes="")
     @RequestMapping(value = "/saveSpu",method = {RequestMethod.GET})
-    @ResponseBody
     public R addSpu(@RequestParam Long shopId,@LoginUser WxUser user,@RequestBody SmallSpu smallSpu) {
         if(user.getShopMan()==null){
             return R.error("不是店主");
@@ -104,8 +106,7 @@ public class ShopGoodsController {
      */
     @ApiOperation(value="更新商品库商品", notes="")
     @RequestMapping(value = "/updateSpu",method = {RequestMethod.GET})
-    @ResponseBody
-    public R updateSpu(@RequestParam Long shopId,@LoginUser WxUser user,@RequestBody SmallSpu smallSpu) {
+    public R updateSpu(@LoginUser WxUser user,@RequestBody SmallSpu smallSpu) {
         if(smallSpu.getId()==null){
             return R.error("id不能为空");
         }
@@ -143,7 +144,6 @@ public class ShopGoodsController {
             @ApiImplicitParam(name = "id", value = "商品id", required = true, paramType = "query", dataType = "Long")
     })
     @RequestMapping(value = "/spuInfo",method = {RequestMethod.GET})
-    @ResponseBody
     public R spuInfo(@RequestParam Long id,@LoginUser WxUser user) {
         if(user.getShopMan()==null){
             return R.error("不是店主");
@@ -163,7 +163,6 @@ public class ShopGoodsController {
             @ApiImplicitParam(name = "id", value = "商品id", required = true, paramType = "query", dataType = "Long")
     })
     @RequestMapping(value = "/delSpu",method = {RequestMethod.GET})
-    @ResponseBody
     public R delSpu(@RequestParam Long id,@LoginUser WxUser user) {
         if(user.getShopMan()==null){
             return R.error("不是店主");
@@ -185,7 +184,6 @@ public class ShopGoodsController {
      */
     @ApiOperation(value="店主商商家商品列表", notes="")
     @RequestMapping(value = "/goodsGroupList",method = {RequestMethod.GET})
-    @ResponseBody
     public R goodsGroupList(@LoginUser WxUser user,@RequestBody Map<String,Object> params) {
         if(user.getShopMan()==null){
             return R.error("不是店主");
@@ -205,13 +203,13 @@ public class ShopGoodsController {
      */
     @ApiOperation(value="保存上架商品", notes="")
     @RequestMapping(value = "/saveGroupgoods",method = {RequestMethod.POST})
-    @ResponseBody
-    public R saveGroupgoods(@RequestParam Long shopId,@LoginUser WxUser user,@RequestBody SmallGroupShop smallGroupShop) {
+    public R saveGroupgoods(@LoginUser WxUser user,@RequestBody SmallGroupShop smallGroupShop) {
         if(user.getShopMan()==null){
             return R.error("不是店主");
         }else if(user.getShopMan()!=null && "0".equals(user.getShopMan().getStatus())){
             return R.error("店主账号已被禁用");
         }
+        smallGroupShop.setShopId(user.getShopMan().getShopId());
         Shop shop = (Shop) shopService.getById(smallGroupShop.getShopId());
         //如果是公共商品，设置公共商品id
         if("1".equals(smallGroupShop.getCommonFlag()) && "1".equals(shop.getSysFlag())){
@@ -230,6 +228,40 @@ public class ShopGoodsController {
         }
         smallGroupShop.setCreateTime(new Date());
         smallGroupShopService.save(smallGroupShop);
+
+        return R.ok();
+    }
+    /**
+     * 修改
+     */
+    @ApiOperation(value="修改上架商品", notes="")
+    @RequestMapping(value = "/updateGroupgoods",method = {RequestMethod.POST})
+    public R updateGroupgoods(@LoginUser WxUser user,@RequestBody SmallGroupShop smallGroupShop){
+        if(user.getShopMan()==null){
+            return R.error("不是店主");
+        }else if(user.getShopMan()!=null && "0".equals(user.getShopMan().getStatus())){
+            return R.error("店主账号已被禁用");
+        }
+        ValidatorUtils.validateEntity(smallGroupShop);
+//        smallGroupShop.setShopId(user.getShopMan().getShopId());
+        smallGroupShop.setModifyTime(new Date());
+        Shop shop = (Shop) shopService.getById(smallGroupShop.getShopId());
+        //如果是公共商品，设置公共商品id
+        if("1".equals(smallGroupShop.getCommonFlag()) && "1".equals(shop.getSysFlag())){
+            return R.error("系统店铺不能上架公共商品");
+        }
+        SmallSpu spu = (SmallSpu) smallSpuService.getById(smallGroupShop.getSpuId());
+        smallGroupShop.setSysShopId(spu.getShopId());
+        //判断spuId \ skuId\ splierId 是否已存在
+        List<SmallGroupShop> list = smallGroupShopService.list(new QueryWrapper<SmallGroupShop>()
+                .eq("sku_id",smallGroupShop.getSkuId())
+                .eq("spu_id",smallGroupShop.getSpuId())
+                .eq("shop_id",smallGroupShop.getShopId()));
+        if(list!=null && list.size()>0 && list.get(0).getId().longValue()!=smallGroupShop.getId().longValue()){
+            return R.error("该商品已加入团购列表");
+        }
+        smallGroupShop.setModifyTime(new Date());
+        smallGroupShopService.updateById(smallGroupShop);
 
         return R.ok();
     }
@@ -259,6 +291,9 @@ public class ShopGoodsController {
         return R.ok().put("smallGroupShop", smallGroupShop);
     }
 
+
+
+
     /**
      * 删除上架商品
      * @return
@@ -276,5 +311,23 @@ public class ShopGoodsController {
         }
         boolean result = smallGroupShopService.removeById(id);
         return result==true?R.ok():R.error("删除失败");
+    }
+
+    /**
+     * 批量上下架
+     * @return
+     */
+    @ApiOperation(value="团购商品批量上下架", notes="")
+    @RequestMapping(value = "/批量上下架",method = {RequestMethod.POST})
+    @ResponseBody
+    public R updateSatusBatch(@RequestBody BatchStatusVo batchStatusVo, @LoginUser WxUser user) {
+        if(batchStatusVo.getIds().length==0){
+            return R.error("ids不能为空");
+        }
+        if(!"0".equals(batchStatusVo.getStatus()) && "1".equals(batchStatusVo.getStatus())){
+            return R.error("状态不正确");
+        }
+        smallGroupShopService.updateSatusBatch(batchStatusVo);
+        return R.ok();
     }
 }

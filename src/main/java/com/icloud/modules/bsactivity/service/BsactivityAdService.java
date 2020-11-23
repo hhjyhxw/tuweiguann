@@ -2,15 +2,15 @@ package com.icloud.modules.bsactivity.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.icloud.api.vo.shopkeeper.BatchSortVo;
+import com.icloud.basecommon.service.BaseServiceImpl;
 import com.icloud.common.MapEntryUtils;
 import com.icloud.common.PageUtils;
+import com.icloud.modules.bsactivity.dao.BsactivityAdMapper;
 import com.icloud.modules.bsactivity.entity.BsactivityAd;
-import com.icloud.modules.small.entity.SmallOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.icloud.basecommon.service.BaseServiceImpl;
-import com.icloud.modules.bsactivity.dao.BsactivityAdMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
@@ -35,6 +35,16 @@ public class BsactivityAdService extends BaseServiceImpl<BsactivityAdMapper,Bsac
         PageInfo<BsactivityAd> pageInfo = new PageInfo<BsactivityAd>(list);
         PageUtils<BsactivityAd> page = new PageUtils<BsactivityAd>(list,(int)pageInfo.getTotal(),pageSize,pageNo);
         return page;
+    }
+
+    public void updateSortBatch(BatchSortVo batchSortVo) {
+        for (int i=0;i<batchSortVo.getIds().length;i++){
+            BsactivityAd bsactivityAd = bsactivityAdMapper.selectById(batchSortVo.getSortNum()[i]);
+            if(bsactivityAd!=null){
+                bsactivityAd.setSortNum(batchSortVo.getSortNum()[i]);
+                bsactivityAdMapper.updateById(bsactivityAd);
+            }
+        }
     }
 }
 

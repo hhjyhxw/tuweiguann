@@ -71,7 +71,7 @@ public class SmallGroupShop implements Serializable {
        @TableField("modify_time")
        private Date modifyTime;
    	   	   /* 商户id */
-       @NotNull(message = "店铺不能为空")
+//       @NotNull(message = "店铺不能为空")
        @TableField("shop_id")
        private Long shopId;
 

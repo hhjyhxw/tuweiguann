@@ -1,22 +1,19 @@
 package com.icloud.modules.small.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.icloud.api.vo.QueryMycouponVo;
-import com.icloud.common.DateUtil;
+import com.icloud.api.vo.shopkeeper.BatchStatusVo;
+import com.icloud.basecommon.service.BaseServiceImpl;
 import com.icloud.common.MapEntryUtils;
 import com.icloud.common.PageUtils;
-import com.icloud.modules.small.entity.SmallCoupon;
+import com.icloud.modules.small.dao.SmallGroupShopMapper;
 import com.icloud.modules.small.entity.SmallGroupShop;
 import com.icloud.modules.small.vo.GroupSkuVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.icloud.basecommon.service.BaseServiceImpl;
-import com.icloud.modules.small.dao.SmallGroupShopMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -76,5 +73,21 @@ public class SmallGroupShopService extends BaseServiceImpl<SmallGroupShopMapper,
     public List<Long> getCategoryidList(QueryMycouponVo queryMycouponVo) {
         return smallGroupShopMapper.getCategoryidList(queryMycouponVo);
     }
+
+    /**
+     *批量更新上下架状态
+     * @param batchStatusVo
+     * @return
+     */
+    public void updateSatusBatch(BatchStatusVo batchStatusVo) {
+        for (Long id:batchStatusVo.getIds()) {
+            SmallGroupShop groupShop = smallGroupShopMapper.selectById(id);
+            if(groupShop!=null){
+                groupShop.setStatus(Integer.valueOf(batchStatusVo.getStatus()));
+                smallGroupShopMapper.updateById(groupShop);
+            }
+        }
+    }
+
 }
 
