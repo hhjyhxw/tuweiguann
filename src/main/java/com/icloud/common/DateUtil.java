@@ -269,6 +269,13 @@ public class DateUtil {
 		return commonFormatDate(date, "yyyy-MM-dd");
 	}
 
+	/**
+	 * 格式化日期：yyyy-MM，如20120-11
+	 */
+	public static String formatYearMonth(java.util.Date date) {
+		return commonFormatDate(date, "yyyy-MM");
+	}
+
 	public static String commonFormatDate(java.util.Date date, String fmt) {
 		if (null == date)
 			return "";
@@ -970,7 +977,7 @@ public class DateUtil {
 	}
 
 	/**
-	 * @see 按指定格式取得当前时间()
+	 * 按指定格式取得当前时间()
 	 */
 	public static String GetTimeFormat(String strFormat) {
 		SimpleDateFormat sdf = new SimpleDateFormat(strFormat);
@@ -979,7 +986,7 @@ public class DateUtil {
 	}
 
 	/**
-	 * @see 取得指定时间的给定格式()
+	 * 取得指定时间的给定格式()
 	 */
 	public static String SetDateFormat(String myDate, String strFormat) {
 		SimpleDateFormat sdf = new SimpleDateFormat(strFormat);
@@ -1090,6 +1097,30 @@ public class DateUtil {
 		
 	}
 	/*****************************************
+	 * @throws ParseException
+	 * @功能 获取前N月  zdh
+	 * @param yearMoth: yyyy-MM
+	 ****************************************/
+	public static String getBeforeNMothStr(Date yearMoth,int n){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(yearMoth);
+		calendar.add(Calendar.MONTH, n);
+		String dateStr = formatDate(calendar.getTime());
+		return dateStr;
+	}
+	/*****************************************
+	 * @throws ParseException
+	 * @功能 获取前N月  zdh
+	 * @param yearMoth: yyyy-MM
+	 ****************************************/
+	public static Date getBeforeNMoth(Date yearMoth,int n){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(yearMoth);
+		calendar.add(Calendar.MONTH, n);
+		return calendar.getTime();
+	}
+
+	/*****************************************
 	 * @throws ParseException 
 	 * @功能 获取前N天  zdh
 	 ****************************************/
@@ -1140,7 +1171,17 @@ public class DateUtil {
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		return year+"年"+month+"月"+day+"日";
 	}
-
+	/**
+	 * 获取日期 yyyy年mm月
+	 */
+	public static String getStringChineseMoth(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH)+1;
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		return year+"年"+month+"月";
+	}
 	
 //	public static void main(String[] args) {
 ////		System.out.println(DateUtil.getBeforeDays(1));
@@ -1154,5 +1195,14 @@ public class DateUtil {
 ////		System.out.println(1%24);
 ////		System.out.println(2%24);
 ////		System.out.println(26%24);
+
+	//        Date date = new Date();
+//
+//        System.out.println(date);
+//        String ym = DateUtil.formatYearMonth(date);
+//        System.out.println(ym);
+//        Date strtodate = DateUtil.parseTimeString(ym,"yyyy-MM");
+//        System.out.println(strtodate);
+//        System.out.println(DateUtil.formatTimestamp(strtodate));
 //	}
 }
