@@ -263,8 +263,9 @@ public class ShopController extends AbstractController {
      */
     @RequestMapping("/selfshoplist")
     public R selfshoplist(@RequestParam Map<String, Object> params){
-//        List<Shop> list =  shopService.list(new QueryWrapper<Shop>().eq("id",getUser().getShopId()));//当前登陆用户的
-        List<Shop> list =  shopService.list(new QueryWrapper<Shop>());
+        Long shopId = sysUserService.getById(getUserId()).getShopId();
+        List<Shop> list =  shopService.list(new QueryWrapper<Shop>().eq("id",shopId));//当前登陆用户的
+//        List<Shop> list =  shopService.list(new QueryWrapper<Shop>());
         return R.ok().put("list", list);
     }
 

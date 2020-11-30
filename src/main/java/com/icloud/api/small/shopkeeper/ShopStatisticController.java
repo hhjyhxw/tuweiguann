@@ -30,7 +30,7 @@ import java.util.Map;
 
 @Api("店铺订单报表统计")
 @RestController
-@RequestMapping("/api/shopStatistic")
+@RequestMapping("/api/shopkeeper/shopStatistic")
 public class ShopStatisticController {
 
     @Autowired

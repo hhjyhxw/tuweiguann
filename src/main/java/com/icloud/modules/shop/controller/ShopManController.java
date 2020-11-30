@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.icloud.annotation.DataFilter;
 import com.icloud.annotation.SysLog;
 import com.icloud.basecommon.model.Query;
@@ -48,6 +49,7 @@ public class ShopManController extends AbstractController {
     @RequiresPermissions("shop:shopman:list")
     @DataFilter
     public R list(@RequestParam Map<String, Object> params){
+        logger.info("json======"+ JSON.toJSONString(params));
         Query query = new Query(params);
         PageUtils page = shopManService.findByPage(query.getPageNum(),query.getPageSize(), query);
 

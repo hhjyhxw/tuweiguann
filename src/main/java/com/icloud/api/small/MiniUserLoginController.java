@@ -115,10 +115,10 @@ public class MiniUserLoginController {
                     user.setStatus("1");
                     wxUserService.save(user);
                 }
-//                List<ShopMan> shopManlist = shopManService.list(new QueryWrapper<ShopMan>().eq("openid",user.getXcxopenid()));
-//                if(shopManlist!=null && shopManlist.size()>0){
-//                    user.setShopMan(shopManlist.get(0));
-//                }
+                List<ShopMan> shopManlist = shopManService.list(new QueryWrapper<ShopMan>().eq("openid",user.getXcxopenid()));
+                if(shopManlist!=null && shopManlist.size()>0){
+                    user.setShopMan(shopManlist.get(0));
+                }
                 String accessToken = new RandomGenerator(12).generate();
                 user.setToken(accessToken);
                 redisService.set(accessToken,user,3000L);//兼容h5、APP 前端服务 登陆

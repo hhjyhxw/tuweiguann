@@ -9,15 +9,13 @@
 package com.icloud.aspect;
 
 
+import com.alibaba.fastjson.JSON;
 import com.icloud.annotation.DataFilter;
 import com.icloud.common.Constant;
 import com.icloud.exceptions.BaseException;
 import com.icloud.modules.shop.service.ShopService;
 import com.icloud.modules.sys.entity.SysUserEntity;
-import com.icloud.modules.sys.service.SysDeptService;
-import com.icloud.modules.sys.service.SysRoleDeptService;
-import com.icloud.modules.sys.service.SysRoleShopService;
-import com.icloud.modules.sys.service.SysUserRoleService;
+import com.icloud.modules.sys.service.*;
 import com.icloud.modules.sys.shiro.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -53,6 +51,8 @@ public class DataFilterAspect {
     private SysRoleShopService sysRoleShopService;
     @Autowired
     private ShopService shopService;
+    @Autowired
+    private SysUserService sysUserService;
 
     @Pointcut("@annotation(com.icloud.annotation.DataFilter)")
 //    @Pointcut("execution(* com.icloud.modules..controller..*.*(..))")
@@ -91,8 +91,8 @@ public class DataFilterAspect {
 
         //dianpu ID列表
         Set<Long> shopIdList = new HashSet<>();
-        shopIdList.add(user.getShopId());
-
+        shopIdList.add(sysUserService.getById(user.getUserId()).getShopId());
+        log.info("shopIdList==="+ JSON.toJSONString(shopIdList));
         //用户拥有角色
 //        List<Long> roleIdList = sysUserRoleService.queryRoleIdList(user.getUserId());
 //        if(roleIdList.size() > 0){
@@ -110,7 +110,7 @@ public class DataFilterAspect {
         StringBuilder sqlFilter = new StringBuilder();
         sqlFilter.append(" (");
 
-        if(shopIdList.size() > 0){
+        if(shopIdList!=null && shopIdList.size() > 0){
             sqlFilter.append(tableAlias).append(dataFilter.shopId()).append(" in(").append(StringUtils.join(shopIdList, ",")).append(")");
         }
 

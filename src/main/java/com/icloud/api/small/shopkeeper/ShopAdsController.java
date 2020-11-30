@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Api("店铺广告")
 @RestController
-@RequestMapping("/api/shopAds")
+@RequestMapping("/api/shopkeeper/shopAds")
 public class ShopAdsController {
 
     @Autowired

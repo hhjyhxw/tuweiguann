@@ -31,7 +31,7 @@ import java.util.Map;
 
 @Api("店铺商品")
 @RestController
-@RequestMapping("/api/shopgoods")
+@RequestMapping("/api/shopkeeper/shopgoods")
 public class ShopGoodsController {
 
     @Autowired

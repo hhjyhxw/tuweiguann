@@ -31,7 +31,7 @@ import java.util.Map;
 
 @Api("店铺提现管理")
 @RestController
-@RequestMapping("/api/shopWithdraw")
+@RequestMapping("/api/shopkeeper/shopWithdraw")
 public class ShopWithdrawController {
 
     @Autowired

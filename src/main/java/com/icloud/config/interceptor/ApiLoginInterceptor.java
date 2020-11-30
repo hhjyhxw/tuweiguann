@@ -3,6 +3,7 @@ package com.icloud.config.interceptor;
 import com.icloud.annotation.AuthIgnore;
 import com.icloud.basecommon.service.redis.RedisService;
 import com.icloud.common.IpUtil;
+import com.icloud.common.R;
 import com.icloud.config.global.Constants;
 import com.icloud.modules.wx.entity.WxUser;
 import com.icloud.modules.wx.service.WxUserService;
@@ -31,7 +32,7 @@ public class ApiLoginInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        printlnVisitInfo(request,handler);
+//        printlnVisitInfo(request,handler);
 
         //从header中获取token
         //1、
@@ -87,8 +88,23 @@ public class ApiLoginInterceptor extends HandlerInterceptorAdapter {
             return false;
         }else{
             //用于其他方法获取用户信息
-            request.setAttribute(Constants.USER_KEY,  (WxUser) sessuser);
+            WxUser wxUser = (WxUser) sessuser;
+            request.setAttribute(Constants.USER_KEY,  wxUser);
+            //校验店主是否绑定
+            if(request.getRequestURI().indexOf("/api/shopkeeper")>-1){
+                if(wxUser.getShopMan()==null){
+                    response.reset();
+                    response.setCharacterEncoding("utf-8");
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print("{\"code\":6000,\"msg\":\"不是店主！\"}");
+                    out.flush();
+                    out.close();
+                    return false;
+                }
+            }
         }
+
         log.info("======验证token成功");
         return true;
     }

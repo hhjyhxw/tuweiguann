@@ -23,7 +23,7 @@ import java.util.*;
 
 @Api("店铺优惠券")
 @RestController
-@RequestMapping("/api/shopCoupon")
+@RequestMapping("/api/shopkeeper/shopCoupon")
 public class ShopCouponController {
 
     @Autowired

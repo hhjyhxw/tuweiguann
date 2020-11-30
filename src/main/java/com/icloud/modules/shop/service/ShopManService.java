@@ -31,7 +31,7 @@ public class ShopManService extends BaseServiceImpl<ShopManMapper,ShopMan> {
     @Override
     public PageUtils<ShopMan> findByPage(int pageNo, int pageSize, Map<String, Object> query) {
         PageHelper.startPage(pageNo, pageSize);
-        List<ShopMan> list = shopManMapper.queryMixList(MapEntryUtils.clearNullValue(query));
+        List<ShopMan> list = shopManMapper.queryMixList(query);
         PageInfo<ShopMan> pageInfo = new PageInfo<ShopMan>(list);
         PageUtils<ShopMan> page = new PageUtils<ShopMan>(list,(int)pageInfo.getTotal(),pageSize,pageNo);
         return page;

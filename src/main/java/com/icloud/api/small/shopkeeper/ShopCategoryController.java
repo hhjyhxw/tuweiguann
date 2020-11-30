@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Api("店铺商品分类")
 @RestController
-@RequestMapping("/api/shopCategory")
+@RequestMapping("/api/shopkeeper/shopCategory")
 public class ShopCategoryController {
 
     @Autowired

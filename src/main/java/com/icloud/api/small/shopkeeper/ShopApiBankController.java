@@ -19,7 +19,7 @@ import java.util.List;
 
 @Api("银行卡")
 @RestController
-@RequestMapping("/api/shopBank")
+@RequestMapping("/api/shopkeeper/shopBank")
 public class ShopApiBankController {
 
     @Autowired
