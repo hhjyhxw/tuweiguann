@@ -48,25 +48,6 @@ public class ShopStatisticController {
                 .put("monthlist", GetYearUtil.getMonthList());
     }
 
-    /**
-     * 订单日报
-     *
-     * @return
-     */
-    @ApiOperation(value = "订单日报", notes = "")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "shopId", value = "商户id", required = true, paramType = "query", dataType = "Long")
-    })
-    @RequestMapping(value = "/orderDayList", method = {RequestMethod.GET})
-    public R adsList(@RequestParam Long shopId, @LoginUser WxUser user) {
-        if (user.getShopMan() == null) {
-            return R.error("不是店主");
-        } else if (user.getShopMan() != null && "0".equals(user.getShopMan().getStatus())) {
-            return R.error("店主账号已被禁用");
-        }
-
-        return R.ok();
-    }
 
     /**
      * 商品日报
