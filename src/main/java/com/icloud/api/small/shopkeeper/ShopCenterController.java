@@ -3,9 +3,9 @@ package com.icloud.api.small.shopkeeper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.LoginUser;
-import com.icloud.api.vo.shopkeeper.ShopStoreVo;
-import com.icloud.api.vo.shopkeeper.ShopVo;
-import com.icloud.api.vo.shopkeeper.ShopkeeperBindVo;
+import com.icloud.api.dto.shopkeeper.ShopStoredto;
+import com.icloud.api.dto.shopkeeper.Shopdto;
+import com.icloud.api.dto.shopkeeper.ShopkeeperBinddto;
 import com.icloud.basecommon.service.redis.RedisService;
 import com.icloud.common.R;
 import com.icloud.common.util.StringUtil;
@@ -89,7 +89,7 @@ public class ShopCenterController {
      */
     @ApiOperation(value="店主绑定接口", notes="")
     @RequestMapping(value = "/shopmanBind",method = {RequestMethod.GET})
-    public R shopmanBind(@LoginUser WxUser user, @RequestBody ShopkeeperBindVo bindVo) {
+    public R shopmanBind(@LoginUser WxUser user, @RequestBody ShopkeeperBinddto bindVo) {
         List<ShopMan> shopManlist = shopManService.list(new QueryWrapper<ShopMan>()
                 .eq("account_no",bindVo.getAccountNo())
                 .eq("pwd",bindVo.getPwd())
@@ -135,7 +135,7 @@ public class ShopCenterController {
      */
     @ApiOperation(value="保存店铺自提地址", notes="")
     @RequestMapping(value = "/saveStoreAddress",method = {RequestMethod.GET})
-    public R saveStoreAddress(@LoginUser WxUser user,@RequestBody ShopStoreVo shopStoreVo) {
+    public R saveStoreAddress(@LoginUser WxUser user,@RequestBody ShopStoredto shopStoreVo) {
         ValidatorUtils.validateEntityForFront(shopStoreVo);
         if(user.getShopMan()==null){
             return R.error("不是店主");
@@ -155,7 +155,7 @@ public class ShopCenterController {
      */
     @ApiOperation(value="开启或者关闭店铺", notes="")
     @RequestMapping(value = "/updateShopSatus",method = {RequestMethod.GET})
-    public R updateShopSatus(@LoginUser WxUser user,@RequestBody ShopVo shopVo) {
+    public R updateShopSatus(@LoginUser WxUser user,@RequestBody Shopdto shopVo) {
         ValidatorUtils.validateEntityForFront(shopVo);
         if(user.getShopMan()==null){
             return R.error("不是店主,不能操作");

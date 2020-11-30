@@ -294,4 +294,25 @@ t.shop_id = s.id and t.user_id = u.id
         </where>
         order by t.create_time desc
     </select>
+
+
+    <!--查询订单日报-->
+    <select id="findOrderDayreportPage" resultType="com.icloud.api.vo.shopkeeper.ShopOrderDayreportvo">
+        select * from (
+        select date_format(t.create_time,'%Y-%m-%d') as orderday,count(*) as countNum ,sum(t.actual_price) as totalAmount  from t_small_order t
+        <where>
+            <if test="shopId != null">
+                and t.shop_id = #{shopId}
+            </if>
+            <if test="startTime != null" >
+                <![CDATA[ and t.create_time  >=  #{startTime}  ]]>
+            </if>
+            <if test="endTime != null" >
+                <![CDATA[ and t.create_time  <=  #{endTime}  ]]>
+            </if>
+        </where>
+        group by date_format(t.create_time,'%Y-%m-%d')
+        ) a
+        order by a.orderday asc,a.totalAmount desc,a.countNum desc
+    </select>
 </mapper>

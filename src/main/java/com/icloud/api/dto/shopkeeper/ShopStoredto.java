@@ -1,4 +1,4 @@
-package com.icloud.api.vo.shopkeeper;
+package com.icloud.api.dto.shopkeeper;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 店铺自提地址vo
  */
 @Data
-public class ShopStoreVo implements Serializable {
+public class ShopStoredto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

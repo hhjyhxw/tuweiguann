@@ -1,5 +1,6 @@
 package com.icloud.modules.small.dao;
 
+import com.icloud.api.vo.shopkeeper.ShopOrderDayreportvo;
 import com.icloud.basecommon.model.Query;
 import com.icloud.modules.small.entity.SmallOrder;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -34,5 +35,11 @@ public interface SmallOrderMapper extends BaseMapper<SmallOrder> {
 
     /*订单月报明细*/
     List<SmallOrder> queryReportMonthDetailList(Map<String,Object> map);
+
+
+
+    /*移动端店主 单月报明细*/
+    List<ShopOrderDayreportvo> findOrderDayreportPage(Map<String,Object> map);
+
 
 }

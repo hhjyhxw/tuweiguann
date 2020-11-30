@@ -639,14 +639,14 @@
                 </dependencies>
             </plugin>
 
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <skipTests>true</skipTests>
                 </configuration>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <!-- maven打包的时候告诉maven不需要web.xml,否刚会报找不到web.xml错误 -->
                 <groupId>org.apache.maven.plugins</groupId>

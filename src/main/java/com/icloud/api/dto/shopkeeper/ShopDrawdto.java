@@ -1,4 +1,4 @@
-package com.icloud.api.vo.shopkeeper;
+package com.icloud.api.dto.shopkeeper;
 
 import com.icloud.common.validator.group.shop.SuSmallWasteGroup;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * 提现vo
  */
 @Data
-public class ShopDrawVo {
+public class ShopDrawdto {
     /* 店铺id */
     @NotNull(message = "店铺不能为空",groups = SuSmallWasteGroup.class)
     private Long shopId;

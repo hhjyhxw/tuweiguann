@@ -3,7 +3,7 @@ package com.icloud.modules.small.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.icloud.api.vo.QueryMycouponVo;
-import com.icloud.api.vo.shopkeeper.BatchStatusVo;
+import com.icloud.api.dto.shopkeeper.BatchStatusdto;
 import com.icloud.basecommon.service.BaseServiceImpl;
 import com.icloud.common.MapEntryUtils;
 import com.icloud.common.PageUtils;
@@ -79,7 +79,7 @@ public class SmallGroupShopService extends BaseServiceImpl<SmallGroupShopMapper,
      * @param batchStatusVo
      * @return
      */
-    public void updateSatusBatch(BatchStatusVo batchStatusVo) {
+    public void updateSatusBatch(BatchStatusdto batchStatusVo) {
         for (Long id:batchStatusVo.getIds()) {
             SmallGroupShop groupShop = smallGroupShopMapper.selectById(id);
             if(groupShop!=null){

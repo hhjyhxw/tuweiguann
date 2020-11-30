@@ -76,4 +76,24 @@ select * from t_small_order_detail t
 </if>
 </where>
 </select>
+    <!--查询商品销售明细-->
+    <select id="findSpuDayreportPage" resultType="com.icloud.api.vo.shopkeeper.ShopGoodsDayreportvo">
+        select * from (
+            select t.sku_title as title,sum(t.num) as countNum ,sum(t.price*t.num) as totalAmount  from t_small_order_detail t
+            <where>
+                <if test="shopId != null">
+                    and t.shop_id = #{shopId}
+                </if>
+                <if test="startTime != null" >
+                    <![CDATA[ and t.create_time  >=  #{startTime}  ]]>
+                </if>
+                <if test="endTime != null" >
+                    <![CDATA[ and t.create_time  <=  #{endTime}  ]]>
+                </if>
+            </where>
+            group by t.sku_title
+        ) a
+        order by a.totalAmount desc,a.countNum desc
+    </select>
+
 </mapper>

@@ -1,7 +1,7 @@
 package com.icloud.api.small.shopkeeper;
 
 import com.icloud.annotation.LoginUser;
-import com.icloud.api.vo.shopkeeper.ShopDrawVo;
+import com.icloud.api.dto.shopkeeper.ShopDrawdto;
 import com.icloud.basecommon.model.Query;
 import com.icloud.common.PageUtils;
 import com.icloud.common.R;
@@ -79,7 +79,7 @@ public class ShopWithdrawController {
     @ApiOperation(value="提现申请", notes="")
     @RequestMapping(value = "/applyDraw",method = {RequestMethod.GET})
     @ResponseBody
-    public R applyDraw(@LoginUser WxUser user, @RequestBody ShopDrawVo shopDrawVo) {
+    public R applyDraw(@LoginUser WxUser user, @RequestBody ShopDrawdto shopDrawVo) {
         if(user.getShopMan()==null){
             return R.error("不是店主");
         }else if(user.getShopMan()!=null && "0".equals(user.getShopMan().getStatus())){

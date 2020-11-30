@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.icloud.api.vo.ShopAndOrderDetailVo;
+import com.icloud.api.vo.shopkeeper.ShopOrderDayreportvo;
 import com.icloud.basecommon.model.Query;
 import com.icloud.basecommon.service.BaseServiceImpl;
 import com.icloud.basecommon.service.LockComponent;
@@ -491,7 +492,7 @@ public class SmallOrderService extends BaseServiceImpl<SmallOrderMapper,SmallOrd
     }
 
     /**
-     * 订单月报
+     * 订单月报(后台)
      * @param pageNo
      * @param pageSize
      * @param query
@@ -514,5 +515,20 @@ public class SmallOrderService extends BaseServiceImpl<SmallOrderMapper,SmallOrd
         return page;
     }
 
+    /**
+     * 移动端店主 订单月报
+     * @param pageNo
+     * @param pageSize
+     * @param query
+     * @return
+     */
+
+    public PageUtils findOrderDayreportPage(int pageNo, int pageSize, Query query){
+        PageHelper.startPage(pageNo, pageSize);
+        List<ShopOrderDayreportvo> list = smallOrderMapper.findOrderDayreportPage(query);
+        PageInfo<ShopOrderDayreportvo> pageInfo = new PageInfo<ShopOrderDayreportvo>(list);
+        PageUtils<ShopOrderDayreportvo> page = new PageUtils<ShopOrderDayreportvo>(list,(int)pageInfo.getTotal(),pageSize,pageNo);
+        return page;
+    }
 }
 

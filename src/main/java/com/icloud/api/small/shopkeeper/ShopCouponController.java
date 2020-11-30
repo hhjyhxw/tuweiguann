@@ -1,19 +1,15 @@
 package com.icloud.api.small.shopkeeper;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.LoginUser;
 import com.icloud.api.util.CouponUtil;
 import com.icloud.api.vo.CouponVo;
-import com.icloud.api.vo.shopkeeper.BatchSortVo;
+import com.icloud.api.dto.shopkeeper.BatchSortdto;
 import com.icloud.basecommon.model.Query;
 import com.icloud.common.PageUtils;
 import com.icloud.common.R;
 import com.icloud.common.util.StringUtil;
 import com.icloud.common.validator.ValidatorUtils;
-import com.icloud.modules.bsactivity.entity.BsactivityAd;
-import com.icloud.modules.bsactivity.service.BsactivityAdService;
 import com.icloud.modules.small.entity.SmallCoupon;
-import com.icloud.modules.small.entity.SmallUserCoupon;
 import com.icloud.modules.small.service.SmallCouponService;
 import com.icloud.modules.wx.entity.WxUser;
 import io.swagger.annotations.Api;
@@ -143,7 +139,7 @@ public class ShopCouponController {
     @ApiOperation(value="批量更新排序", notes="")
     @RequestMapping(value = "/updateSortBatch",method = {RequestMethod.POST})
     @ResponseBody
-    public R updateSortBatch(@RequestBody BatchSortVo batchSortVo, @LoginUser WxUser user) {
+    public R updateSortBatch(@RequestBody BatchSortdto batchSortVo, @LoginUser WxUser user) {
         if(batchSortVo.getIds().length==0){
             return R.error("ids不能为空");
         }

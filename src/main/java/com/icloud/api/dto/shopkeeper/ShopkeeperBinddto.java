@@ -1,4 +1,4 @@
-package com.icloud.api.vo.shopkeeper;
+package com.icloud.api.dto.shopkeeper;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * 绑定成为店主vo
  */
 @Data
-public class ShopkeeperBindVo {
+public class ShopkeeperBinddto {
 
     @NotEmpty(message = "账号不能为空")
     private String accountNo;

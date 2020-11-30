@@ -15,14 +15,7 @@ import java.util.StringTokenizer;
  * 
  * @filename       : DateUtil.java
  * @description    : TODO
- * @author         : penglong
- * @create         : 2015-1-30 下午02:08:00
- * @copyright      : mall Corporation 2015
- *
  * Modification History:
- * Date             Author       Version
- * --------------------------------------
- * 2015-1-30 下午02:08:00  long
  */
 public class DateUtil {
 	/*
@@ -232,6 +225,13 @@ public class DateUtil {
 	 */
 	public static String formatTimestamp(java.util.Date date) {
 		return commonFormatDate(date, "yyyy-MM-dd HH:mm:ss");
+	}
+
+	/**
+	 * 格式化时间：yyyy-MM-dd，示例：2014-10-10 12:13:14
+	 */
+	public static String formatDay(java.util.Date date) {
+		return commonFormatDate(date, "yyyy-MM-dd");
 	}
 
 	/**
@@ -1128,6 +1128,19 @@ public class DateUtil {
 		}
 		return calendar.getTime();
 	}
+
+	/**
+	 * 获取日期 yyyy年mm月dd日
+	 */
+	public static String getStringChineseDate(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH)+1;
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		return year+"年"+month+"月"+day+"日";
+	}
+
 	
 //	public static void main(String[] args) {
 ////		System.out.println(DateUtil.getBeforeDays(1));

@@ -1,5 +1,7 @@
 package com.icloud.modules.small.dao;
 
+import com.icloud.api.vo.shopkeeper.ShopGoodsDayreportvo;
+import com.icloud.basecommon.model.Query;
 import com.icloud.modules.small.entity.SmallOrderDetail;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import java.util.List;
@@ -14,4 +16,6 @@ import java.util.Map;
 public interface SmallOrderDetailMapper extends BaseMapper<SmallOrderDetail> {
 
 	List<SmallOrderDetail> queryMixList(Map<String,Object> map);
+
+    List<ShopGoodsDayreportvo> findSpuDayreportPage(Query query);
 }

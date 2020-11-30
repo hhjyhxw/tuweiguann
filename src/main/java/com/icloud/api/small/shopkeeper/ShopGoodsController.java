@@ -2,7 +2,7 @@ package com.icloud.api.small.shopkeeper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.LoginUser;
-import com.icloud.api.vo.shopkeeper.BatchStatusVo;
+import com.icloud.api.dto.shopkeeper.BatchStatusdto;
 import com.icloud.basecommon.model.Query;
 import com.icloud.common.PageUtils;
 import com.icloud.common.R;
@@ -320,7 +320,7 @@ public class ShopGoodsController {
     @ApiOperation(value="团购商品批量上下架", notes="")
     @RequestMapping(value = "/批量上下架",method = {RequestMethod.POST})
     @ResponseBody
-    public R updateSatusBatch(@RequestBody BatchStatusVo batchStatusVo, @LoginUser WxUser user) {
+    public R updateSatusBatch(@RequestBody BatchStatusdto batchStatusVo, @LoginUser WxUser user) {
         if(batchStatusVo.getIds().length==0){
             return R.error("ids不能为空");
         }

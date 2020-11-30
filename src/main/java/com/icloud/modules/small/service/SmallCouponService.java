@@ -3,7 +3,7 @@ package com.icloud.modules.small.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.icloud.api.vo.shopkeeper.BatchSortVo;
+import com.icloud.api.dto.shopkeeper.BatchSortdto;
 import com.icloud.basecommon.service.BaseServiceImpl;
 import com.icloud.common.MapEntryUtils;
 import com.icloud.common.PageUtils;
@@ -38,7 +38,7 @@ public class SmallCouponService extends BaseServiceImpl<SmallCouponMapper,SmallC
         return page;
     }
 
-    public void updateSortBatch(BatchSortVo batchSortVo) {
+    public void updateSortBatch(BatchSortdto batchSortVo) {
         for (int i=0;i<batchSortVo.getIds().length;i++){
             SmallCoupon smallCoupon = smallCouponMapper.selectById(batchSortVo.getSortNum()[i]);
             if(smallCoupon!=null){

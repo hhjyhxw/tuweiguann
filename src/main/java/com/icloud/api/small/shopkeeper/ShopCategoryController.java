@@ -2,7 +2,7 @@ package com.icloud.api.small.shopkeeper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.icloud.annotation.LoginUser;
-import com.icloud.api.vo.shopkeeper.ShopCategoryVo;
+import com.icloud.api.dto.testdto;
 import com.icloud.common.R;
 import com.icloud.modules.small.entity.SmallCategory;
 import com.icloud.modules.small.entity.SmallSpu;
@@ -46,8 +46,8 @@ public class ShopCategoryController {
         }
         //获取两级分类
         List<SmallCategory> list = smallCategoryService.list(new QueryWrapper<SmallCategory>().eq("shop_id",user.getShopMan().getShopId()));
-        List<ShopCategoryVo> shopCategoryVolist = list.stream().filter((item) -> (item.getParentId().equals(0l))).map(item -> {
-            ShopCategoryVo dto = new ShopCategoryVo();
+        List<testdto.ShopCategorydto> shopCategoryVolist = list.stream().filter((item) -> (item.getParentId().equals(0l))).map(item -> {
+            testdto.ShopCategorydto dto = new testdto.ShopCategorydto();
             BeanUtils.copyProperties(item,dto);
             dto.setLevel(0);
             dto.setChildList(new LinkedList<>());
@@ -56,7 +56,7 @@ public class ShopCategoryController {
         shopCategoryVolist.forEach(p->{
             list.forEach(smallCategory->{
                 if(p.getId().longValue()==smallCategory.getParentId().longValue()){
-                    ShopCategoryVo dto = new ShopCategoryVo();
+                    testdto.ShopCategorydto dto = new testdto.ShopCategorydto();
                     BeanUtils.copyProperties(smallCategory,dto);
                     dto.setLevel(1);
                     dto.setChildList(new LinkedList<>());
@@ -76,7 +76,7 @@ public class ShopCategoryController {
             @ApiImplicitParam(name = "shopId", value = "商户id", required = true, paramType = "query", dataType = "Long")
     })
     @RequestMapping(value = "/saveCategory",method = {RequestMethod.POST})
-    public R saveCategory(@LoginUser WxUser user,@RequestBody ShopCategoryVo shopCategoryVo) {
+    public R saveCategory(@LoginUser WxUser user,@RequestBody testdto.ShopCategorydto shopCategoryVo) {
         if(user.getShopMan()==null){
             return R.error("不是店主");
         }else if(user.getShopMan()!=null && "0".equals(user.getShopMan().getStatus())){
