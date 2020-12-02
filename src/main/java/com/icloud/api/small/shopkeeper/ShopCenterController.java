@@ -31,7 +31,7 @@ import java.util.List;
 
 @Api("店铺中心")
 @RestController
-@RequestMapping("/api/shopkeeper/shopcenter")
+@RequestMapping("/api/shopkeeper")
 public class ShopCenterController {
 
     @Autowired
